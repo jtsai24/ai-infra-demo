@@ -13,12 +13,6 @@ provider "nebius" {
   }
 }
 
-resource "nebius_compute_v1_gpu_cluster" "gpu_cluster" {
-  name              = "h100-cluster"
-  parent_id         = var.project_id
-  infiniband_fabric = "fabric-2"
-}
-
 resource "nebius_compute_v1_disk" "node1_disk" {
   name           = "h100-node1-disk"
   parent_id      = var.project_id
@@ -46,10 +40,6 @@ resource "nebius_compute_v1_instance" "node1" {
   resources = {
     platform = "gpu-h100-sxm"
     preset   = "1gpu-16vcpu-200gb"
-  }
-
-  gpu_cluster = {
-    id = nebius_compute_v1_gpu_cluster.gpu_cluster.id
   }
 
   boot_disk = {
@@ -86,10 +76,6 @@ resource "nebius_compute_v1_instance" "node2" {
   resources = {
     platform = "gpu-h100-sxm"
     preset   = "1gpu-16vcpu-200gb"
-  }
-
-  gpu_cluster = {
-    id = nebius_compute_v1_gpu_cluster.gpu_cluster.id
   }
 
   boot_disk = {
