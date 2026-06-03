@@ -13,24 +13,49 @@ provider "nebius" {
   }
 }
 
-resource "nebius_compute_v1_instance" "cpu_validation" {
-  name      = "cpu-validation"
+resource "nebius_compute_v1_gpu_cluster" "gpu_cluster" {
+  name              = "h100-cluster"
+  parent_id         = var.project_id
+  infiniband_fabric = "fabric-2"
+}
+
+resource "nebius_compute_v1_disk" "node1_disk" {
+  name           = "h100-node1-disk"
+  parent_id      = var.project_id
+  type           = "NETWORK_SSD"
+  size_gibibytes = 200
+  source_image_family = {
+    image_family = "ubuntu22.04-cuda12"
+  }
+}
+
+resource "nebius_compute_v1_disk" "node2_disk" {
+  name           = "h100-node2-disk"
+  parent_id      = var.project_id
+  type           = "NETWORK_SSD"
+  size_gibibytes = 200
+  source_image_family = {
+    image_family = "ubuntu22.04-cuda12"
+  }
+}
+
+resource "nebius_compute_v1_instance" "node1" {
+  name      = "h100-node1"
   parent_id = var.project_id
 
   resources = {
-    platform = "cpu-e2"
-    preset   = "2vcpu-8gb"
+    platform = "gpu-h100-sxm"
+    preset   = "1gpu-16vcpu-200gb"
+  }
+
+  gpu_cluster = {
+    id = nebius_compute_v1_gpu_cluster.gpu_cluster.id
   }
 
   boot_disk = {
     attach_mode = "READ_WRITE"
-    managed_disk = {
-      name = "cpu-validation-disk"
-      spec = {
-        source_image_id = "computeimage-e00x8tej7rj2bpm8pk"
-        size_gibibytes  = 20
-        type            = "NETWORK_SSD"
-      }
+    existing_disk = {
+      id = nebius_compute_v1_disk.node1_disk.id
     }
   }
 
@@ -50,6 +75,46 @@ resource "nebius_compute_v1_instance" "cpu_validation" {
         sudo: ALL=(ALL) NOPASSWD:ALL
         shell: /bin/bash
         ssh_authorized_keys:
-          - ${file("credentials/public_openssh.pub")}
+          - ${file("../credentials/public_openssh.pub")}
+  EOT
+}
+
+resource "nebius_compute_v1_instance" "node2" {
+  name      = "h100-node2"
+  parent_id = var.project_id
+
+  resources = {
+    platform = "gpu-h100-sxm"
+    preset   = "1gpu-16vcpu-200gb"
+  }
+
+  gpu_cluster = {
+    id = nebius_compute_v1_gpu_cluster.gpu_cluster.id
+  }
+
+  boot_disk = {
+    attach_mode = "READ_WRITE"
+    existing_disk = {
+      id = nebius_compute_v1_disk.node2_disk.id
+    }
+  }
+
+  network_interfaces = [
+    {
+      name              = "eth0"
+      subnet_id         = var.subnet_id
+      ip_address        = {}
+      public_ip_address = {}
+    }
+  ]
+
+  cloud_init_user_data = <<-EOT
+    #cloud-config
+    users:
+      - name: user
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        shell: /bin/bash
+        ssh_authorized_keys:
+          - ${file("../credentials/public_openssh.pub")}
   EOT
 }
