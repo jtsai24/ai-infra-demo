@@ -1,0 +1,156 @@
+{
+  "nested_type": {
+    "attributes": {
+      "attach_mode": {
+        "type": "string",
+        "description": ":\n\n   #### Supported values\n   \n   Possible values:\n   \n   - `UNSPECIFIED`\n   - `READ_ONLY`\n   - `READ_WRITE`\n   \n",
+        "description_kind": "markdown",
+        "required": true
+      },
+      "device_id": {
+        "type": "string",
+        "description": "Specifies the user-defined identifier, allowing to use '/dev/disk/by-id/virtio-{device_id}' as a device path in mount command.",
+        "description_kind": "markdown",
+        "optional": true
+      },
+      "existing_disk": {
+        "nested_type": {
+          "attributes": {
+            "id": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            }
+          },
+          "nesting_mode": "single"
+        },
+        "description": ":\n\n   Attach an existing disk.\n   \n   Lifecycle:\n   - The disk is preserved when the instance is deleted (it will be detached).\n   \n   Switching to a managed disk:\n   - To delete the disk together with the instance, switch to ManagedDisk in the instance spec.\n   - For the switch, `ManagedDisk.name` MUST match the current disk `name`\n     (see DiskService.Get for the disk referenced by `ExistingDisk.id`).\n   - When converting an ExistingDisk to a ManagedDisk, you must provide `ManagedDisk.name` and `ManagedDisk.spec`\n     exactly as they are currently defined in the disk resource.\n     Obtain the current values via `DiskService.Get` and copy them verbatim.\n     If `ManagedDisk.spec` differs from the current disk spec, the instance update will fail.\n   \n   *Cannot be set alongside managed_disk.*\n",
+        "description_kind": "markdown",
+        "optional": true
+      },
+      "managed_disk": {
+        "nested_type": {
+          "attributes": {
+            "labels": {
+              "type": [
+                "map",
+                "string"
+              ],
+              "description": ":\n\n   Labels associated with disk resource.\n   \n",
+              "description_kind": "markdown",
+              "optional": true
+            },
+            "name": {
+              "type": "string",
+              "description": ":\n\n   Name of a dependent disk.\n   Use it to convert an ExistingDisk to a dependent disk.\n   Changing the name will replace the disk and cause data loss.\n",
+              "description_kind": "markdown",
+              "required": true
+            },
+            "spec": {
+              "nested_type": {
+                "attributes": {
+                  "block_size_bytes": {
+                    "type": "number",
+                    "description": ":\n\n   Block size in bytes.\n   The block size must be a power of two between 4096 bytes (4 KiB) and 131072 bytes (128 KiB).\n   The default value is 4096 bytes (4 KiB).\n",
+                    "description_kind": "markdown",
+                    "optional": true
+                  },
+                  "disk_encryption": {
+                    "nested_type": {
+                      "attributes": {
+                        "type": {
+                          "type": "string",
+                          "description": ":\n\n   #### Supported values\n   \n   Possible values:\n   \n   - `DISK_ENCRYPTION_UNSPECIFIED` - No encryption is applied unless explicitly specified.\n   - `DISK_ENCRYPTION_MANAGED`:\n      Enables encryption using the platform's default root key from KMS.\n      Available for disks with NETWORK_SSD_NON_REPLICATED and NETWORK_SSD_IO_M3 types only.\n   \n   \n",
+                          "description_kind": "markdown",
+                          "optional": true
+                        }
+                      },
+                      "nesting_mode": "single"
+                    },
+                    "description": "Defines how data on the disk is encrypted. By default, no encryption is applied.",
+                    "description_kind": "markdown",
+                    "optional": true
+                  },
+                  "forbid_deletion": {
+                    "type": "bool",
+                    "description": "Prevents deletion whilst set",
+                    "description_kind": "markdown",
+                    "optional": true
+                  },
+                  "size_bytes": {
+                    "type": "number",
+                    "description": "*Cannot be set alongside size_kibibytes, size_mebibytes or size_gibibytes.*",
+                    "description_kind": "markdown",
+                    "optional": true
+                  },
+                  "size_gibibytes": {
+                    "type": "number",
+                    "description": "*Cannot be set alongside size_bytes, size_kibibytes or size_mebibytes.*",
+                    "description_kind": "markdown",
+                    "optional": true
+                  },
+                  "size_kibibytes": {
+                    "type": "number",
+                    "description": "*Cannot be set alongside size_bytes, size_mebibytes or size_gibibytes.*",
+                    "description_kind": "markdown",
+                    "optional": true
+                  },
+                  "size_mebibytes": {
+                    "type": "number",
+                    "description": "*Cannot be set alongside size_bytes, size_kibibytes or size_gibibytes.*",
+                    "description_kind": "markdown",
+                    "optional": true
+                  },
+                  "source_image_family": {
+                    "nested_type": {
+                      "attributes": {
+                        "image_family": {
+                          "type": "string",
+                          "description_kind": "plain",
+                          "required": true
+                        },
+                        "parent_id": {
+                          "type": "string",
+                          "description_kind": "plain",
+                          "optional": true
+                        }
+                      },
+                      "nesting_mode": "single"
+                    },
+                    "description": "*Cannot be set alongside source_image_id.*",
+                    "description_kind": "markdown",
+                    "optional": true
+                  },
+                  "source_image_id": {
+                    "type": "string",
+                    "description": "*Cannot be set alongside source_image_family.*",
+                    "description_kind": "markdown",
+                    "optional": true
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": ":\n\n   The type of disk defines the performance and reliability characteristics of the block device.\n   For details, see https://docs.nebius.com/compute/storage/types#disks-types\n   \n   #### Supported values\n   \n   the list of available types will be clarified later, it is not final version\n   Possible values:\n   \n   - `UNSPECIFIED`\n   - `NETWORK_SSD`\n   - `NETWORK_HDD`\n   - `NETWORK_SSD_NON_REPLICATED`\n   - `NETWORK_SSD_IO_M3`\n   \n",
+                    "description_kind": "markdown",
+                    "required": true
+                  }
+                },
+                "nesting_mode": "single"
+              },
+              "description": "Specification of a dependent disk to be created.",
+              "description_kind": "markdown",
+              "required": true
+            }
+          },
+          "nesting_mode": "single"
+        },
+        "description": ":\n\n   Attach a managed disk.\n   \n   Lifecycle:\n   - The disk is deleted when the instance is deleted.\n   \n   Semantics:\n   - Specifying a ManagedDisk expresses an intent to have that managed disk attached.\n   - If this intent cannot be satisfied, the entire operation fails.\n   - You can check the intent status in `instance.status.disk_attachments`.\n   \n   Updates and matching:\n   - Managed disks can be updated only via instance spec updates. Updates via DiskService are not allowed.\n   - During updates, disks are matched by `name`.\n   \n   Renaming and data loss:\n   - Changing the disk `name` triggers disk replacement (create a new disk and delete the old one),\n     which causes data loss.\n   - To rename a managed disk safely:\n     1) switch it to ExistingDisk in the instance spec, and\n     2) update/rename it via DiskService.\n   \n   Conflicts:\n   - Instance create/update fails if there is already a disk with the same `name`.\n     as requested by any ManagedDisk.\n   \n   Finding the disk ID:\n   - The disk ID is available in `instance.status.disk_attachments` after it is created.\n     Use `DiskAttachmentStatus.name` to find the desired disk which matches `name`.\n   \n   Switching to an existing (non-managed) disk:\n   - To preserve the disk after instance deletion, switch it to ExistingDisk in the instance spec,\n     use the disk ID from `instance.status.disk_attachments`.\n   \n   Deletion protection:\n   - Switching ExistingDisk to ManagedDisk fails if `Disk.spec.deletion_protection` is enabled.\n   - Deleting an instance that has a ManagedDisk fails if `Disk.spec.deletion_protection` is enabled.\n   \n   *Cannot be set alongside existing_disk.*\n",
+        "description_kind": "markdown",
+        "optional": true
+      }
+    },
+    "nesting_mode": "single"
+  },
+  "description": "Specified boot disk attached to the instance.",
+  "description_kind": "markdown",
+  "optional": true
+}

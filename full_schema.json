@@ -1,0 +1,826 @@
+{
+  "version": 0,
+  "block": {
+    "attributes": {
+      "boot_disk": {
+        "nested_type": {
+          "attributes": {
+            "attach_mode": {
+              "type": "string",
+              "description": ":\n\n   #### Supported values\n   \n   Possible values:\n   \n   - `UNSPECIFIED`\n   - `READ_ONLY`\n   - `READ_WRITE`\n   \n",
+              "description_kind": "markdown",
+              "required": true
+            },
+            "device_id": {
+              "type": "string",
+              "description": "Specifies the user-defined identifier, allowing to use '/dev/disk/by-id/virtio-{device_id}' as a device path in mount command.",
+              "description_kind": "markdown",
+              "optional": true
+            },
+            "existing_disk": {
+              "nested_type": {
+                "attributes": {
+                  "id": {
+                    "type": "string",
+                    "description_kind": "plain",
+                    "required": true
+                  }
+                },
+                "nesting_mode": "single"
+              },
+              "description": ":\n\n   Attach an existing disk.\n   \n   Lifecycle:\n   - The disk is preserved when the instance is deleted (it will be detached).\n   \n   Switching to a managed disk:\n   - To delete the disk together with the instance, switch to ManagedDisk in the instance spec.\n   - For the switch, `ManagedDisk.name` MUST match the current disk `name`\n     (see DiskService.Get for the disk referenced by `ExistingDisk.id`).\n   - When converting an ExistingDisk to a ManagedDisk, you must provide `ManagedDisk.name` and `ManagedDisk.spec`\n     exactly as they are currently defined in the disk resource.\n     Obtain the current values via `DiskService.Get` and copy them verbatim.\n     If `ManagedDisk.spec` differs from the current disk spec, the instance update will fail.\n   \n   *Cannot be set alongside managed_disk.*\n",
+              "description_kind": "markdown",
+              "optional": true
+            },
+            "managed_disk": {
+              "nested_type": {
+                "attributes": {
+                  "labels": {
+                    "type": [
+                      "map",
+                      "string"
+                    ],
+                    "description": ":\n\n   Labels associated with disk resource.\n   \n",
+                    "description_kind": "markdown",
+                    "optional": true
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": ":\n\n   Name of a dependent disk.\n   Use it to convert an ExistingDisk to a dependent disk.\n   Changing the name will replace the disk and cause data loss.\n",
+                    "description_kind": "markdown",
+                    "required": true
+                  },
+                  "spec": {
+                    "nested_type": {
+                      "attributes": {
+                        "block_size_bytes": {
+                          "type": "number",
+                          "description": ":\n\n   Block size in bytes.\n   The block size must be a power of two between 4096 bytes (4 KiB) and 131072 bytes (128 KiB).\n   The default value is 4096 bytes (4 KiB).\n",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "disk_encryption": {
+                          "nested_type": {
+                            "attributes": {
+                              "type": {
+                                "type": "string",
+                                "description": ":\n\n   #### Supported values\n   \n   Possible values:\n   \n   - `DISK_ENCRYPTION_UNSPECIFIED` - No encryption is applied unless explicitly specified.\n   - `DISK_ENCRYPTION_MANAGED`:\n      Enables encryption using the platform's default root key from KMS.\n      Available for disks with NETWORK_SSD_NON_REPLICATED and NETWORK_SSD_IO_M3 types only.\n   \n   \n",
+                                "description_kind": "markdown",
+                                "optional": true
+                              }
+                            },
+                            "nesting_mode": "single"
+                          },
+                          "description": "Defines how data on the disk is encrypted. By default, no encryption is applied.",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "forbid_deletion": {
+                          "type": "bool",
+                          "description": "Prevents deletion whilst set",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "size_bytes": {
+                          "type": "number",
+                          "description": "*Cannot be set alongside size_kibibytes, size_mebibytes or size_gibibytes.*",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "size_gibibytes": {
+                          "type": "number",
+                          "description": "*Cannot be set alongside size_bytes, size_kibibytes or size_mebibytes.*",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "size_kibibytes": {
+                          "type": "number",
+                          "description": "*Cannot be set alongside size_bytes, size_mebibytes or size_gibibytes.*",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "size_mebibytes": {
+                          "type": "number",
+                          "description": "*Cannot be set alongside size_bytes, size_kibibytes or size_gibibytes.*",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "source_image_family": {
+                          "nested_type": {
+                            "attributes": {
+                              "image_family": {
+                                "type": "string",
+                                "description_kind": "plain",
+                                "required": true
+                              },
+                              "parent_id": {
+                                "type": "string",
+                                "description_kind": "plain",
+                                "optional": true
+                              }
+                            },
+                            "nesting_mode": "single"
+                          },
+                          "description": "*Cannot be set alongside source_image_id.*",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "source_image_id": {
+                          "type": "string",
+                          "description": "*Cannot be set alongside source_image_family.*",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": ":\n\n   The type of disk defines the performance and reliability characteristics of the block device.\n   For details, see https://docs.nebius.com/compute/storage/types#disks-types\n   \n   #### Supported values\n   \n   the list of available types will be clarified later, it is not final version\n   Possible values:\n   \n   - `UNSPECIFIED`\n   - `NETWORK_SSD`\n   - `NETWORK_HDD`\n   - `NETWORK_SSD_NON_REPLICATED`\n   - `NETWORK_SSD_IO_M3`\n   \n",
+                          "description_kind": "markdown",
+                          "required": true
+                        }
+                      },
+                      "nesting_mode": "single"
+                    },
+                    "description": "Specification of a dependent disk to be created.",
+                    "description_kind": "markdown",
+                    "required": true
+                  }
+                },
+                "nesting_mode": "single"
+              },
+              "description": ":\n\n   Attach a managed disk.\n   \n   Lifecycle:\n   - The disk is deleted when the instance is deleted.\n   \n   Semantics:\n   - Specifying a ManagedDisk expresses an intent to have that managed disk attached.\n   - If this intent cannot be satisfied, the entire operation fails.\n   - You can check the intent status in `instance.status.disk_attachments`.\n   \n   Updates and matching:\n   - Managed disks can be updated only via instance spec updates. Updates via DiskService are not allowed.\n   - During updates, disks are matched by `name`.\n   \n   Renaming and data loss:\n   - Changing the disk `name` triggers disk replacement (create a new disk and delete the old one),\n     which causes data loss.\n   - To rename a managed disk safely:\n     1) switch it to ExistingDisk in the instance spec, and\n     2) update/rename it via DiskService.\n   \n   Conflicts:\n   - Instance create/update fails if there is already a disk with the same `name`.\n     as requested by any ManagedDisk.\n   \n   Finding the disk ID:\n   - The disk ID is available in `instance.status.disk_attachments` after it is created.\n     Use `DiskAttachmentStatus.name` to find the desired disk which matches `name`.\n   \n   Switching to an existing (non-managed) disk:\n   - To preserve the disk after instance deletion, switch it to ExistingDisk in the instance spec,\n     use the disk ID from `instance.status.disk_attachments`.\n   \n   Deletion protection:\n   - Switching ExistingDisk to ManagedDisk fails if `Disk.spec.deletion_protection` is enabled.\n   - Deleting an instance that has a ManagedDisk fails if `Disk.spec.deletion_protection` is enabled.\n   \n   *Cannot be set alongside existing_disk.*\n",
+              "description_kind": "markdown",
+              "optional": true
+            }
+          },
+          "nesting_mode": "single"
+        },
+        "description": "Specified boot disk attached to the instance.",
+        "description_kind": "markdown",
+        "optional": true
+      },
+      "cloud_init_user_data": {
+        "type": "string",
+        "description": ":\n\n   Data in cloud-init format for customizing instance initialization.\n   For details, see https://docs.nebius.com/compute/virtual-machines/manage#user-data\n",
+        "description_kind": "markdown",
+        "optional": true,
+        "sensitive": true
+      },
+      "created_at": {
+        "type": "string",
+        "description": ":\n\n   Timestamp indicating when the resource was created.\n   \n   A string representing a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ` or `YYYY-MM-DDTHH:MM:SS.SSS\u00b1HH:MM`\n",
+        "description_kind": "markdown",
+        "computed": true
+      },
+      "filesystems": {
+        "nested_type": {
+          "attributes": {
+            "attach_mode": {
+              "type": "string",
+              "description": ":\n\n   #### Supported values\n   \n   Possible values:\n   \n   - `UNSPECIFIED`\n   - `READ_ONLY`\n   - `READ_WRITE`\n   \n",
+              "description_kind": "markdown",
+              "required": true
+            },
+            "existing_filesystem": {
+              "nested_type": {
+                "attributes": {
+                  "id": {
+                    "type": "string",
+                    "description_kind": "plain",
+                    "required": true
+                  }
+                },
+                "nesting_mode": "single"
+              },
+              "description_kind": "plain",
+              "optional": true
+            },
+            "mount_tag": {
+              "type": "string",
+              "description": "Specifies the user-defined identifier, allowing to use it as a device in mount command.",
+              "description_kind": "markdown",
+              "required": true
+            }
+          },
+          "nesting_mode": "list"
+        },
+        "description": "List of Shared Filesystems attached to the instance.",
+        "description_kind": "markdown",
+        "optional": true
+      },
+      "gpu_cluster": {
+        "nested_type": {
+          "attributes": {
+            "id": {
+              "type": "string",
+              "description": ":\n\n   If you want to interconnect several instances in a GPU cluster via NVIDIA InfiniBand,\n   set the ID of an existing GPU cluster.\n   You can only add the VM to the cluster when creating the VM.\n   For details, see https://docs.nebius.com/compute/clusters/gpu\n",
+              "description_kind": "markdown",
+              "optional": true
+            }
+          },
+          "nesting_mode": "single"
+        },
+        "description": ":\n\n   If you want to interconnect several instances in a GPU cluster via NVIDIA InfiniBand,\n   set the ID of an existing GPU cluster.\n   You can only add the VM to the cluster when creating the VM.\n   For details, see https://docs.nebius.com/compute/clusters/gpu\n",
+        "description_kind": "markdown",
+        "optional": true
+      },
+      "hostname": {
+        "type": "string",
+        "description": ":\n\n   Instance's hostname. Used to generate default DNS record in format `<hostname>.<network_id>.compute.internal.`\n   or `<instance_id>.<network_id>.compute.internal.` if hostname is not specified.\n",
+        "description_kind": "markdown",
+        "optional": true
+      },
+      "id": {
+        "type": "string",
+        "description": "Identifier for the resource, unique for its resource type.",
+        "description_kind": "markdown",
+        "computed": true
+      },
+      "labels": {
+        "type": [
+          "map",
+          "string"
+        ],
+        "description": ":\n\n   Labels associated with the resource.\n   \n",
+        "description_kind": "markdown",
+        "optional": true
+      },
+      "local_disks": {
+        "nested_type": {
+          "attributes": {
+            "passthrough_group": {
+              "nested_type": {
+                "attributes": {
+                  "requested": {
+                    "type": "bool",
+                    "description": ":\n\n   Passthrough local disks from the underlying host.\n   \n   Devices are expected to appear in the guest as NVMe devices (nvme0, nvme1, ...),\n   but the exact number depends on the preset.\n   Enabled only when this field is explicitly set.\n",
+                    "description_kind": "markdown",
+                    "optional": true
+                  }
+                },
+                "nesting_mode": "single"
+              },
+              "description": ":\n\n   Requests passthrough local disks from the host.\n   Topology of the provided disks is preserved during stop and start\n   for every instance of a specific platform and preset in the region.\n   \n   \n",
+              "description_kind": "markdown",
+              "optional": true
+            }
+          },
+          "nesting_mode": "single"
+        },
+        "description": ":\n\n   Local disks are meaningfully different from regular (remote) disks:\n   they are provided by the underlying host and are tied to a particular VM run.\n   Local disk data is not preserved across Stop-Start initiated via Compute API.\n   Local disks are not provided by default. To get them, explicitly request them via this field.\n   Availability depends on the selected platform, preset and region.\n   Changing this field will result in disks change and content loss, but only after stop and start the instance.\n",
+        "description_kind": "markdown",
+        "optional": true
+      },
+      "metadata": {
+        "nested_type": {
+          "nesting_mode": "single"
+        },
+        "description": ":\n\n   #### Inner value description\n   \n   Common resource metadata.\n",
+        "description_kind": "markdown",
+        "optional": true,
+        "computed": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Human readable name for the resource.",
+        "description_kind": "markdown",
+        "optional": true
+      },
+      "network_interfaces": {
+        "nested_type": {
+          "attributes": {
+            "aliases": {
+              "nested_type": {
+                "attributes": {
+                  "allocation_id": {
+                    "type": "string",
+                    "description": "ID of allocation",
+                    "description_kind": "markdown",
+                    "required": true
+                  }
+                },
+                "nesting_mode": "list"
+              },
+              "description": "Assign ranges of IP addresses as aliases",
+              "description_kind": "markdown",
+              "optional": true
+            },
+            "ip_address": {
+              "nested_type": {
+                "attributes": {
+                  "allocation_id": {
+                    "type": "string",
+                    "description": "Allocation identifier if it was created before.",
+                    "description_kind": "markdown",
+                    "optional": true
+                  }
+                },
+                "nesting_mode": "single"
+              },
+              "description": ":\n\n   Private IPv4 address associated with the interface.\n   \n   #### Inner value description\n   \n   Describes an IPv4 address.\n",
+              "description_kind": "markdown",
+              "required": true
+            },
+            "name": {
+              "type": "string",
+              "description": ":\n\n   Interface name\n   Value of this field configures the name of the network interface inside VM's OS.\n   Longer values will persist in the specification but will be truncated to 15 symbols before being passed to VM configuration.\n",
+              "description_kind": "markdown",
+              "required": true
+            },
+            "public_ip_address": {
+              "nested_type": {
+                "attributes": {
+                  "allocation_id": {
+                    "type": "string",
+                    "description": "Allocation identifier if it was created before.",
+                    "description_kind": "markdown",
+                    "optional": true
+                  },
+                  "static": {
+                    "type": "bool",
+                    "description": ":\n\n   If false - Allocation will be created/deleted during NetworkInterface.Allocate/NetworkInterface.Deallocate\n   If true  - Allocation will be created/deleted during NetworkInterface.Create/NetworkInterface.Delete\n   False by default\n",
+                    "description_kind": "markdown",
+                    "optional": true
+                  }
+                },
+                "nesting_mode": "single"
+              },
+              "description": ":\n\n   Public IPv4 address associated with the interface.\n   \n   #### Inner value description\n   \n   Describes a public IP address.\n",
+              "description_kind": "markdown",
+              "optional": true
+            },
+            "security_groups": {
+              "nested_type": {
+                "attributes": {
+                  "id": {
+                    "type": "string",
+                    "description": "Security group identifier",
+                    "description_kind": "markdown",
+                    "optional": true
+                  }
+                },
+                "nesting_mode": "list"
+              },
+              "description": ":\n\n   Security groups associated with the network interface.\n   If an empty list is provided, the default security group for the network will be used.\n   Effective security groups can be seen in the status.\n",
+              "description_kind": "markdown",
+              "optional": true
+            },
+            "subnet_id": {
+              "type": "string",
+              "description": "Subnet ID",
+              "description_kind": "markdown",
+              "required": true
+            }
+          },
+          "nesting_mode": "list"
+        },
+        "description": ":\n\n   List of network interfaces attached to the instance.\n   \n   #### Inner value description\n   \n   Describes the specification of a network interface.\n",
+        "description_kind": "markdown",
+        "required": true
+      },
+      "nvl_instance_group_id": {
+        "type": "string",
+        "description": "NVLink Instance Group ID associated with the VM",
+        "description_kind": "markdown",
+        "optional": true
+      },
+      "parent_id": {
+        "type": "string",
+        "description": "Identifier of the parent resource to which the resource belongs.",
+        "description_kind": "markdown",
+        "required": true
+      },
+      "preemptible": {
+        "nested_type": {
+          "attributes": {
+            "on_preemption": {
+              "type": "string",
+              "description": ":\n\n   Specifies what happens when the VM is preempted. The only supported value is STOP:\n   Compute stops the VM without deleting or restarting it.\n   \n   #### Supported values\n   \n   Possible values:\n   \n   - `UNSPECIFIED`\n   - `STOP`\n   \n",
+              "description_kind": "markdown",
+              "required": true
+            },
+            "priority": {
+              "type": "number",
+              "description_kind": "plain",
+              "deprecated": true,
+              "deprecation_message": "Supported until 2026-05-11. It is deprecated and doesn't affect preemption behavior anymore.",
+              "optional": true
+            }
+          },
+          "nesting_mode": "single"
+        },
+        "description": ":\n\n   Include these parameters to create a Preemptible VM and omit them to create a Regular VM\n   For details, see https://docs.nebius.com/compute/virtual-machines/preemptible\n",
+        "description_kind": "markdown",
+        "optional": true
+      },
+      "recovery_policy": {
+        "type": "string",
+        "description": ":\n\n   Recovery policy defines how the instance will be treated in case of a failure.\n   Common source of failure is a host failure, but it can be any other failure.\n   Instance undergoing a guest shutdown (poweroff, etc.) will be subject to recovery policy, meaning that it could\n   be restarted and billed accordingly. Stop instance via API or UI to stop it to avoid recovering.\n   - If set to RECOVER, instance will be restarted, if possible. It could be restarted on the same host or on another host.\n   - If set to FAIL, instance will be stopped and not restarted.\n   \n   #### Supported values\n   \n   Possible values:\n   \n   - `RECOVER`\n   - `FAIL`\n   \n",
+        "description_kind": "markdown",
+        "optional": true
+      },
+      "reservation_policy": {
+        "nested_type": {
+          "attributes": {
+            "policy": {
+              "type": "string",
+              "description": ":\n\n   #### Supported values\n   \n   Possible values:\n   \n   - `AUTO`:\n      1) Will try to launch instance in any reservation_ids if provided.\n      2) Will try to launch instance in any of the available capacity block.\n      3) Will try to launch instance in PAYG if 1 & 2 are not satisfied.\n   \n   - `FORBID`:\n      The instance is launched only using on-demand (PAYG) capacity.\n      No attempt is made to find or use a Capacity Block.\n      It's an error to provide reservation_ids with policy = FORBID\n   \n   - `STRICT`:\n      1) Will try to launch the instance in Capacity Blocks from reservation_ids if provided.\n      2) If reservation_ids are not provided will try to launch instance in suitable & available Capacity Block.\n      3) Fail otherwise.\n   \n   \n",
+              "description_kind": "markdown",
+              "optional": true
+            },
+            "reservation_ids": {
+              "type": [
+                "list",
+                "string"
+              ],
+              "description": "Capacity block groups, order matters",
+              "description_kind": "markdown",
+              "optional": true
+            }
+          },
+          "nesting_mode": "single"
+        },
+        "description_kind": "plain",
+        "optional": true
+      },
+      "resource_version": {
+        "type": "number",
+        "description": ":\n\n   Version of the resource for safe concurrent modifications and consistent reads.\n   Positive and monotonically increases on each resource spec change (but *not* on each change of the\n   resource's container(s) or status).\n   Service allows zero value or current.\n   \n",
+        "description_kind": "markdown",
+        "computed": true
+      },
+      "resources": {
+        "nested_type": {
+          "attributes": {
+            "platform": {
+              "type": "string",
+              "description_kind": "plain",
+              "required": true
+            },
+            "preset": {
+              "type": "string",
+              "description_kind": "plain",
+              "optional": true
+            }
+          },
+          "nesting_mode": "single"
+        },
+        "description": ":\n\n   Specification of compute resources allocated to the instance.\n   For details, see https://docs.nebius.com/compute/virtual-machines/types\n",
+        "description_kind": "markdown",
+        "required": true
+      },
+      "secondary_disks": {
+        "nested_type": {
+          "attributes": {
+            "attach_mode": {
+              "type": "string",
+              "description": ":\n\n   #### Supported values\n   \n   Possible values:\n   \n   - `UNSPECIFIED`\n   - `READ_ONLY`\n   - `READ_WRITE`\n   \n",
+              "description_kind": "markdown",
+              "required": true
+            },
+            "device_id": {
+              "type": "string",
+              "description": "Specifies the user-defined identifier, allowing to use '/dev/disk/by-id/virtio-{device_id}' as a device path in mount command.",
+              "description_kind": "markdown",
+              "optional": true
+            },
+            "existing_disk": {
+              "nested_type": {
+                "attributes": {
+                  "id": {
+                    "type": "string",
+                    "description_kind": "plain",
+                    "required": true
+                  }
+                },
+                "nesting_mode": "single"
+              },
+              "description": ":\n\n   Attach an existing disk.\n   \n   Lifecycle:\n   - The disk is preserved when the instance is deleted (it will be detached).\n   \n   Switching to a managed disk:\n   - To delete the disk together with the instance, switch to ManagedDisk in the instance spec.\n   - For the switch, `ManagedDisk.name` MUST match the current disk `name`\n     (see DiskService.Get for the disk referenced by `ExistingDisk.id`).\n   - When converting an ExistingDisk to a ManagedDisk, you must provide `ManagedDisk.name` and `ManagedDisk.spec`\n     exactly as they are currently defined in the disk resource.\n     Obtain the current values via `DiskService.Get` and copy them verbatim.\n     If `ManagedDisk.spec` differs from the current disk spec, the instance update will fail.\n   \n   *Cannot be set alongside managed_disk.*\n",
+              "description_kind": "markdown",
+              "optional": true
+            },
+            "managed_disk": {
+              "nested_type": {
+                "attributes": {
+                  "labels": {
+                    "type": [
+                      "map",
+                      "string"
+                    ],
+                    "description": ":\n\n   Labels associated with disk resource.\n   \n",
+                    "description_kind": "markdown",
+                    "optional": true
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": ":\n\n   Name of a dependent disk.\n   Use it to convert an ExistingDisk to a dependent disk.\n   Changing the name will replace the disk and cause data loss.\n",
+                    "description_kind": "markdown",
+                    "required": true
+                  },
+                  "spec": {
+                    "nested_type": {
+                      "attributes": {
+                        "block_size_bytes": {
+                          "type": "number",
+                          "description": ":\n\n   Block size in bytes.\n   The block size must be a power of two between 4096 bytes (4 KiB) and 131072 bytes (128 KiB).\n   The default value is 4096 bytes (4 KiB).\n",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "disk_encryption": {
+                          "nested_type": {
+                            "attributes": {
+                              "type": {
+                                "type": "string",
+                                "description": ":\n\n   #### Supported values\n   \n   Possible values:\n   \n   - `DISK_ENCRYPTION_UNSPECIFIED` - No encryption is applied unless explicitly specified.\n   - `DISK_ENCRYPTION_MANAGED`:\n      Enables encryption using the platform's default root key from KMS.\n      Available for disks with NETWORK_SSD_NON_REPLICATED and NETWORK_SSD_IO_M3 types only.\n   \n   \n",
+                                "description_kind": "markdown",
+                                "optional": true
+                              }
+                            },
+                            "nesting_mode": "single"
+                          },
+                          "description": "Defines how data on the disk is encrypted. By default, no encryption is applied.",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "forbid_deletion": {
+                          "type": "bool",
+                          "description": "Prevents deletion whilst set",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "size_bytes": {
+                          "type": "number",
+                          "description": "*Cannot be set alongside size_kibibytes, size_mebibytes or size_gibibytes.*",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "size_gibibytes": {
+                          "type": "number",
+                          "description": "*Cannot be set alongside size_bytes, size_kibibytes or size_mebibytes.*",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "size_kibibytes": {
+                          "type": "number",
+                          "description": "*Cannot be set alongside size_bytes, size_mebibytes or size_gibibytes.*",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "size_mebibytes": {
+                          "type": "number",
+                          "description": "*Cannot be set alongside size_bytes, size_kibibytes or size_gibibytes.*",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "source_image_family": {
+                          "nested_type": {
+                            "attributes": {
+                              "image_family": {
+                                "type": "string",
+                                "description_kind": "plain",
+                                "required": true
+                              },
+                              "parent_id": {
+                                "type": "string",
+                                "description_kind": "plain",
+                                "optional": true
+                              }
+                            },
+                            "nesting_mode": "single"
+                          },
+                          "description": "*Cannot be set alongside source_image_id.*",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "source_image_id": {
+                          "type": "string",
+                          "description": "*Cannot be set alongside source_image_family.*",
+                          "description_kind": "markdown",
+                          "optional": true
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": ":\n\n   The type of disk defines the performance and reliability characteristics of the block device.\n   For details, see https://docs.nebius.com/compute/storage/types#disks-types\n   \n   #### Supported values\n   \n   the list of available types will be clarified later, it is not final version\n   Possible values:\n   \n   - `UNSPECIFIED`\n   - `NETWORK_SSD`\n   - `NETWORK_HDD`\n   - `NETWORK_SSD_NON_REPLICATED`\n   - `NETWORK_SSD_IO_M3`\n   \n",
+                          "description_kind": "markdown",
+                          "required": true
+                        }
+                      },
+                      "nesting_mode": "single"
+                    },
+                    "description": "Specification of a dependent disk to be created.",
+                    "description_kind": "markdown",
+                    "required": true
+                  }
+                },
+                "nesting_mode": "single"
+              },
+              "description": ":\n\n   Attach a managed disk.\n   \n   Lifecycle:\n   - The disk is deleted when the instance is deleted.\n   \n   Semantics:\n   - Specifying a ManagedDisk expresses an intent to have that managed disk attached.\n   - If this intent cannot be satisfied, the entire operation fails.\n   - You can check the intent status in `instance.status.disk_attachments`.\n   \n   Updates and matching:\n   - Managed disks can be updated only via instance spec updates. Updates via DiskService are not allowed.\n   - During updates, disks are matched by `name`.\n   \n   Renaming and data loss:\n   - Changing the disk `name` triggers disk replacement (create a new disk and delete the old one),\n     which causes data loss.\n   - To rename a managed disk safely:\n     1) switch it to ExistingDisk in the instance spec, and\n     2) update/rename it via DiskService.\n   \n   Conflicts:\n   - Instance create/update fails if there is already a disk with the same `name`.\n     as requested by any ManagedDisk.\n   \n   Finding the disk ID:\n   - The disk ID is available in `instance.status.disk_attachments` after it is created.\n     Use `DiskAttachmentStatus.name` to find the desired disk which matches `name`.\n   \n   Switching to an existing (non-managed) disk:\n   - To preserve the disk after instance deletion, switch it to ExistingDisk in the instance spec,\n     use the disk ID from `instance.status.disk_attachments`.\n   \n   Deletion protection:\n   - Switching ExistingDisk to ManagedDisk fails if `Disk.spec.deletion_protection` is enabled.\n   - Deleting an instance that has a ManagedDisk fails if `Disk.spec.deletion_protection` is enabled.\n   \n   *Cannot be set alongside existing_disk.*\n",
+              "description_kind": "markdown",
+              "optional": true
+            }
+          },
+          "nesting_mode": "list"
+        },
+        "description": "List of additional data disks attached to the instance beyond the boot disk.",
+        "description_kind": "markdown",
+        "optional": true
+      },
+      "service_account_id": {
+        "type": "string",
+        "description": ":\n\n   Unique identifier of the service account associated with this instance.\n   For details, see https://docs.nebius.com/iam/service-accounts/manage\n",
+        "description_kind": "markdown",
+        "optional": true
+      },
+      "status": {
+        "nested_type": {
+          "attributes": {
+            "disk_attachments": {
+              "nested_type": {
+                "attributes": {
+                  "id": {
+                    "type": "string",
+                    "description": ":\n\n   Disk ID.\n   - For ExistingDisk, this is the referenced disk ID.\n   - For ManagedDisk, may be empty while the attachment intent is still pending.\n",
+                    "description_kind": "markdown",
+                    "computed": true
+                  },
+                  "is_managed": {
+                    "type": "bool",
+                    "description": ":\n\n   Indicates whether this attachment is managed by the instance lifecycle.\n   If true, the disk is expected to be deleted when the instance is deleted.\n   If false, the disk is preserved and only detached on instance deletion.\n",
+                    "description_kind": "markdown",
+                    "computed": true
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": ":\n\n   Disk name used to match this status entry with the desired attachment\n   from the instance specification.\n   \n   Consistency:\n   - For ManagedDisk, this value is derived from the instance spec (ManagedDisk.name).\n   - For ExistingDisk, this value is derived from the disk resource name and may lag behind\n     in case of renaming. It is updated asynchronously and is eventually consistent.\n",
+                    "description_kind": "markdown",
+                    "computed": true
+                  }
+                },
+                "nesting_mode": "list"
+              },
+              "description": "Status of the requested disk attachments.",
+              "description_kind": "markdown",
+              "computed": true
+            },
+            "infiniband_topology_path": {
+              "nested_type": {
+                "attributes": {
+                  "path": {
+                    "type": [
+                      "list",
+                      "string"
+                    ],
+                    "description_kind": "plain",
+                    "computed": true
+                  }
+                },
+                "nesting_mode": "single"
+              },
+              "description_kind": "plain",
+              "computed": true
+            },
+            "maintenance_event_id": {
+              "type": "string",
+              "description_kind": "plain",
+              "computed": true
+            },
+            "network_interfaces": {
+              "nested_type": {
+                "attributes": {
+                  "aliases": {
+                    "nested_type": {
+                      "attributes": {
+                        "cidrs": {
+                          "type": [
+                            "list",
+                            "string"
+                          ],
+                          "description_kind": "plain",
+                          "computed": true
+                        }
+                      },
+                      "nesting_mode": "single"
+                    },
+                    "description": "Effective IP Aliases",
+                    "description_kind": "markdown",
+                    "computed": true
+                  },
+                  "fqdn": {
+                    "type": "string",
+                    "description": "FQDN of the interface",
+                    "description_kind": "markdown",
+                    "computed": true
+                  },
+                  "index": {
+                    "type": "number",
+                    "description": "The index of the network interface",
+                    "description_kind": "markdown",
+                    "computed": true
+                  },
+                  "ip_address": {
+                    "nested_type": {
+                      "attributes": {
+                        "address": {
+                          "type": "string",
+                          "description": "Effective private IPv4 address assigned to the interface.",
+                          "description_kind": "markdown",
+                          "computed": true
+                        },
+                        "allocation_id": {
+                          "type": "string",
+                          "description": "Allocation identifier.",
+                          "description_kind": "markdown",
+                          "computed": true
+                        }
+                      },
+                      "nesting_mode": "single"
+                    },
+                    "description": "Effective Private IPv4 address",
+                    "description_kind": "markdown",
+                    "computed": true
+                  },
+                  "mac_address": {
+                    "type": "string",
+                    "description": "MAC address",
+                    "description_kind": "markdown",
+                    "computed": true
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": ":\n\n   Name for interface.\n   Unique within instance's network interfaces\n",
+                    "description_kind": "markdown",
+                    "computed": true
+                  },
+                  "public_ip_address": {
+                    "nested_type": {
+                      "attributes": {
+                        "address": {
+                          "type": "string",
+                          "description": "Effective public IPv4 address assigned to the interface.",
+                          "description_kind": "markdown",
+                          "computed": true
+                        },
+                        "allocation_id": {
+                          "type": "string",
+                          "description": "Allocation identifier.",
+                          "description_kind": "markdown",
+                          "computed": true
+                        },
+                        "static": {
+                          "type": "bool",
+                          "description": ":\n\n   If false - Allocation will be created/deleted during NetworkInterface.Allocate/NetworkInterface.Deallocate\n   If true  - Allocation will be created/deleted during NetworkInterface.Create/NetworkInterface.Delete\n   False by default\n",
+                          "description_kind": "markdown",
+                          "computed": true
+                        }
+                      },
+                      "nesting_mode": "single"
+                    },
+                    "description": "Effective Public IPv4 address",
+                    "description_kind": "markdown",
+                    "computed": true
+                  }
+                },
+                "nesting_mode": "list"
+              },
+              "description": ":\n\n   #### Inner value description\n   \n   Describes the status of a network interface.\n",
+              "description_kind": "markdown",
+              "computed": true
+            },
+            "reconciling": {
+              "type": "bool",
+              "description": "Indicates whether there is an ongoing operation",
+              "description_kind": "markdown",
+              "computed": true
+            },
+            "reservation_id": {
+              "type": "string",
+              "description_kind": "plain",
+              "computed": true
+            },
+            "state": {
+              "type": "string",
+              "description": ":\n\n   #### Supported values\n   \n   Possible values:\n   \n   - `UNSPECIFIED`\n   - `CREATING`\n   - `UPDATING`\n   - `STARTING`\n   - `RUNNING`\n   - `STOPPING`\n   - `STOPPED`\n   - `DELETING`\n   - `ERROR`\n   \n",
+              "description_kind": "markdown",
+              "computed": true
+            }
+          },
+          "nesting_mode": "single"
+        },
+        "description_kind": "plain",
+        "computed": true
+      },
+      "stopped": {
+        "type": "bool",
+        "description": "Indicates whether the instance should be stopped.",
+        "description_kind": "markdown",
+        "optional": true
+      },
+      "updated_at": {
+        "type": "string",
+        "description": ":\n\n   Timestamp indicating when the resource was last updated.\n   \n   A string representing a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ` or `YYYY-MM-DDTHH:MM:SS.SSS\u00b1HH:MM`\n",
+        "description_kind": "markdown",
+        "computed": true
+      }
+    },
+    "description_kind": "plain"
+  }
+}
