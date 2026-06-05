@@ -35,27 +35,6 @@
         state: present
         update_cache: yes
 
-    # --- CPU performance governor ---
-    - name: Install cpufrequtils
-      apt:
-        name: cpufrequtils
-        state: present
-
-    - name: Set CPU governor to performance for all cores
-      shell: |
-        for cpu in /sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_governor; do
-          echo performance > "$cpu"
-        done
-      args:
-        executable: /bin/bash
-
-    - name: Persist CPU governor via cpufrequtils
-      lineinfile:
-        path: /etc/default/cpufrequtils
-        regexp: '^GOVERNOR='
-        line: 'GOVERNOR="performance"'
-        create: yes
-
     # --- Kernel modules ---
     - name: Load RDMA kernel modules
       modprobe:
