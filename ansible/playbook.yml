@@ -83,10 +83,10 @@
         group: munge
         mode: '0400'
 
-    - name: Enable and start munge
+    - name: Enable and restart munge (ensures new key is loaded)
       service:
         name: munge
-        state: started
+        state: restarted
         enabled: yes
 
     # --- RDMA device check ---
