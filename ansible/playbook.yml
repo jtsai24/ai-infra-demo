@@ -1,0 +1,87 @@
+---
+- name: Configure H100 GPU cluster nodes
+  hosts: all
+  become: true
+
+  tasks:
+    # --- Swap ---
+    - name: Disable swap immediately
+      command: swapoff -a
+      when: ansible_swaptotal_mb > 0
+
+    - name: Remove swap entries from /etc/fstab
+      replace:
+        path: /etc/fstab
+        regexp: '^([^#].*\s+swap\s+.*)$'
+        replace: '# \1'
+
+    - name: Set vm.swappiness=0 permanently
+      sysctl:
+        name: vm.swappiness
+        value: '0'
+        state: present
+        reload: yes
+
+    # --- Packages ---
+    - name: Install RDMA and utility packages
+      apt:
+        name:
+          - rdma-core
+          - ibverbs-utils
+          - perftest
+          - numactl
+          - htop
+          - nvtop
+        state: present
+        update_cache: yes
+
+    # --- CPU performance governor ---
+    - name: Install cpufrequtils
+      apt:
+        name: cpufrequtils
+        state: present
+
+    - name: Set CPU governor to performance for all cores
+      shell: |
+        for cpu in /sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_governor; do
+          echo performance > "$cpu"
+        done
+      args:
+        executable: /bin/bash
+
+    - name: Persist CPU governor via cpufrequtils
+      lineinfile:
+        path: /etc/default/cpufrequtils
+        regexp: '^GOVERNOR='
+        line: 'GOVERNOR="performance"'
+        create: yes
+
+    # --- Kernel modules ---
+    - name: Load RDMA kernel modules
+      modprobe:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - ib_uverbs
+        - ib_core
+        - rdma_rxe
+
+    - name: Persist RDMA kernel modules across reboots
+      lineinfile:
+        path: /etc/modules-load.d/rdma.conf
+        line: "{{ item }}"
+        create: yes
+      loop:
+        - ib_uverbs
+        - ib_core
+        - rdma_rxe
+
+    # --- RDMA device check ---
+    - name: Run ibv_devices to confirm RDMA devices
+      command: ibv_devices
+      register: ibv_output
+      changed_when: false
+
+    - name: Print ibv_devices output
+      debug:
+        msg: "{{ ibv_output.stdout_lines }}"

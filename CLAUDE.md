@@ -1,5 +1,5 @@
 # CLAUDE.md
-Last updated: June 1, 2026
+Last updated: June 4, 2026
 
 ## Who I am
 
@@ -47,6 +47,10 @@ Build a portfolio demo for AI infra roles (CoreWeave, Anthropic, Nvidia L1-L3):
 - Always run terraform destroy when done
 - Always verify zero instances in Nebius console after destroy — not just "stopped"
 - All RDMA debugging done locally with Soft-RoCE (free) before the paid session
+
+## Notion
+
+- Always prefix page titles with the date in YYYY-MM-DD format, e.g. `2026-06-04 Ansible Commands Reference`
 
 ## Current phase
 
