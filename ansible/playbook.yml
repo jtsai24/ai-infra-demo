@@ -43,7 +43,6 @@
       loop:
         - ib_uverbs
         - ib_core
-        - rdma_rxe
 
     - name: Persist RDMA kernel modules across reboots
       lineinfile:
@@ -53,7 +52,6 @@
       loop:
         - ib_uverbs
         - ib_core
-        - rdma_rxe
 
     # --- RDMA device check ---
     - name: Run ibv_devices to confirm RDMA devices
