@@ -26,12 +26,18 @@
     - name: Install RDMA and utility packages
       apt:
         name:
+          # RDMA packages — installed but not active on 1-GPU Nebius VMs (Virtio NIC, no SR-IOV).
+          # Will be useful when provisioning 8-GPU InfiniBand nodes for the final IB benchmark session.
           - rdma-core
           - ibverbs-utils
           - perftest
           - numactl
           - htop
           - nvtop
+          # Slurm and dependencies
+          - slurm-wlm
+          - munge
+          - python3-pip
         state: present
         update_cache: yes
 
