@@ -1,0 +1,47 @@
+---
+- name: Build nccl-tests on all nodes
+  hosts: all
+  become: false
+
+  tasks:
+    - name: Install build dependencies
+      apt:
+        name:
+          - git
+          - make
+          - g++
+          - openmpi-bin
+          - libopenmpi-dev
+        state: present
+        update_cache: yes
+      become: true
+
+    - name: Clone nccl-tests
+      git:
+        repo: https://github.com/NVIDIA/nccl-tests.git
+        dest: /home/user/nccl-tests
+        version: master
+        force: no  # don't overwrite local changes if already cloned
+
+    - name: Clean previous build (MPI=0 binaries are incompatible with MPI=1)
+      file:
+        path: /home/user/nccl-tests/build
+        state: absent
+
+    - name: Build nccl-tests with MPI support
+      make:
+        chdir: /home/user/nccl-tests
+        params:
+          MPI: "1"
+          MPI_HOME: /usr/lib/x86_64-linux-gnu/openmpi
+          NCCL_HOME: /usr
+          CUDA_HOME: /usr/local/cuda
+
+    - name: Confirm binary exists
+      stat:
+        path: /home/user/nccl-tests/build/all_reduce_perf
+      register: binary
+
+    - name: Print build result
+      debug:
+        msg: "{{ 'nccl-tests built successfully' if binary.stat.exists else 'BUILD FAILED — binary not found' }}"
