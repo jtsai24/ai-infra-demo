@@ -59,6 +59,19 @@
         - ib_uverbs
         - ib_core
 
+    # --- Hostnames ---
+    # Set stable hostnames (node1/node2) so slurm.conf is consistent across reprovisioning.
+    # Nebius default hostnames (computeinstance-e00xyz...) change on every terraform apply.
+    - name: Set hostname
+      hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Update /etc/hosts with new hostname
+      lineinfile:
+        path: /etc/hosts
+        regexp: '^127\.0\.1\.1'
+        line: "127.0.1.1   {{ inventory_hostname }}"
+
     # --- Munge (Slurm inter-node authentication) ---
     # Munge requires an identical key on all nodes. We generate it once on node1,
     # fetch it back to the Ansible control machine, then push it to all nodes.
