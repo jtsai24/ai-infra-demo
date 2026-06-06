@@ -1,0 +1,31 @@
+---
+- name: Deploy and submit Slurm jobs
+  hosts: controller
+  become: false
+
+  tasks:
+    - name: Create logs directory
+      file:
+        path: /home/user/logs
+        state: directory
+        mode: '0755'
+
+    - name: Create jobs directory
+      file:
+        path: /home/user/jobs
+        state: directory
+        mode: '0755'
+
+    - name: Copy hello job script
+      copy:
+        src: ../jobs/hello.sh
+        dest: /home/user/jobs/hello.sh
+        mode: '0755'
+
+    - name: Submit hello job
+      command: sbatch /home/user/jobs/hello.sh
+      register: hello_submit
+
+    - name: Print job submission result
+      debug:
+        msg: "{{ hello_submit.stdout }}"
