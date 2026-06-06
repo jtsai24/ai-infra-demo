@@ -102,6 +102,58 @@
         state: restarted
         enabled: yes
 
+    # --- Slurm configuration ---
+    - name: Create slurm log directory
+      file:
+        path: /var/log/slurm
+        state: directory
+        owner: slurm
+        group: slurm
+        mode: '0755'
+
+    - name: Create slurmd spool directory
+      file:
+        path: /var/spool/slurmd
+        state: directory
+        owner: slurm
+        group: slurm
+        mode: '0755'
+
+    - name: Create slurm config directory
+      file:
+        path: /etc/slurm
+        state: directory
+        mode: '0755'
+
+    - name: Deploy slurm.conf from template
+      template:
+        src: templates/slurm.conf.j2
+        dest: /etc/slurm/slurm.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Deploy gres.conf
+      copy:
+        dest: /etc/slurm/gres.conf
+        content: "Name=gpu Type=h100 File=/dev/nvidia0\n"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Start slurmctld on node1
+      service:
+        name: slurmctld
+        state: restarted
+        enabled: yes
+      when: inventory_hostname == 'node1'
+
+    - name: Start slurmd on all nodes
+      service:
+        name: slurmd
+        state: restarted
+        enabled: yes
+
     # --- RDMA device check ---
     - name: Run ibv_devices to confirm RDMA devices
       command: ibv_devices
