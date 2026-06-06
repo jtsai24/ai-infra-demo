@@ -10,11 +10,11 @@
           - git
           - make
           - g++
-          - openmpi-bin
-          - libopenmpi-dev
         state: present
         update_cache: yes
       become: true
+      # Note: OpenMPI is pre-installed by Nebius at /usr/mpi/gcc/openmpi-4.1.7a1
+      # Do NOT install openmpi-bin from apt — it conflicts with UCX 1.16 already on the system
 
     - name: Clone nccl-tests
       git:
@@ -33,7 +33,7 @@
         chdir: /home/user/nccl-tests
         params:
           MPI: "1"
-          MPI_HOME: /usr/lib/x86_64-linux-gnu/openmpi
+          MPI_HOME: /usr/mpi/gcc/openmpi-4.1.7a1
           NCCL_HOME: /usr
           CUDA_HOME: /usr/local/cuda
 

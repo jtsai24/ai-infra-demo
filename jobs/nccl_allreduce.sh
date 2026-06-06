@@ -8,7 +8,7 @@
 export NCCL_SOCKET_IFNAME=eth0
 export NCCL_DEBUG=WARN  # reduce noise; use INFO if debugging
 
-mpirun --np 2 \
+/usr/mpi/gcc/openmpi-4.1.7a1/bin/mpirun --np 2 \
   --host node1,node2 \
   --mca btl_tcp_if_include eth0 \
   /home/user/nccl-tests/build/all_reduce_perf -b 8 -e 256M -f 2 -g 1
