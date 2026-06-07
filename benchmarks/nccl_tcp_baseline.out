@@ -1,0 +1,54 @@
+[LOG_CAT_ML] You must specify a valid HCA device by setting:
+-x HCOLL_MAIN_IB=<dev_name:port> or -x UCX_NET_DEVICES=<dev_name:port>.
+If no device was specified for HCOLL (or the calling library), automatic device detection will be run.
+In case of unfounded HCA device please contact your system administrator.
+[LOG_CAT_ML] You must specify a valid HCA device by setting:
+-x HCOLL_MAIN_IB=<dev_name:port> or -x UCX_NET_DEVICES=<dev_name:port>.
+If no device was specified for HCOLL (or the calling library), automatic device detection will be run.
+In case of unfounded HCA device please contact your system administrator.
+[node1:33528] Error: coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+[node2:27369] Error: coll_hcoll_module.c:310 - mca_coll_hcoll_comm_query() Hcol library init failed
+# nccl-tests version 2.18.4 nccl-headers=22304 nccl-library=22304
+# Collective test starting: all_reduce_perf
+# nThread 1 nGpus 1 minBytes 8 maxBytes 268435456 step: 2(factor) warmup iters: 1 iters: 20 agg iters: 1 validation: 1 graph: 0 unalign: 0
+#
+# Using devices
+#  Rank  0 Group  0 Pid  33528 on      node1 device  0 [0000:8d:00] NVIDIA H100 80GB HBM3
+#  Rank  1 Group  0 Pid  27369 on      node2 device  0 [0000:8d:00] NVIDIA H100 80GB HBM3
+NCCL version 2.23.4+cuda12.4
+#
+#                                                              out-of-place                       in-place          
+#       size         count      type   redop    root     time   algbw   busbw  #wrong     time   algbw   busbw  #wrong 
+#        (B)    (elements)                               (us)  (GB/s)  (GB/s)             (us)  (GB/s)  (GB/s)         
+           8             2     float     sum      -1   136.34    0.00    0.00       0   122.44    0.00    0.00       0
+          16             4     float     sum      -1   127.81    0.00    0.00       0   119.97    0.00    0.00       0
+          32             8     float     sum      -1   116.50    0.00    0.00       0   108.14    0.00    0.00       0
+          64            16     float     sum      -1   113.04    0.00    0.00       0   111.63    0.00    0.00       0
+         128            32     float     sum      -1   119.20    0.00    0.00       0   115.96    0.00    0.00       0
+         256            64     float     sum      -1   125.21    0.00    0.00       0   114.99    0.00    0.00       0
+         512           128     float     sum      -1   113.25    0.00    0.00       0   115.80    0.00    0.00       0
+        1024           256     float     sum      -1   122.92    0.01    0.01       0   125.56    0.01    0.01       0
+        2048           512     float     sum      -1   133.91    0.02    0.02       0   128.18    0.02    0.02       0
+        4096          1024     float     sum      -1   159.58    0.03    0.03       0   141.01    0.03    0.03       0
+        8192          2048     float     sum      -1   160.62    0.05    0.05       0   170.87    0.05    0.05       0
+       16384          4096     float     sum      -1   242.04    0.07    0.07       0   210.00    0.08    0.08       0
+       32768          8192     float     sum      -1   410.80    0.08    0.08       0   375.97    0.09    0.09       0
+       65536         16384     float     sum      -1   475.80    0.14    0.14       0   392.36    0.17    0.17       0
+      131072         32768     float     sum      -1   579.50    0.23    0.23       0   604.00    0.22    0.22       0
+      262144         65536     float     sum      -1   799.49    0.33    0.33       0   797.98    0.33    0.33       0
+      524288        131072     float     sum      -1   890.24    0.59    0.59       0   957.18    0.55    0.55       0
+     1048576        262144     float     sum      -1  1505.20    0.70    0.70       0  1462.54    0.72    0.72       0
+     2097152        524288     float     sum      -1  2143.47    0.98    0.98       0  2145.39    0.98    0.98       0
+     4194304       1048576     float     sum      -1  3579.92    1.17    1.17       0  3392.35    1.24    1.24       0
+     8388608       2097152     float     sum      -1  5548.60    1.51    1.51       0  5680.53    1.48    1.48       0
+    16777216       4194304     float     sum      -1  11435.4    1.47    1.47       0  11121.7    1.51    1.51       0
+    33554432       8388608     float     sum      -1  33995.0    0.99    0.99       0  24340.5    1.38    1.38       0
+    67108864      16777216     float     sum      -1  48781.4    1.38    1.38       0  44562.0    1.51    1.51       0
+   134217728      33554432     float     sum      -1  93308.4    1.44    1.44       0  99533.3    1.35    1.35       0
+   268435456      67108864     float     sum      -1   184510    1.45    1.45       0   189084    1.42    1.42       0
+# Out of bounds values : 0 OK
+# Avg bus bandwidth    : 0.494672 
+#
+# Collective test concluded: all_reduce_perf
+#
+
