@@ -1,0 +1,31 @@
+---
+- name: Deploy and submit NCCL MPI+TCP job
+  hosts: controller
+  become: false
+
+  tasks:
+    - name: Create logs directory
+      file:
+        path: /home/user/logs
+        state: directory
+        mode: '0755'
+
+    - name: Create jobs directory
+      file:
+        path: /home/user/jobs
+        state: directory
+        mode: '0755'
+
+    - name: Copy nccl_3_mpi_tcp job script
+      copy:
+        src: ../jobs/nccl_3_mpi_tcp.sh
+        dest: /home/user/jobs/nccl_3_mpi_tcp.sh
+        mode: '0755'
+
+    - name: Submit nccl_3_mpi_tcp job
+      command: sbatch /home/user/jobs/nccl_3_mpi_tcp.sh
+      register: submit
+
+    - name: Print job ID
+      debug:
+        msg: "{{ submit.stdout }}"

@@ -1,0 +1,31 @@
+---
+- name: Deploy and submit NCCL NVLink job
+  hosts: controller
+  become: false
+
+  tasks:
+    - name: Create logs directory
+      file:
+        path: /home/user/logs
+        state: directory
+        mode: '0755'
+
+    - name: Create jobs directory
+      file:
+        path: /home/user/jobs
+        state: directory
+        mode: '0755'
+
+    - name: Copy nccl_2_nvlink job script
+      copy:
+        src: ../jobs/nccl_2_nvlink.sh
+        dest: /home/user/jobs/nccl_2_nvlink.sh
+        mode: '0755'
+
+    - name: Submit nccl_2_nvlink job
+      command: sbatch /home/user/jobs/nccl_2_nvlink.sh
+      register: submit
+
+    - name: Print job ID
+      debug:
+        msg: "{{ submit.stdout }}"

@@ -16,14 +16,14 @@
         state: directory
         mode: '0755'
 
-    - name: Copy nccl_allreduce job script
+    - name: Copy nccl_4_ib job script
       copy:
-        src: ../jobs/nccl_allreduce.sh
-        dest: /home/user/jobs/nccl_allreduce.sh
+        src: ../jobs/nccl_4_ib.sh
+        dest: /home/user/jobs/nccl_4_ib.sh
         mode: '0755'
 
-    - name: Submit nccl_allreduce job
-      command: sbatch /home/user/jobs/nccl_allreduce.sh
+    - name: Submit nccl_4_ib job
+      command: sbatch /home/user/jobs/nccl_4_ib.sh
       register: nccl_submit
 
     - name: Print nccl job submission result
