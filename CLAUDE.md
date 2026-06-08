@@ -49,6 +49,9 @@ Build a portfolio demo for AI infra roles (CoreWeave, Anthropic, Nvidia L1-L3):
 - All RDMA debugging done locally with Soft-RoCE (free) before the paid session
 
 
+## Notion
+Always invoke the `/notion` skill before any Notion operation — reading, writing, creating pages, or editing existing pages.
+
 ## Current phase
 
 Phase 1, Week 1 — Foundation
