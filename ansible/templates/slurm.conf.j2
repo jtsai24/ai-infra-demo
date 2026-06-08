@@ -11,7 +11,7 @@ SlurmctldLogFile=/var/log/slurm/slurmctld.log
 SlurmdLogFile=/var/log/slurm/slurmd.log
 SlurmdSpoolDir=/var/spool/slurmd
 
-NodeName=node1 NodeAddr={{ hostvars['node1']['ansible_default_ipv4']['address'] }} CPUs=16 Boards=1 SocketsPerBoard=1 CoresPerSocket=8 ThreadsPerCore=2 RealMemory=200000 Gres=gpu:1 State=UNKNOWN
-NodeName=node2 NodeAddr={{ hostvars['node2']['ansible_default_ipv4']['address'] }} CPUs=16 Boards=1 SocketsPerBoard=1 CoresPerSocket=8 ThreadsPerCore=2 RealMemory=200000 Gres=gpu:1 State=UNKNOWN
+NodeName=node1 NodeAddr={{ hostvars['node1']['ansible_default_ipv4']['address'] }} CPUs=128 Boards=1 SocketsPerBoard=2 CoresPerSocket=32 ThreadsPerCore=2 RealMemory=1612647 Gres=gpu:8 State=UNKNOWN
+NodeName=node2 NodeAddr={{ hostvars['node2']['ansible_default_ipv4']['address'] }} CPUs=128 Boards=1 SocketsPerBoard=2 CoresPerSocket=32 ThreadsPerCore=2 RealMemory=1612647 Gres=gpu:8 State=UNKNOWN
 
 PartitionName=gpu Nodes=node1,node2 Default=YES MaxTime=INFINITE State=UP
