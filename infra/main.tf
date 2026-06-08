@@ -33,9 +33,18 @@ resource "nebius_compute_v1_disk" "node2_disk" {
   }
 }
 
+resource "nebius_compute_v1_gpu_cluster" "ib_cluster" {
+  name              = "ai-infra-ib-cluster"
+  parent_id         = var.project_id
+  infiniband_fabric = "fabric-2"
+}
+
 resource "nebius_compute_v1_instance" "node1" {
-  name      = "h100-node1"
-  parent_id = var.project_id
+  name           = "h100-node1"
+  parent_id      = var.project_id
+  gpu_cluster = {
+    id = nebius_compute_v1_gpu_cluster.ib_cluster.id
+  }
 
   resources = {
     platform = "gpu-h100-sxm"
@@ -70,8 +79,11 @@ resource "nebius_compute_v1_instance" "node1" {
 }
 
 resource "nebius_compute_v1_instance" "node2" {
-  name      = "h100-node2"
-  parent_id = var.project_id
+  name           = "h100-node2"
+  parent_id      = var.project_id
+  gpu_cluster = {
+    id = nebius_compute_v1_gpu_cluster.ib_cluster.id
+  }
 
   resources = {
     platform = "gpu-h100-sxm"
