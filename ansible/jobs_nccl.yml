@@ -1,0 +1,31 @@
+---
+- name: Deploy and submit NCCL benchmark job
+  hosts: controller
+  become: false
+
+  tasks:
+    - name: Create logs directory
+      file:
+        path: /home/user/logs
+        state: directory
+        mode: '0755'
+
+    - name: Create jobs directory
+      file:
+        path: /home/user/jobs
+        state: directory
+        mode: '0755'
+
+    - name: Copy nccl_allreduce job script
+      copy:
+        src: ../jobs/nccl_allreduce.sh
+        dest: /home/user/jobs/nccl_allreduce.sh
+        mode: '0755'
+
+    - name: Submit nccl_allreduce job
+      command: sbatch /home/user/jobs/nccl_allreduce.sh
+      register: nccl_submit
+
+    - name: Print nccl job submission result
+      debug:
+        msg: "{{ nccl_submit.stdout }}"
