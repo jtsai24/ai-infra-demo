@@ -144,7 +144,7 @@
     - name: Deploy gres.conf
       copy:
         dest: /etc/slurm/gres.conf
-        content: "Name=gpu Type=h100 File=/dev/nvidia0\n"
+        content: "Name=gpu Type=h100 File=/dev/nvidia[0-7]\n"
         owner: root
         group: root
         mode: '0644'

@@ -48,7 +48,7 @@ resource "nebius_compute_v1_instance" "node1" {
 
   resources = {
     platform = "gpu-h100-sxm"
-    preset   = "1gpu-16vcpu-200gb"
+    preset   = "8gpu-128vcpu-1600gb"
   }
 
   boot_disk = {
@@ -87,7 +87,7 @@ resource "nebius_compute_v1_instance" "node2" {
 
   resources = {
     platform = "gpu-h100-sxm"
-    preset   = "1gpu-16vcpu-200gb"
+    preset   = "8gpu-128vcpu-1600gb"
   }
 
   boot_disk = {

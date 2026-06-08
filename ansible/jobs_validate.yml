@@ -1,0 +1,45 @@
+---
+- name: Deploy and submit validation jobs
+  hosts: controller
+  become: false
+
+  tasks:
+    - name: Create logs directory
+      file:
+        path: /home/user/logs
+        state: directory
+        mode: '0755'
+
+    - name: Create jobs directory
+      file:
+        path: /home/user/jobs
+        state: directory
+        mode: '0755'
+
+    - name: Copy hello job script
+      copy:
+        src: ../jobs/hello.sh
+        dest: /home/user/jobs/hello.sh
+        mode: '0755'
+
+    - name: Submit hello job
+      command: sbatch /home/user/jobs/hello.sh
+      register: hello_submit
+
+    - name: Print hello job submission result
+      debug:
+        msg: "{{ hello_submit.stdout }}"
+
+    - name: Copy gpu_check job script
+      copy:
+        src: ../jobs/gpu_check.sh
+        dest: /home/user/jobs/gpu_check.sh
+        mode: '0755'
+
+    - name: Submit gpu_check job
+      command: sbatch /home/user/jobs/gpu_check.sh
+      register: gpu_check_submit
+
+    - name: Print gpu_check job submission result
+      debug:
+        msg: "{{ gpu_check_submit.stdout }}"
