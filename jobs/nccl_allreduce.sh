@@ -8,8 +8,8 @@
 
 export NCCL_IB_DISABLE=0
 export NCCL_IB_HCA=mlx5_0  # placeholder — verify with ibv_devices after nodes come up
-export NCCL_DEBUG=WARN  # reduce noise; use INFO if debugging
+export NCCL_DEBUG=INFO  # INFO required to confirm Transport: IBV in logs
 
 /usr/mpi/gcc/openmpi-4.1.7a1/bin/mpirun --np 16 \
-  --host node1,node2 \
+  --host node1:8,node2:8 \
   /home/user/nccl-tests/build/all_reduce_perf -b 8 -e 256M -f 2 -g 8
