@@ -8,4 +8,5 @@
 
 # Simplest possible NCCL test: 1 node, 1 GPU, no MPI
 # Goal: confirm nccl-tests binary runs and NCCL initializes
+export LD_LIBRARY_PATH=/usr/mpi/gcc/openmpi-4.1.7a1/lib:$LD_LIBRARY_PATH
 /home/user/nccl-tests/build/all_reduce_perf -b 8 -e 128M -f 2 -g 1

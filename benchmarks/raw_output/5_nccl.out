@@ -1,0 +1,1555 @@
+# nccl-tests version 2.18.4 nccl-headers=22304 nccl-library=22304
+# Collective test starting: all_reduce_perf
+# nThread 1 nGpus 1 minBytes 8 maxBytes 268435456 step: 2(factor) warmup iters: 1 iters: 20 agg iters: 1 validation: 1 graph: 0 unalign: 0
+#
+# Using devices
+#  Rank  0 Group  0 Pid  14787 on      node1 device  0 [0000:8d:00] NVIDIA H100 80GB HBM3
+#  Rank  1 Group  0 Pid  14788 on      node1 device  1 [0000:91:00] NVIDIA H100 80GB HBM3
+#  Rank  2 Group  0 Pid  14789 on      node1 device  2 [0000:95:00] NVIDIA H100 80GB HBM3
+#  Rank  3 Group  0 Pid  14790 on      node1 device  3 [0000:99:00] NVIDIA H100 80GB HBM3
+#  Rank  4 Group  0 Pid  14791 on      node1 device  4 [0000:ab:00] NVIDIA H100 80GB HBM3
+#  Rank  5 Group  0 Pid  14793 on      node1 device  5 [0000:af:00] NVIDIA H100 80GB HBM3
+#  Rank  6 Group  0 Pid  14796 on      node1 device  6 [0000:b3:00] NVIDIA H100 80GB HBM3
+#  Rank  7 Group  0 Pid  14800 on      node1 device  7 [0000:b7:00] NVIDIA H100 80GB HBM3
+#  Rank  8 Group  0 Pid  12768 on      node2 device  0 [0000:8d:00] NVIDIA H100 80GB HBM3
+#  Rank  9 Group  0 Pid  12769 on      node2 device  1 [0000:91:00] NVIDIA H100 80GB HBM3
+#  Rank 10 Group  0 Pid  12770 on      node2 device  2 [0000:95:00] NVIDIA H100 80GB HBM3
+#  Rank 11 Group  0 Pid  12771 on      node2 device  3 [0000:99:00] NVIDIA H100 80GB HBM3
+#  Rank 12 Group  0 Pid  12772 on      node2 device  4 [0000:ab:00] NVIDIA H100 80GB HBM3
+#  Rank 13 Group  0 Pid  12774 on      node2 device  5 [0000:af:00] NVIDIA H100 80GB HBM3
+#  Rank 14 Group  0 Pid  12777 on      node2 device  6 [0000:b3:00] NVIDIA H100 80GB HBM3
+#  Rank 15 Group  0 Pid  12780 on      node2 device  7 [0000:b7:00] NVIDIA H100 80GB HBM3
+node1:14787:14787 [0] NCCL INFO Bootstrap : Using eth0:10.0.0.83<0>
+node1:14787:14787 [0] NCCL INFO cudaDriverVersion 12040
+node1:14787:14787 [0] NCCL INFO NCCL version 2.23.4+cuda12.4
+node1:14789:14789 [2] NCCL INFO cudaDriverVersion 12040
+node1:14789:14789 [2] NCCL INFO Bootstrap : Using eth0:10.0.0.83<0>
+node1:14789:14789 [2] NCCL INFO NCCL version 2.23.4+cuda12.4
+node2:12774:12774 [5] NCCL INFO cudaDriverVersion 12040
+node2:12774:12774 [5] NCCL INFO Bootstrap : Using eth0:10.0.0.53<0>
+node2:12774:12774 [5] NCCL INFO NCCL version 2.23.4+cuda12.4
+node1:14800:14800 [7] NCCL INFO cudaDriverVersion 12040
+node1:14800:14800 [7] NCCL INFO Bootstrap : Using eth0:10.0.0.83<0>
+node1:14800:14800 [7] NCCL INFO NCCL version 2.23.4+cuda12.4
+node2:12771:12771 [3] NCCL INFO cudaDriverVersion 12040
+node2:12771:12771 [3] NCCL INFO Bootstrap : Using eth0:10.0.0.53<0>
+node2:12771:12771 [3] NCCL INFO NCCL version 2.23.4+cuda12.4
+node1:14793:14793 [5] NCCL INFO cudaDriverVersion 12040
+node1:14793:14793 [5] NCCL INFO Bootstrap : Using eth0:10.0.0.83<0>
+node1:14793:14793 [5] NCCL INFO NCCL version 2.23.4+cuda12.4
+node2:12769:12769 [1] NCCL INFO cudaDriverVersion 12040
+node2:12769:12769 [1] NCCL INFO Bootstrap : Using eth0:10.0.0.53<0>
+node2:12769:12769 [1] NCCL INFO NCCL version 2.23.4+cuda12.4
+node1:14791:14791 [4] NCCL INFO cudaDriverVersion 12040
+node1:14791:14791 [4] NCCL INFO Bootstrap : Using eth0:10.0.0.83<0>
+node1:14791:14791 [4] NCCL INFO NCCL version 2.23.4+cuda12.4
+node1:14788:14788 [1] NCCL INFO cudaDriverVersion 12040
+node1:14788:14788 [1] NCCL INFO Bootstrap : Using eth0:10.0.0.83<0>
+node1:14788:14788 [1] NCCL INFO NCCL version 2.23.4+cuda12.4
+node1:14790:14790 [3] NCCL INFO cudaDriverVersion 12040
+node1:14790:14790 [3] NCCL INFO Bootstrap : Using eth0:10.0.0.83<0>
+node1:14790:14790 [3] NCCL INFO NCCL version 2.23.4+cuda12.4
+node2:12777:12777 [6] NCCL INFO cudaDriverVersion 12040
+node2:12777:12777 [6] NCCL INFO Bootstrap : Using eth0:10.0.0.53<0>
+node2:12777:12777 [6] NCCL INFO NCCL version 2.23.4+cuda12.4
+node2:12770:12770 [2] NCCL INFO cudaDriverVersion 12040
+node2:12770:12770 [2] NCCL INFO Bootstrap : Using eth0:10.0.0.53<0>
+node2:12770:12770 [2] NCCL INFO NCCL version 2.23.4+cuda12.4
+node2:12768:12768 [0] NCCL INFO cudaDriverVersion 12040
+node1:14796:14796 [6] NCCL INFO cudaDriverVersion 12040
+node2:12768:12768 [0] NCCL INFO Bootstrap : Using eth0:10.0.0.53<0>
+node2:12768:12768 [0] NCCL INFO NCCL version 2.23.4+cuda12.4
+node1:14796:14796 [6] NCCL INFO Bootstrap : Using eth0:10.0.0.83<0>
+node1:14796:14796 [6] NCCL INFO NCCL version 2.23.4+cuda12.4
+node2:12780:12780 [7] NCCL INFO cudaDriverVersion 12040
+node2:12780:12780 [7] NCCL INFO Bootstrap : Using eth0:10.0.0.53<0>
+node2:12780:12780 [7] NCCL INFO NCCL version 2.23.4+cuda12.4
+node2:12772:12772 [4] NCCL INFO cudaDriverVersion 12040
+node2:12772:12772 [4] NCCL INFO Bootstrap : Using eth0:10.0.0.53<0>
+node2:12772:12772 [4] NCCL INFO NCCL version 2.23.4+cuda12.4
+node1:14787:14881 [0] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal network plugin.
+node1:14787:14881 [0] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+node1:14787:14881 [0] NCCL INFO NCCL_IB_HCA set to mlx5
+node1:14789:14882 [2] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal network plugin.
+node1:14789:14882 [2] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+node1:14789:14882 [2] NCCL INFO NCCL_IB_HCA set to mlx5
+node1:14787:14881 [0] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB [2]mlx5_2:1/IB [3]mlx5_3:1/IB [4]mlx5_4:1/IB [5]mlx5_5:1/IB [6]mlx5_6:1/IB [7]mlx5_7:1/IB [RO]; OOB eth0:10.0.0.83<0>
+node1:14787:14881 [0] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so.
+node1:14787:14881 [0] NCCL INFO Using network IB
+node1:14800:14883 [7] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal network plugin.
+node1:14800:14883 [7] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+node1:14800:14883 [7] NCCL INFO NCCL_IB_HCA set to mlx5
+node1:14789:14882 [2] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB [2]mlx5_2:1/IB [3]mlx5_3:1/IB [4]mlx5_4:1/IB [5]mlx5_5:1/IB [6]mlx5_6:1/IB [7]mlx5_7:1/IB [RO]; OOB eth0:10.0.0.83<0>
+node1:14789:14882 [2] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so.
+node1:14789:14882 [2] NCCL INFO Using network IB
+node1:14800:14883 [7] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB [2]mlx5_2:1/IB [3]mlx5_3:1/IB [4]mlx5_4:1/IB [5]mlx5_5:1/IB [6]mlx5_6:1/IB [7]mlx5_7:1/IB [RO]; OOB eth0:10.0.0.83<0>
+node1:14800:14883 [7] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so.
+node1:14800:14883 [7] NCCL INFO Using network IB
+node1:14793:14884 [5] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal network plugin.
+node1:14793:14884 [5] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+node1:14793:14884 [5] NCCL INFO NCCL_IB_HCA set to mlx5
+node1:14793:14884 [5] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB [2]mlx5_2:1/IB [3]mlx5_3:1/IB [4]mlx5_4:1/IB [5]mlx5_5:1/IB [6]mlx5_6:1/IB [7]mlx5_7:1/IB [RO]; OOB eth0:10.0.0.83<0>
+node1:14793:14884 [5] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so.
+node1:14793:14884 [5] NCCL INFO Using network IB
+node1:14791:14885 [4] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal network plugin.
+node1:14791:14885 [4] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+node1:14790:14887 [3] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal network plugin.
+node1:14790:14887 [3] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+node1:14791:14885 [4] NCCL INFO NCCL_IB_HCA set to mlx5
+node1:14790:14887 [3] NCCL INFO NCCL_IB_HCA set to mlx5
+node1:14790:14887 [3] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB [2]mlx5_2:1/IB [3]mlx5_3:1/IB [4]mlx5_4:1/IB [5]mlx5_5:1/IB [6]mlx5_6:1/IB [7]mlx5_7:1/IB [RO]; OOB eth0:10.0.0.83<0>
+node1:14790:14887 [3] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so.
+node1:14790:14887 [3] NCCL INFO Using network IB
+node1:14791:14885 [4] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB [2]mlx5_2:1/IB [3]mlx5_3:1/IB [4]mlx5_4:1/IB [5]mlx5_5:1/IB [6]mlx5_6:1/IB [7]mlx5_7:1/IB [RO]; OOB eth0:10.0.0.83<0>
+node1:14791:14885 [4] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so.
+node1:14791:14885 [4] NCCL INFO Using network IB
+node2:12774:12857 [5] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal network plugin.
+node2:12774:12857 [5] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+node2:12774:12857 [5] NCCL INFO NCCL_IB_HCA set to mlx5
+node2:12771:12858 [3] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal network plugin.
+node2:12771:12858 [3] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+node2:12770:12863 [2] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal network plugin.
+node2:12770:12863 [2] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+node2:12777:12860 [6] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal network plugin.
+node2:12777:12860 [6] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+node2:12774:12857 [5] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB [2]mlx5_2:1/IB [3]mlx5_3:1/IB [4]mlx5_4:1/IB [5]mlx5_5:1/IB [6]mlx5_6:1/IB [7]mlx5_7:1/IB [RO]; OOB eth0:10.0.0.53<0>
+node2:12777:12860 [6] NCCL INFO NCCL_IB_HCA set to mlx5
+node2:12770:12863 [2] NCCL INFO NCCL_IB_HCA set to mlx5
+node2:12771:12858 [3] NCCL INFO NCCL_IB_HCA set to mlx5
+node2:12774:12857 [5] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so.
+node2:12774:12857 [5] NCCL INFO Using network IB
+node1:14788:14886 [1] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal network plugin.
+node1:14788:14886 [1] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+node1:14788:14886 [1] NCCL INFO NCCL_IB_HCA set to mlx5
+node2:12769:12859 [1] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal network plugin.
+node2:12769:12859 [1] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+node2:12769:12859 [1] NCCL INFO NCCL_IB_HCA set to mlx5
+node2:12780:12861 [7] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal network plugin.
+node2:12780:12861 [7] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+node2:12780:12861 [7] NCCL INFO NCCL_IB_HCA set to mlx5
+node2:12768:12862 [0] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal network plugin.
+node2:12768:12862 [0] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+node2:12768:12862 [0] NCCL INFO NCCL_IB_HCA set to mlx5
+node2:12771:12858 [3] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB [2]mlx5_2:1/IB [3]mlx5_3:1/IB [4]mlx5_4:1/IB [5]mlx5_5:1/IB [6]mlx5_6:1/IB [7]mlx5_7:1/IB [RO]; OOB eth0:10.0.0.53<0>
+node2:12777:12860 [6] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB [2]mlx5_2:1/IB [3]mlx5_3:1/IB [4]mlx5_4:1/IB [5]mlx5_5:1/IB [6]mlx5_6:1/IB [7]mlx5_7:1/IB [RO]; OOB eth0:10.0.0.53<0>
+node2:12770:12863 [2] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB [2]mlx5_2:1/IB [3]mlx5_3:1/IB [4]mlx5_4:1/IB [5]mlx5_5:1/IB [6]mlx5_6:1/IB [7]mlx5_7:1/IB [RO]; OOB eth0:10.0.0.53<0>
+node2:12771:12858 [3] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so.
+node2:12771:12858 [3] NCCL INFO Using network IB
+node2:12777:12860 [6] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so.
+node2:12777:12860 [6] NCCL INFO Using network IB
+node2:12770:12863 [2] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so.
+node2:12770:12863 [2] NCCL INFO Using network IB
+node1:14788:14886 [1] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB [2]mlx5_2:1/IB [3]mlx5_3:1/IB [4]mlx5_4:1/IB [5]mlx5_5:1/IB [6]mlx5_6:1/IB [7]mlx5_7:1/IB [RO]; OOB eth0:10.0.0.83<0>
+node1:14788:14886 [1] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so.
+node1:14788:14886 [1] NCCL INFO Using network IB
+node2:12769:12859 [1] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB [2]mlx5_2:1/IB [3]mlx5_3:1/IB [4]mlx5_4:1/IB [5]mlx5_5:1/IB [6]mlx5_6:1/IB [7]mlx5_7:1/IB [RO]; OOB eth0:10.0.0.53<0>
+node2:12769:12859 [1] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so.
+node2:12769:12859 [1] NCCL INFO Using network IB
+node2:12772:12864 [4] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal network plugin.
+node2:12772:12864 [4] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+node2:12772:12864 [4] NCCL INFO NCCL_IB_HCA set to mlx5
+node2:12780:12861 [7] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB [2]mlx5_2:1/IB [3]mlx5_3:1/IB [4]mlx5_4:1/IB [5]mlx5_5:1/IB [6]mlx5_6:1/IB [7]mlx5_7:1/IB [RO]; OOB eth0:10.0.0.53<0>
+node2:12780:12861 [7] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so.
+node2:12780:12861 [7] NCCL INFO Using network IB
+node1:14796:14888 [6] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. Using internal network plugin.
+node1:14796:14888 [6] NCCL INFO NCCL_IB_DISABLE set by environment to 0.
+node1:14796:14888 [6] NCCL INFO NCCL_IB_HCA set to mlx5
+node2:12768:12862 [0] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB [2]mlx5_2:1/IB [3]mlx5_3:1/IB [4]mlx5_4:1/IB [5]mlx5_5:1/IB [6]mlx5_6:1/IB [7]mlx5_7:1/IB [RO]; OOB eth0:10.0.0.53<0>
+node2:12768:12862 [0] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so.
+node2:12768:12862 [0] NCCL INFO Using network IB
+node2:12772:12864 [4] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB [2]mlx5_2:1/IB [3]mlx5_3:1/IB [4]mlx5_4:1/IB [5]mlx5_5:1/IB [6]mlx5_6:1/IB [7]mlx5_7:1/IB [RO]; OOB eth0:10.0.0.53<0>
+node2:12772:12864 [4] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so.
+node2:12772:12864 [4] NCCL INFO Using network IB
+node1:14796:14888 [6] NCCL INFO NET/IB : Using [0]mlx5_0:1/IB [1]mlx5_1:1/IB [2]mlx5_2:1/IB [3]mlx5_3:1/IB [4]mlx5_4:1/IB [5]mlx5_5:1/IB [6]mlx5_6:1/IB [7]mlx5_7:1/IB [RO]; OOB eth0:10.0.0.83<0>
+node1:14796:14888 [6] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so.
+node1:14796:14888 [6] NCCL INFO Using network IB
+node1:14789:14882 [2] NCCL INFO ncclCommInitRankConfig comm 0x5650387204c0 rank 2 nranks 16 cudaDev 2 nvmlDev 2 busId 95000 commId 0x96bead0bf75b2174 - Init START
+node1:14787:14881 [0] NCCL INFO ncclCommInitRankConfig comm 0x55858412f8f0 rank 0 nranks 16 cudaDev 0 nvmlDev 0 busId 8d000 commId 0x96bead0bf75b2174 - Init START
+node2:12774:12857 [5] NCCL INFO ncclCommInitRankConfig comm 0x55e721711260 rank 13 nranks 16 cudaDev 5 nvmlDev 5 busId af000 commId 0x96bead0bf75b2174 - Init START
+node1:14793:14884 [5] NCCL INFO ncclCommInitRankConfig comm 0x556cfc92bf80 rank 5 nranks 16 cudaDev 5 nvmlDev 5 busId af000 commId 0x96bead0bf75b2174 - Init START
+node1:14800:14883 [7] NCCL INFO ncclCommInitRankConfig comm 0x55cd9b20d120 rank 7 nranks 16 cudaDev 7 nvmlDev 7 busId b7000 commId 0x96bead0bf75b2174 - Init START
+node1:14791:14885 [4] NCCL INFO ncclCommInitRankConfig comm 0x5562b61a20a0 rank 4 nranks 16 cudaDev 4 nvmlDev 4 busId ab000 commId 0x96bead0bf75b2174 - Init START
+node1:14790:14887 [3] NCCL INFO ncclCommInitRankConfig comm 0x55cf2859fbc0 rank 3 nranks 16 cudaDev 3 nvmlDev 3 busId 99000 commId 0x96bead0bf75b2174 - Init START
+node1:14788:14886 [1] NCCL INFO ncclCommInitRankConfig comm 0x557c35fd2520 rank 1 nranks 16 cudaDev 1 nvmlDev 1 busId 91000 commId 0x96bead0bf75b2174 - Init START
+node1:14796:14888 [6] NCCL INFO ncclCommInitRankConfig comm 0x55af05ffe720 rank 6 nranks 16 cudaDev 6 nvmlDev 6 busId b3000 commId 0x96bead0bf75b2174 - Init START
+node2:12771:12858 [3] NCCL INFO ncclCommInitRankConfig comm 0x5561c0ca5a40 rank 11 nranks 16 cudaDev 3 nvmlDev 3 busId 99000 commId 0x96bead0bf75b2174 - Init START
+node2:12772:12864 [4] NCCL INFO ncclCommInitRankConfig comm 0x5641f544d920 rank 12 nranks 16 cudaDev 4 nvmlDev 4 busId ab000 commId 0x96bead0bf75b2174 - Init START
+node2:12777:12860 [6] NCCL INFO ncclCommInitRankConfig comm 0x55fc79ed17a0 rank 14 nranks 16 cudaDev 6 nvmlDev 6 busId b3000 commId 0x96bead0bf75b2174 - Init START
+node2:12770:12863 [2] NCCL INFO ncclCommInitRankConfig comm 0x557b93358f00 rank 10 nranks 16 cudaDev 2 nvmlDev 2 busId 95000 commId 0x96bead0bf75b2174 - Init START
+node2:12780:12861 [7] NCCL INFO ncclCommInitRankConfig comm 0x55c814d5a980 rank 15 nranks 16 cudaDev 7 nvmlDev 7 busId b7000 commId 0x96bead0bf75b2174 - Init START
+node2:12769:12859 [1] NCCL INFO ncclCommInitRankConfig comm 0x5593f27a4df0 rank 9 nranks 16 cudaDev 1 nvmlDev 1 busId 91000 commId 0x96bead0bf75b2174 - Init START
+node2:12768:12862 [0] NCCL INFO ncclCommInitRankConfig comm 0x560aeda9b790 rank 8 nranks 16 cudaDev 0 nvmlDev 0 busId 8d000 commId 0x96bead0bf75b2174 - Init START
+node1:14787:14881 [0] NCCL INFO Bootstrap timings total 1.390286 (create 0.000019, send 0.000079, recv 0.632566, ring 0.029739, delay 0.000000)
+node1:14789:14882 [2] NCCL INFO Bootstrap timings total 1.412459 (create 0.000037, send 0.000140, recv 0.640044, ring 0.757453, delay 0.000000)
+node1:14796:14888 [6] NCCL INFO Bootstrap timings total 0.757143 (create 0.000025, send 0.000094, recv 0.000119, ring 0.756798, delay 0.000000)
+node1:14791:14885 [4] NCCL INFO Bootstrap timings total 0.784499 (create 0.000032, send 0.000117, recv 0.000119, ring 0.772043, delay 0.000000)
+node1:14788:14886 [1] NCCL INFO Bootstrap timings total 0.757867 (create 0.000025, send 0.000103, recv 0.000135, ring 0.757465, delay 0.000000)
+node1:14800:14883 [7] NCCL INFO Bootstrap timings total 0.796251 (create 0.000029, send 0.000108, recv 0.794340, ring 0.001166, delay 0.000000)
+node1:14793:14884 [5] NCCL INFO Bootstrap timings total 0.810205 (create 0.000043, send 0.000163, recv 0.053070, ring 0.756790, delay 0.000000)
+node1:14790:14887 [3] NCCL INFO Bootstrap timings total 0.772490 (create 0.000025, send 0.000105, recv 0.000152, ring 0.772062, delay 0.000000)
+node2:12769:12859 [1] NCCL INFO Bootstrap timings total 0.013720 (create 0.000025, send 0.000949, recv 0.001105, ring 0.000717, delay 0.000000)
+node2:12771:12858 [3] NCCL INFO Bootstrap timings total 0.145228 (create 0.000045, send 0.001086, recv 0.032340, ring 0.048824, delay 0.000000)
+node2:12772:12864 [4] NCCL INFO Bootstrap timings total 0.114347 (create 0.000037, send 0.000885, recv 0.001626, ring 0.111603, delay 0.000000)
+node2:12770:12863 [2] NCCL INFO Bootstrap timings total 0.050811 (create 0.000024, send 0.000926, recv 0.000874, ring 0.011526, delay 0.000000)
+node2:12777:12860 [6] NCCL INFO Bootstrap timings total 0.106935 (create 0.000033, send 0.000569, recv 0.075724, ring 0.030066, delay 0.000000)
+node2:12780:12861 [7] NCCL INFO Bootstrap timings total 0.032466 (create 0.000025, send 0.000701, recv 0.001403, ring 0.029914, delay 0.000000)
+node2:12774:12857 [5] NCCL INFO Bootstrap timings total 1.118161 (create 0.000048, send 0.000929, recv 1.011521, ring 0.105476, delay 0.000000)
+node1:14790:14887 [3] NCCL INFO MNNVL busId 0x99000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+node1:14791:14885 [4] NCCL INFO MNNVL busId 0xab000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+node1:14789:14882 [2] NCCL INFO MNNVL busId 0x95000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+node2:12768:12862 [0] NCCL INFO Bootstrap timings total 0.003186 (create 0.000024, send 0.000515, recv 0.001287, ring 0.001237, delay 0.000000)
+node2:12777:12860 [6] NCCL INFO MNNVL busId 0xb3000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+node2:12771:12858 [3] NCCL INFO MNNVL busId 0x99000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+node2:12769:12859 [1] NCCL INFO MNNVL busId 0x91000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+node2:12768:12862 [0] NCCL INFO MNNVL busId 0x8d000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+node2:12774:12857 [5] NCCL INFO MNNVL busId 0xaf000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+node1:14796:14888 [6] NCCL INFO MNNVL busId 0xb3000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+node1:14787:14881 [0] NCCL INFO MNNVL busId 0x8d000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+node1:14800:14883 [7] NCCL INFO MNNVL busId 0xb7000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+node2:12780:12861 [7] NCCL INFO MNNVL busId 0xb7000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+node2:12772:12864 [4] NCCL INFO MNNVL busId 0xab000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+node2:12770:12863 [2] NCCL INFO MNNVL busId 0x95000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+node1:14788:14886 [1] NCCL INFO MNNVL busId 0x91000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+node1:14793:14884 [5] NCCL INFO MNNVL busId 0xaf000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+node1:14791:14885 [4] NCCL INFO NVLS multicast support is available on dev 4
+node1:14793:14884 [5] NCCL INFO Setting affinity for GPU 5 to 30,00000000,00000000
+node1:14793:14884 [5] NCCL INFO NVLS multicast support is available on dev 5
+node1:14787:14881 [0] NCCL INFO Setting affinity for GPU 0 to 03
+node1:14787:14881 [0] NCCL INFO NVLS multicast support is available on dev 0
+node1:14790:14887 [3] NCCL INFO NVLS multicast support is available on dev 3
+node1:14788:14886 [1] NCCL INFO NVLS multicast support is available on dev 1
+node1:14796:14888 [6] NCCL INFO NVLS multicast support is available on dev 6
+node1:14789:14882 [2] NCCL INFO Setting affinity for GPU 2 to 0c
+node1:14789:14882 [2] NCCL INFO NVLS multicast support is available on dev 2
+node1:14800:14883 [7] NCCL INFO Setting affinity for GPU 7 to c0,00000000,00000000
+node1:14800:14883 [7] NCCL INFO NVLS multicast support is available on dev 7
+node2:12774:12857 [5] NCCL INFO Setting affinity for GPU 5 to 30,00000000,00000000
+node2:12774:12857 [5] NCCL INFO NVLS multicast support is available on dev 5
+node2:12770:12863 [2] NCCL INFO Setting affinity for GPU 2 to 0c
+node2:12770:12863 [2] NCCL INFO NVLS multicast support is available on dev 2
+node2:12768:12862 [0] NCCL INFO Setting affinity for GPU 0 to 03
+node2:12768:12862 [0] NCCL INFO NVLS multicast support is available on dev 0
+node2:12780:12861 [7] NCCL INFO Setting affinity for GPU 7 to c0,00000000,00000000
+node2:12780:12861 [7] NCCL INFO NVLS multicast support is available on dev 7
+node2:12771:12858 [3] NCCL INFO NVLS multicast support is available on dev 3
+node2:12769:12859 [1] NCCL INFO NVLS multicast support is available on dev 1
+node2:12772:12864 [4] NCCL INFO NVLS multicast support is available on dev 4
+node2:12777:12860 [6] NCCL INFO NVLS multicast support is available on dev 6
+node1:14791:14885 [4] NCCL INFO comm 0x5562b61a20a0 rank 4 nRanks 16 nNodes 2 localRanks 8 localRank 4 MNNVL 0
+node1:14791:14885 [4] NCCL INFO NVLS Head  0:  0  8
+node1:14791:14885 [4] NCCL INFO NVLS Head  1:  1  9
+node1:14791:14885 [4] NCCL INFO NVLS Head  2:  2 10
+node1:14791:14885 [4] NCCL INFO NVLS Head  3:  3 11
+node1:14791:14885 [4] NCCL INFO NVLS Head  4:  4 12
+node1:14791:14885 [4] NCCL INFO NVLS Head  5:  5 13
+node1:14791:14885 [4] NCCL INFO NVLS Head  6:  6 14
+node1:14791:14885 [4] NCCL INFO NVLS Head  7:  7 15
+node1:14791:14885 [4] NCCL INFO Trees [0] 5/-1/-1->4->3 [1] 5/-1/-1->4->3 [2] 5/-1/-1->4->3 [3] 5/-1/-1->4->3 [4] 5/12/-1->4->-1 [5] -1/-1/-1->4->3 [6] 5/-1/-1->4->3 [7] 5/-1/-1->4->3 [8] 5/-1/-1->4->3 [9] 5/-1/-1->4->3 [10] 5/-1/-1->4->3 [11] 5/-1/-1->4->3 [12] 5/-1/-1->4->12 [13] -1/-1/-1->4->3 [14] 5/-1/-1->4->3 [15] 5/-1/-1->4->3
+node1:14791:14885 [4] NCCL INFO P2P Chunksize set to 131072
+node1:14791:14961 [4] NCCL INFO [Proxy Service] Device 4 CPU core 4
+node1:14796:14888 [6] NCCL INFO comm 0x55af05ffe720 rank 6 nRanks 16 nNodes 2 localRanks 8 localRank 6 MNNVL 0
+node1:14796:14888 [6] NCCL INFO NVLS Head  0:  0  8
+node1:14796:14888 [6] NCCL INFO NVLS Head  1:  1  9
+node1:14796:14888 [6] NCCL INFO NVLS Head  2:  2 10
+node1:14796:14888 [6] NCCL INFO NVLS Head  3:  3 11
+node1:14796:14888 [6] NCCL INFO NVLS Head  4:  4 12
+node1:14796:14888 [6] NCCL INFO NVLS Head  5:  5 13
+node1:14796:14888 [6] NCCL INFO NVLS Head  6:  6 14
+node1:14796:14888 [6] NCCL INFO NVLS Head  7:  7 15
+node1:14796:14888 [6] NCCL INFO Trees [0] 7/-1/-1->6->5 [1] 7/-1/-1->6->5 [2] 7/-1/-1->6->5 [3] 7/-1/-1->6->5 [4] 7/-1/-1->6->5 [5] 7/-1/-1->6->5 [6] 7/14/-1->6->-1 [7] -1/-1/-1->6->5 [8] 7/-1/-1->6->5 [9] 7/-1/-1->6->5 [10] 7/-1/-1->6->5 [11] 7/-1/-1->6->5 [12] 7/-1/-1->6->5 [13] 7/-1/-1->6->5 [14] 7/-1/-1->6->14 [15] -1/-1/-1->6->5
+node1:14796:14888 [6] NCCL INFO P2P Chunksize set to 131072
+node1:14789:14882 [2] NCCL INFO comm 0x5650387204c0 rank 2 nRanks 16 nNodes 2 localRanks 8 localRank 2 MNNVL 0
+node1:14789:14882 [2] NCCL INFO NVLS Head  0:  0  8
+node1:14789:14882 [2] NCCL INFO NVLS Head  1:  1  9
+node1:14789:14882 [2] NCCL INFO NVLS Head  2:  2 10
+node1:14789:14882 [2] NCCL INFO NVLS Head  3:  3 11
+node1:14789:14882 [2] NCCL INFO NVLS Head  4:  4 12
+node1:14789:14882 [2] NCCL INFO NVLS Head  5:  5 13
+node1:14789:14882 [2] NCCL INFO NVLS Head  6:  6 14
+node1:14789:14882 [2] NCCL INFO NVLS Head  7:  7 15
+node1:14789:14882 [2] NCCL INFO Trees [0] 3/-1/-1->2->1 [1] 3/-1/-1->2->1 [2] 3/10/-1->2->-1 [3] -1/-1/-1->2->1 [4] 3/-1/-1->2->1 [5] 3/-1/-1->2->1 [6] 3/-1/-1->2->1 [7] 3/-1/-1->2->1 [8] 3/-1/-1->2->1 [9] 3/-1/-1->2->1 [10] 3/-1/-1->2->10 [11] -1/-1/-1->2->1 [12] 3/-1/-1->2->1 [13] 3/-1/-1->2->1 [14] 3/-1/-1->2->1 [15] 3/-1/-1->2->1
+node1:14789:14882 [2] NCCL INFO P2P Chunksize set to 131072
+node1:14793:14884 [5] NCCL INFO comm 0x556cfc92bf80 rank 5 nRanks 16 nNodes 2 localRanks 8 localRank 5 MNNVL 0
+node1:14793:14884 [5] NCCL INFO NVLS Head  0:  0  8
+node1:14793:14884 [5] NCCL INFO NVLS Head  1:  1  9
+node1:14793:14884 [5] NCCL INFO NVLS Head  2:  2 10
+node1:14793:14884 [5] NCCL INFO NVLS Head  3:  3 11
+node1:14793:14884 [5] NCCL INFO NVLS Head  4:  4 12
+node1:14793:14884 [5] NCCL INFO NVLS Head  5:  5 13
+node1:14793:14884 [5] NCCL INFO NVLS Head  6:  6 14
+node1:14793:14884 [5] NCCL INFO NVLS Head  7:  7 15
+node1:14793:14884 [5] NCCL INFO Trees [0] 6/-1/-1->5->4 [1] 6/-1/-1->5->4 [2] 6/-1/-1->5->4 [3] 6/-1/-1->5->4 [4] 6/-1/-1->5->4 [5] 6/13/-1->5->-1 [6] -1/-1/-1->5->4 [7] 6/-1/-1->5->4 [8] 6/-1/-1->5->4 [9] 6/-1/-1->5->4 [10] 6/-1/-1->5->4 [11] 6/-1/-1->5->4 [12] 6/-1/-1->5->4 [13] 6/-1/-1->5->13 [14] -1/-1/-1->5->4 [15] 6/-1/-1->5->4
+node1:14793:14884 [5] NCCL INFO P2P Chunksize set to 131072
+node1:14787:14881 [0] NCCL INFO comm 0x55858412f8f0 rank 0 nRanks 16 nNodes 2 localRanks 8 localRank 0 MNNVL 0
+node1:14787:14881 [0] NCCL INFO NVLS Head  0:  0  8
+node1:14787:14881 [0] NCCL INFO NVLS Head  1:  1  9
+node1:14787:14881 [0] NCCL INFO NVLS Head  2:  2 10
+node1:14787:14881 [0] NCCL INFO NVLS Head  3:  3 11
+node1:14787:14881 [0] NCCL INFO NVLS Head  4:  4 12
+node1:14787:14881 [0] NCCL INFO NVLS Head  5:  5 13
+node1:14787:14881 [0] NCCL INFO NVLS Head  6:  6 14
+node1:14787:14881 [0] NCCL INFO NVLS Head  7:  7 15
+node1:14787:14881 [0] NCCL INFO Channel 00/16 :  0  7  6  5  4  3  2  1  9 10 11 12 13 14 15  8
+node1:14787:14881 [0] NCCL INFO Channel 01/16 :  0  8 15 14 13 12 11 10  9  1  2  3  4  5  6  7
+node1:14787:14881 [0] NCCL INFO Channel 02/16 :  0  7  6  5  4  3 11 12 13 14 15  8  9 10  2  1
+node1:14787:14881 [0] NCCL INFO Channel 03/16 :  0  1  2 10  9  8 15 14 13 12 11  3  4  5  6  7
+node1:14787:14881 [0] NCCL INFO Channel 04/16 :  0  7  6  5 13 14 15  8  9 10 11 12  4  3  2  1
+node1:14787:14881 [0] NCCL INFO Channel 05/16 :  0  1  2  3  4 12 11 10  9  8 15 14 13  5  6  7
+node1:14787:14881 [0] NCCL INFO Channel 06/16 :  0  7 15  8  9 10 11 12 13 14  6  5  4  3  2  1
+node1:14787:14881 [0] NCCL INFO Channel 07/16 :  0  1  2  3  4  5  6 14 13 12 11 10  9  8 15  7
+node1:14787:14881 [0] NCCL INFO Channel 08/16 :  0  7  6  5  4  3  2  1  9 10 11 12 13 14 15  8
+node1:14787:14881 [0] NCCL INFO Channel 09/16 :  0  8 15 14 13 12 11 10  9  1  2  3  4  5  6  7
+node1:14787:14881 [0] NCCL INFO Channel 10/16 :  0  7  6  5  4  3 11 12 13 14 15  8  9 10  2  1
+node1:14787:14881 [0] NCCL INFO Channel 11/16 :  0  1  2 10  9  8 15 14 13 12 11  3  4  5  6  7
+node1:14787:14881 [0] NCCL INFO Channel 12/16 :  0  7  6  5 13 14 15  8  9 10 11 12  4  3  2  1
+node1:14787:14881 [0] NCCL INFO Channel 13/16 :  0  1  2  3  4 12 11 10  9  8 15 14 13  5  6  7
+node1:14787:14881 [0] NCCL INFO Channel 14/16 :  0  7 15  8  9 10 11 12 13 14  6  5  4  3  2  1
+node1:14787:14881 [0] NCCL INFO Channel 15/16 :  0  1  2  3  4  5  6 14 13 12 11 10  9  8 15  7
+node1:14787:14881 [0] NCCL INFO Trees [0] 1/8/-1->0->-1 [1] -1/-1/-1->0->7 [2] 1/-1/-1->0->7 [3] 1/-1/-1->0->7 [4] 1/-1/-1->0->7 [5] 1/-1/-1->0->7 [6] 1/-1/-1->0->7 [7] 1/-1/-1->0->7 [8] 1/-1/-1->0->8 [9] -1/-1/-1->0->7 [10] 1/-1/-1->0->7 [11] 1/-1/-1->0->7 [12] 1/-1/-1->0->7 [13] 1/-1/-1->0->7 [14] 1/-1/-1->0->7 [15] 1/-1/-1->0->7
+node1:14787:14881 [0] NCCL INFO P2P Chunksize set to 131072
+node1:14800:14883 [7] NCCL INFO comm 0x55cd9b20d120 rank 7 nRanks 16 nNodes 2 localRanks 8 localRank 7 MNNVL 0
+node1:14800:14883 [7] NCCL INFO NVLS Head  0:  0  8
+node1:14800:14883 [7] NCCL INFO NVLS Head  1:  1  9
+node1:14800:14883 [7] NCCL INFO NVLS Head  2:  2 10
+node1:14800:14883 [7] NCCL INFO NVLS Head  3:  3 11
+node1:14800:14883 [7] NCCL INFO NVLS Head  4:  4 12
+node1:14800:14883 [7] NCCL INFO NVLS Head  5:  5 13
+node1:14800:14883 [7] NCCL INFO NVLS Head  6:  6 14
+node1:14800:14883 [7] NCCL INFO NVLS Head  7:  7 15
+node1:14800:14883 [7] NCCL INFO Trees [0] -1/-1/-1->7->6 [1] 0/-1/-1->7->6 [2] 0/-1/-1->7->6 [3] 0/-1/-1->7->6 [4] 0/-1/-1->7->6 [5] 0/-1/-1->7->6 [6] 0/-1/-1->7->6 [7] 0/15/-1->7->-1 [8] -1/-1/-1->7->6 [9] 0/-1/-1->7->6 [10] 0/-1/-1->7->6 [11] 0/-1/-1->7->6 [12] 0/-1/-1->7->6 [13] 0/-1/-1->7->6 [14] 0/-1/-1->7->6 [15] 0/-1/-1->7->15
+node1:14800:14883 [7] NCCL INFO P2P Chunksize set to 131072
+node1:14800:14963 [7] NCCL INFO [Proxy Service] Device 7 CPU core 71
+node1:14790:14887 [3] NCCL INFO comm 0x55cf2859fbc0 rank 3 nRanks 16 nNodes 2 localRanks 8 localRank 3 MNNVL 0
+node1:14790:14887 [3] NCCL INFO NVLS Head  0:  0  8
+node1:14790:14887 [3] NCCL INFO NVLS Head  1:  1  9
+node1:14790:14887 [3] NCCL INFO NVLS Head  2:  2 10
+node1:14790:14887 [3] NCCL INFO NVLS Head  3:  3 11
+node1:14790:14887 [3] NCCL INFO NVLS Head  4:  4 12
+node1:14790:14887 [3] NCCL INFO NVLS Head  5:  5 13
+node1:14790:14887 [3] NCCL INFO NVLS Head  6:  6 14
+node1:14790:14887 [3] NCCL INFO NVLS Head  7:  7 15
+node1:14790:14887 [3] NCCL INFO Trees [0] 4/-1/-1->3->2 [1] 4/-1/-1->3->2 [2] 4/-1/-1->3->2 [3] 4/11/-1->3->-1 [4] -1/-1/-1->3->2 [5] 4/-1/-1->3->2 [6] 4/-1/-1->3->2 [7] 4/-1/-1->3->2 [8] 4/-1/-1->3->2 [9] 4/-1/-1->3->2 [10] 4/-1/-1->3->2 [11] 4/-1/-1->3->11 [12] -1/-1/-1->3->2 [13] 4/-1/-1->3->2 [14] 4/-1/-1->3->2 [15] 4/-1/-1->3->2
+node1:14790:14887 [3] NCCL INFO P2P Chunksize set to 131072
+node1:14788:14886 [1] NCCL INFO comm 0x557c35fd2520 rank 1 nRanks 16 nNodes 2 localRanks 8 localRank 1 MNNVL 0
+node1:14788:14886 [1] NCCL INFO NVLS Head  0:  0  8
+node1:14788:14886 [1] NCCL INFO NVLS Head  1:  1  9
+node1:14788:14886 [1] NCCL INFO NVLS Head  2:  2 10
+node1:14788:14886 [1] NCCL INFO NVLS Head  3:  3 11
+node1:14788:14886 [1] NCCL INFO NVLS Head  4:  4 12
+node1:14788:14886 [1] NCCL INFO NVLS Head  5:  5 13
+node1:14788:14886 [1] NCCL INFO NVLS Head  6:  6 14
+node1:14788:14886 [1] NCCL INFO NVLS Head  7:  7 15
+node1:14788:14886 [1] NCCL INFO Trees [0] 2/-1/-1->1->0 [1] 2/9/-1->1->-1 [2] -1/-1/-1->1->0 [3] 2/-1/-1->1->0 [4] 2/-1/-1->1->0 [5] 2/-1/-1->1->0 [6] 2/-1/-1->1->0 [7] 2/-1/-1->1->0 [8] 2/-1/-1->1->0 [9] 2/-1/-1->1->9 [10] -1/-1/-1->1->0 [11] 2/-1/-1->1->0 [12] 2/-1/-1->1->0 [13] 2/-1/-1->1->0 [14] 2/-1/-1->1->0 [15] 2/-1/-1->1->0
+node1:14788:14886 [1] NCCL INFO P2P Chunksize set to 131072
+node1:14791:14965 [4] NCCL INFO [Proxy Service UDS] Device 4 CPU core 4
+node1:14796:14964 [6] NCCL INFO [Proxy Service] Device 6 CPU core 6
+node1:14796:14966 [6] NCCL INFO [Proxy Service UDS] Device 6 CPU core 6
+node1:14793:14962 [5] NCCL INFO [Proxy Service] Device 5 CPU core 68
+node1:14800:14967 [7] NCCL INFO [Proxy Service UDS] Device 7 CPU core 71
+node1:14793:14968 [5] NCCL INFO [Proxy Service UDS] Device 5 CPU core 68
+node1:14788:14970 [1] NCCL INFO [Proxy Service] Device 1 CPU core 64
+node1:14789:14969 [2] NCCL INFO [Proxy Service] Device 2 CPU core 3
+node1:14790:14971 [3] NCCL INFO [Proxy Service] Device 3 CPU core 66
+node1:14789:14972 [2] NCCL INFO [Proxy Service UDS] Device 2 CPU core 3
+node1:14788:14973 [1] NCCL INFO [Proxy Service UDS] Device 1 CPU core 64
+node1:14787:14974 [0] NCCL INFO [Proxy Service] Device 0 CPU core 0
+node2:12768:12862 [0] NCCL INFO comm 0x560aeda9b790 rank 8 nRanks 16 nNodes 2 localRanks 8 localRank 0 MNNVL 0
+node2:12768:12862 [0] NCCL INFO Trees [0] 9/-1/-1->8->0 [1] -1/-1/-1->8->15 [2] 9/-1/-1->8->15 [3] 9/-1/-1->8->15 [4] 9/-1/-1->8->15 [5] 9/-1/-1->8->15 [6] 9/-1/-1->8->15 [7] 9/-1/-1->8->15 [8] 9/0/-1->8->-1 [9] -1/-1/-1->8->15 [10] 9/-1/-1->8->15 [11] 9/-1/-1->8->15 [12] 9/-1/-1->8->15 [13] 9/-1/-1->8->15 [14] 9/-1/-1->8->15 [15] 9/-1/-1->8->15
+node2:12768:12862 [0] NCCL INFO P2P Chunksize set to 131072
+node2:12770:12863 [2] NCCL INFO comm 0x557b93358f00 rank 10 nRanks 16 nNodes 2 localRanks 8 localRank 2 MNNVL 0
+node2:12770:12863 [2] NCCL INFO Trees [0] 11/-1/-1->10->9 [1] 11/-1/-1->10->9 [2] 11/-1/-1->10->2 [3] -1/-1/-1->10->9 [4] 11/-1/-1->10->9 [5] 11/-1/-1->10->9 [6] 11/-1/-1->10->9 [7] 11/-1/-1->10->9 [8] 11/-1/-1->10->9 [9] 11/-1/-1->10->9 [10] 11/2/-1->10->-1 [11] -1/-1/-1->10->9 [12] 11/-1/-1->10->9 [13] 11/-1/-1->10->9 [14] 11/-1/-1->10->9 [15] 11/-1/-1->10->9
+node2:12770:12863 [2] NCCL INFO P2P Chunksize set to 131072
+node2:12777:12860 [6] NCCL INFO comm 0x55fc79ed17a0 rank 14 nRanks 16 nNodes 2 localRanks 8 localRank 6 MNNVL 0
+node2:12777:12860 [6] NCCL INFO Trees [0] 15/-1/-1->14->13 [1] 15/-1/-1->14->13 [2] 15/-1/-1->14->13 [3] 15/-1/-1->14->13 [4] 15/-1/-1->14->13 [5] 15/-1/-1->14->13 [6] 15/-1/-1->14->6 [7] -1/-1/-1->14->13 [8] 15/-1/-1->14->13 [9] 15/-1/-1->14->13 [10] 15/-1/-1->14->13 [11] 15/-1/-1->14->13 [12] 15/-1/-1->14->13 [13] 15/-1/-1->14->13 [14] 15/6/-1->14->-1 [15] -1/-1/-1->14->13
+node2:12777:12860 [6] NCCL INFO P2P Chunksize set to 131072
+node1:14790:14975 [3] NCCL INFO [Proxy Service UDS] Device 3 CPU core 66
+node2:12772:12864 [4] NCCL INFO comm 0x5641f544d920 rank 12 nRanks 16 nNodes 2 localRanks 8 localRank 4 MNNVL 0
+node2:12772:12864 [4] NCCL INFO Trees [0] 13/-1/-1->12->11 [1] 13/-1/-1->12->11 [2] 13/-1/-1->12->11 [3] 13/-1/-1->12->11 [4] 13/-1/-1->12->4 [5] -1/-1/-1->12->11 [6] 13/-1/-1->12->11 [7] 13/-1/-1->12->11 [8] 13/-1/-1->12->11 [9] 13/-1/-1->12->11 [10] 13/-1/-1->12->11 [11] 13/-1/-1->12->11 [12] 13/4/-1->12->-1 [13] -1/-1/-1->12->11 [14] 13/-1/-1->12->11 [15] 13/-1/-1->12->11
+node2:12772:12864 [4] NCCL INFO P2P Chunksize set to 131072
+node2:12769:12859 [1] NCCL INFO comm 0x5593f27a4df0 rank 9 nRanks 16 nNodes 2 localRanks 8 localRank 1 MNNVL 0
+node2:12769:12859 [1] NCCL INFO Trees [0] 10/-1/-1->9->8 [1] 10/-1/-1->9->1 [2] -1/-1/-1->9->8 [3] 10/-1/-1->9->8 [4] 10/-1/-1->9->8 [5] 10/-1/-1->9->8 [6] 10/-1/-1->9->8 [7] 10/-1/-1->9->8 [8] 10/-1/-1->9->8 [9] 10/1/-1->9->-1 [10] -1/-1/-1->9->8 [11] 10/-1/-1->9->8 [12] 10/-1/-1->9->8 [13] 10/-1/-1->9->8 [14] 10/-1/-1->9->8 [15] 10/-1/-1->9->8
+node2:12769:12859 [1] NCCL INFO P2P Chunksize set to 131072
+node1:14787:14976 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 0
+node2:12771:12858 [3] NCCL INFO comm 0x5561c0ca5a40 rank 11 nRanks 16 nNodes 2 localRanks 8 localRank 3 MNNVL 0
+node2:12771:12858 [3] NCCL INFO Trees [0] 12/-1/-1->11->10 [1] 12/-1/-1->11->10 [2] 12/-1/-1->11->10 [3] 12/-1/-1->11->3 [4] -1/-1/-1->11->10 [5] 12/-1/-1->11->10 [6] 12/-1/-1->11->10 [7] 12/-1/-1->11->10 [8] 12/-1/-1->11->10 [9] 12/-1/-1->11->10 [10] 12/-1/-1->11->10 [11] 12/3/-1->11->-1 [12] -1/-1/-1->11->10 [13] 12/-1/-1->11->10 [14] 12/-1/-1->11->10 [15] 12/-1/-1->11->10
+node2:12771:12858 [3] NCCL INFO P2P Chunksize set to 131072
+node2:12780:12861 [7] NCCL INFO comm 0x55c814d5a980 rank 15 nRanks 16 nNodes 2 localRanks 8 localRank 7 MNNVL 0
+node2:12780:12861 [7] NCCL INFO Trees [0] -1/-1/-1->15->14 [1] 8/-1/-1->15->14 [2] 8/-1/-1->15->14 [3] 8/-1/-1->15->14 [4] 8/-1/-1->15->14 [5] 8/-1/-1->15->14 [6] 8/-1/-1->15->14 [7] 8/-1/-1->15->7 [8] -1/-1/-1->15->14 [9] 8/-1/-1->15->14 [10] 8/-1/-1->15->14 [11] 8/-1/-1->15->14 [12] 8/-1/-1->15->14 [13] 8/-1/-1->15->14 [14] 8/-1/-1->15->14 [15] 8/7/-1->15->-1
+node2:12780:12861 [7] NCCL INFO P2P Chunksize set to 131072
+node2:12774:12857 [5] NCCL INFO comm 0x55e721711260 rank 13 nRanks 16 nNodes 2 localRanks 8 localRank 5 MNNVL 0
+node2:12774:12857 [5] NCCL INFO Trees [0] 14/-1/-1->13->12 [1] 14/-1/-1->13->12 [2] 14/-1/-1->13->12 [3] 14/-1/-1->13->12 [4] 14/-1/-1->13->12 [5] 14/-1/-1->13->5 [6] -1/-1/-1->13->12 [7] 14/-1/-1->13->12 [8] 14/-1/-1->13->12 [9] 14/-1/-1->13->12 [10] 14/-1/-1->13->12 [11] 14/-1/-1->13->12 [12] 14/-1/-1->13->12 [13] 14/5/-1->13->-1 [14] -1/-1/-1->13->12 [15] 14/-1/-1->13->12
+node2:12774:12857 [5] NCCL INFO P2P Chunksize set to 131072
+node2:12768:12940 [0] NCCL INFO [Proxy Service] Device 0 CPU core 1
+node2:12770:12942 [2] NCCL INFO [Proxy Service] Device 2 CPU core 3
+node2:12777:12943 [6] NCCL INFO [Proxy Service] Device 6 CPU core 6
+node2:12772:12944 [4] NCCL INFO [Proxy Service] Device 4 CPU core 4
+node2:12769:12948 [1] NCCL INFO [Proxy Service UDS] Device 1 CPU core 64
+node2:12774:12949 [5] NCCL INFO [Proxy Service] Device 5 CPU core 69
+node2:12769:12941 [1] NCCL INFO [Proxy Service] Device 1 CPU core 65
+node2:12768:12945 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 0
+node2:12770:12951 [2] NCCL INFO [Proxy Service UDS] Device 2 CPU core 2
+node2:12772:12953 [4] NCCL INFO [Proxy Service UDS] Device 4 CPU core 5
+node2:12777:12952 [6] NCCL INFO [Proxy Service UDS] Device 6 CPU core 7
+node2:12774:12954 [5] NCCL INFO [Proxy Service UDS] Device 5 CPU core 68
+node2:12771:12955 [3] NCCL INFO [Proxy Service UDS] Device 3 CPU core 66
+node2:12780:12946 [7] NCCL INFO [Proxy Service] Device 7 CPU core 71
+node2:12780:12956 [7] NCCL INFO [Proxy Service UDS] Device 7 CPU core 70
+node2:12771:12950 [3] NCCL INFO [Proxy Service] Device 3 CPU core 66
+node1:14789:14882 [2] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 512 | 512
+node1:14789:14882 [2] NCCL INFO 16 coll channels, 16 collnet channels, 16 nvls channels, 16 p2p channels, 2 p2p channels per peer
+node1:14787:14881 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 512 | 512
+node1:14787:14881 [0] NCCL INFO 16 coll channels, 16 collnet channels, 16 nvls channels, 16 p2p channels, 2 p2p channels per peer
+node1:14787:14881 [0] NCCL INFO CC Off, Multi-GPU CC Off, workFifoBytes 1048576
+node1:14796:14888 [6] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 512 | 512
+node1:14796:14888 [6] NCCL INFO 16 coll channels, 16 collnet channels, 16 nvls channels, 16 p2p channels, 2 p2p channels per peer
+node1:14791:14885 [4] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 512 | 512
+node1:14791:14885 [4] NCCL INFO 16 coll channels, 16 collnet channels, 16 nvls channels, 16 p2p channels, 2 p2p channels per peer
+node1:14800:14883 [7] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 512 | 512
+node1:14800:14883 [7] NCCL INFO 16 coll channels, 16 collnet channels, 16 nvls channels, 16 p2p channels, 2 p2p channels per peer
+node1:14790:14887 [3] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 512 | 512
+node1:14790:14887 [3] NCCL INFO 16 coll channels, 16 collnet channels, 16 nvls channels, 16 p2p channels, 2 p2p channels per peer
+node1:14788:14886 [1] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 512 | 512
+node1:14788:14886 [1] NCCL INFO 16 coll channels, 16 collnet channels, 16 nvls channels, 16 p2p channels, 2 p2p channels per peer
+node1:14793:14884 [5] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 512 | 512
+node1:14793:14884 [5] NCCL INFO 16 coll channels, 16 collnet channels, 16 nvls channels, 16 p2p channels, 2 p2p channels per peer
+node1:14791:14885 [4] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so libnccl-net.so. Using internal tuner plugin.
+node1:14791:14885 [4] NCCL INFO ncclCommInitRankConfig comm 0x5562b61a20a0 rank 4 nranks 16 cudaDev 4 nvmlDev 4 busId ab000 commId 0x96bead0bf75b2174 - Init COMPLETE
+node1:14791:14885 [4] NCCL INFO Init timings - ncclCommInitRankConfig: rank 4 nranks 16 total 5.32 (kernels 0.56, alloc 2.48, bootstrap 0.78, allgathers 0.24, topo 1.00, graphs 0.02, connections 0.24, rest 0.00)
+node1:14796:14888 [6] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so libnccl-net.so. Using internal tuner plugin.
+node1:14796:14888 [6] NCCL INFO ncclCommInitRankConfig comm 0x55af05ffe720 rank 6 nranks 16 cudaDev 6 nvmlDev 6 busId b3000 commId 0x96bead0bf75b2174 - Init COMPLETE
+node1:14796:14888 [6] NCCL INFO Init timings - ncclCommInitRankConfig: rank 6 nranks 16 total 5.30 (kernels 0.68, alloc 2.37, bootstrap 0.76, allgathers 0.24, topo 1.00, graphs 0.02, connections 0.24, rest 0.00)
+node1:14787:14881 [0] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so libnccl-net.so. Using internal tuner plugin.
+node1:14787:14881 [0] NCCL INFO ncclCommInitRankConfig comm 0x55858412f8f0 rank 0 nranks 16 cudaDev 0 nvmlDev 0 busId 8d000 commId 0x96bead0bf75b2174 - Init COMPLETE
+node1:14787:14881 [0] NCCL INFO Init timings - ncclCommInitRankConfig: rank 0 nranks 16 total 5.49 (kernels 0.56, alloc 2.05, bootstrap 1.39, allgathers 0.24, topo 1.00, graphs 0.02, connections 0.24, rest 0.00)
+node1:14789:14882 [2] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so libnccl-net.so. Using internal tuner plugin.
+node1:14789:14882 [2] NCCL INFO ncclCommInitRankConfig comm 0x5650387204c0 rank 2 nranks 16 cudaDev 2 nvmlDev 2 busId 95000 commId 0x96bead0bf75b2174 - Init COMPLETE
+node1:14789:14882 [2] NCCL INFO Init timings - ncclCommInitRankConfig: rank 2 nranks 16 total 5.45 (kernels 0.54, alloc 2.00, bootstrap 1.41, allgathers 0.24, topo 1.00, graphs 0.02, connections 0.24, rest 0.00)
+node1:14800:14883 [7] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so libnccl-net.so. Using internal tuner plugin.
+node1:14800:14883 [7] NCCL INFO ncclCommInitRankConfig comm 0x55cd9b20d120 rank 7 nranks 16 cudaDev 7 nvmlDev 7 busId b7000 commId 0x96bead0bf75b2174 - Init COMPLETE
+node1:14800:14883 [7] NCCL INFO Init timings - ncclCommInitRankConfig: rank 7 nranks 16 total 5.40 (kernels 0.53, alloc 2.58, bootstrap 0.80, allgathers 0.24, topo 1.00, graphs 0.02, connections 0.24, rest 0.00)
+node1:14790:14887 [3] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so libnccl-net.so. Using internal tuner plugin.
+node1:14790:14887 [3] NCCL INFO ncclCommInitRankConfig comm 0x55cf2859fbc0 rank 3 nranks 16 cudaDev 3 nvmlDev 3 busId 99000 commId 0x96bead0bf75b2174 - Init COMPLETE
+node1:14790:14887 [3] NCCL INFO Init timings - ncclCommInitRankConfig: rank 3 nranks 16 total 5.31 (kernels 0.55, alloc 2.49, bootstrap 0.77, allgathers 0.24, topo 1.00, graphs 0.02, connections 0.24, rest 0.00)
+node1:14788:14886 [1] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so libnccl-net.so. Using internal tuner plugin.
+node1:14788:14886 [1] NCCL INFO ncclCommInitRankConfig comm 0x557c35fd2520 rank 1 nranks 16 cudaDev 1 nvmlDev 1 busId 91000 commId 0x96bead0bf75b2174 - Init COMPLETE
+node1:14788:14886 [1] NCCL INFO Init timings - ncclCommInitRankConfig: rank 1 nranks 16 total 5.31 (kernels 0.65, alloc 2.41, bootstrap 0.76, allgathers 0.24, topo 1.00, graphs 0.02, connections 0.24, rest 0.00)
+node1:14793:14884 [5] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so libnccl-net.so. Using internal tuner plugin.
+node1:14793:14884 [5] NCCL INFO ncclCommInitRankConfig comm 0x556cfc92bf80 rank 5 nranks 16 cudaDev 5 nvmlDev 5 busId af000 commId 0x96bead0bf75b2174 - Init COMPLETE
+node1:14793:14884 [5] NCCL INFO Init timings - ncclCommInitRankConfig: rank 5 nranks 16 total 5.36 (kernels 0.56, alloc 2.49, bootstrap 0.81, allgathers 0.24, topo 1.00, graphs 0.02, connections 0.24, rest 0.00)
+node2:12769:12859 [1] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 512 | 512
+node2:12769:12859 [1] NCCL INFO 16 coll channels, 16 collnet channels, 16 nvls channels, 16 p2p channels, 2 p2p channels per peer
+node2:12768:12862 [0] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 512 | 512
+node2:12768:12862 [0] NCCL INFO 16 coll channels, 16 collnet channels, 16 nvls channels, 16 p2p channels, 2 p2p channels per peer
+node2:12780:12861 [7] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 512 | 512
+node2:12780:12861 [7] NCCL INFO 16 coll channels, 16 collnet channels, 16 nvls channels, 16 p2p channels, 2 p2p channels per peer
+node2:12770:12863 [2] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 512 | 512
+node2:12770:12863 [2] NCCL INFO 16 coll channels, 16 collnet channels, 16 nvls channels, 16 p2p channels, 2 p2p channels per peer
+node2:12774:12857 [5] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 512 | 512
+node2:12774:12857 [5] NCCL INFO 16 coll channels, 16 collnet channels, 16 nvls channels, 16 p2p channels, 2 p2p channels per peer
+node2:12777:12860 [6] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 512 | 512
+node2:12777:12860 [6] NCCL INFO 16 coll channels, 16 collnet channels, 16 nvls channels, 16 p2p channels, 2 p2p channels per peer
+node2:12772:12864 [4] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 512 | 512
+node2:12772:12864 [4] NCCL INFO 16 coll channels, 16 collnet channels, 16 nvls channels, 16 p2p channels, 2 p2p channels per peer
+node2:12771:12858 [3] NCCL INFO threadThresholds 8/8/64 | 128/8/64 | 512 | 512
+node2:12771:12858 [3] NCCL INFO 16 coll channels, 16 collnet channels, 16 nvls channels, 16 p2p channels, 2 p2p channels per peer
+node2:12769:12859 [1] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so libnccl-net.so. Using internal tuner plugin.
+node2:12769:12859 [1] NCCL INFO ncclCommInitRankConfig comm 0x5593f27a4df0 rank 9 nranks 16 cudaDev 1 nvmlDev 1 busId 91000 commId 0x96bead0bf75b2174 - Init COMPLETE
+node2:12769:12859 [1] NCCL INFO Init timings - ncclCommInitRankConfig: rank 9 nranks 16 total 5.48 (kernels 0.65, alloc 3.15, bootstrap 0.01, allgathers 0.01, topo 1.23, graphs 0.02, connections 0.40, rest 0.00)
+node2:12774:12857 [5] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so libnccl-net.so. Using internal tuner plugin.
+node2:12774:12857 [5] NCCL INFO ncclCommInitRankConfig comm 0x55e721711260 rank 13 nranks 16 cudaDev 5 nvmlDev 5 busId af000 commId 0x96bead0bf75b2174 - Init COMPLETE
+node2:12774:12857 [5] NCCL INFO Init timings - ncclCommInitRankConfig: rank 13 nranks 16 total 5.57 (kernels 0.70, alloc 2.10, bootstrap 1.12, allgathers 0.01, topo 1.23, graphs 0.02, connections 0.40, rest 0.00)
+node2:12780:12861 [7] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so libnccl-net.so. Using internal tuner plugin.
+node2:12780:12861 [7] NCCL INFO ncclCommInitRankConfig comm 0x55c814d5a980 rank 15 nranks 16 cudaDev 7 nvmlDev 7 busId b7000 commId 0x96bead0bf75b2174 - Init COMPLETE
+node2:12780:12861 [7] NCCL INFO Init timings - ncclCommInitRankConfig: rank 15 nranks 16 total 5.47 (kernels 0.65, alloc 3.13, bootstrap 0.03, allgathers 0.01, topo 1.23, graphs 0.02, connections 0.40, rest 0.00)
+node2:12771:12858 [3] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so libnccl-net.so. Using internal tuner plugin.
+node2:12771:12858 [3] NCCL INFO ncclCommInitRankConfig comm 0x5561c0ca5a40 rank 11 nranks 16 cudaDev 3 nvmlDev 3 busId 99000 commId 0x96bead0bf75b2174 - Init COMPLETE
+node2:12771:12858 [3] NCCL INFO Init timings - ncclCommInitRankConfig: rank 11 nranks 16 total 5.55 (kernels 0.72, alloc 3.03, bootstrap 0.15, allgathers 0.01, topo 1.23, graphs 0.02, connections 0.40, rest 0.00)
+node2:12770:12863 [2] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so libnccl-net.so. Using internal tuner plugin.
+node2:12770:12863 [2] NCCL INFO ncclCommInitRankConfig comm 0x557b93358f00 rank 10 nranks 16 cudaDev 2 nvmlDev 2 busId 95000 commId 0x96bead0bf75b2174 - Init COMPLETE
+node2:12770:12863 [2] NCCL INFO Init timings - ncclCommInitRankConfig: rank 10 nranks 16 total 5.46 (kernels 0.63, alloc 3.12, bootstrap 0.05, allgathers 0.01, topo 1.23, graphs 0.02, connections 0.40, rest 0.00)
+node2:12772:12864 [4] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so libnccl-net.so. Using internal tuner plugin.
+node2:12772:12864 [4] NCCL INFO ncclCommInitRankConfig comm 0x5641f544d920 rank 12 nranks 16 cudaDev 4 nvmlDev 4 busId ab000 commId 0x96bead0bf75b2174 - Init COMPLETE
+node2:12772:12864 [4] NCCL INFO Init timings - ncclCommInitRankConfig: rank 12 nranks 16 total 5.45 (kernels 0.66, alloc 3.02, bootstrap 0.11, allgathers 0.01, topo 1.23, graphs 0.02, connections 0.40, rest 0.00)
+node2:12777:12860 [6] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so libnccl-net.so. Using internal tuner plugin.
+node2:12777:12860 [6] NCCL INFO ncclCommInitRankConfig comm 0x55fc79ed17a0 rank 14 nranks 16 cudaDev 6 nvmlDev 6 busId b3000 commId 0x96bead0bf75b2174 - Init COMPLETE
+node2:12777:12860 [6] NCCL INFO Init timings - ncclCommInitRankConfig: rank 14 nranks 16 total 5.47 (kernels 0.64, alloc 3.07, bootstrap 0.11, allgathers 0.01, topo 1.23, graphs 0.02, connections 0.40, rest 0.00)
+node2:12768:12862 [0] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so libnccl-net.so. Using internal tuner plugin.
+node2:12768:12862 [0] NCCL INFO ncclCommInitRankConfig comm 0x560aeda9b790 rank 8 nranks 16 cudaDev 0 nvmlDev 0 busId 8d000 commId 0x96bead0bf75b2174 - Init COMPLETE
+node2:12768:12862 [0] NCCL INFO Init timings - ncclCommInitRankConfig: rank 8 nranks 16 total 5.47 (kernels 0.66, alloc 3.15, bootstrap 0.00, allgathers 0.01, topo 1.23, graphs 0.02, connections 0.40, rest 0.00)
+#
+#                                                              out-of-place                       in-place          
+#       size         count      type   redop    root     time   algbw   busbw  #wrong     time   algbw   busbw  #wrong 
+#        (B)    (elements)                               (us)  (GB/s)  (GB/s)             (us)  (GB/s)  (GB/s)         
+node1:14787:14983 [0] NCCL INFO Channel 00/0 : 0[0] -> 1[1] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 00/0 : 8[0] -> 9[1] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 02/0 : 8[0] -> 9[1] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 02/0 : 0[0] -> 1[1] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 03/0 : 0[0] -> 1[1] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 04/0 : 0[0] -> 1[1] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 05/0 : 0[0] -> 1[1] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 06/0 : 0[0] -> 1[1] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 07/0 : 0[0] -> 1[1] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 08/0 : 0[0] -> 1[1] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 10/0 : 0[0] -> 1[1] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 11/0 : 0[0] -> 1[1] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 00/0 : 14[6] -> 15[7] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 12/0 : 0[0] -> 1[1] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 00/0 : 10[2] -> 11[3] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 01/0 : 14[6] -> 15[7] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 13/0 : 0[0] -> 1[1] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 01/0 : 10[2] -> 11[3] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 02/0 : 14[6] -> 15[7] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 14/0 : 0[0] -> 1[1] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 02/0 : 10[2] -> 11[3] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 03/0 : 14[6] -> 15[7] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 04/0 : 10[2] -> 11[3] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 04/0 : 14[6] -> 15[7] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 15/0 : 0[0] -> 1[1] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 05/0 : 10[2] -> 11[3] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 05/0 : 14[6] -> 15[7] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 00/0 : 4[4] -> 5[5] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 06/0 : 10[2] -> 11[3] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 06/0 : 14[6] -> 15[7] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 01/0 : 4[4] -> 5[5] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 00/0 : 6[6] -> 7[7] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 07/0 : 10[2] -> 11[3] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 08/0 : 14[6] -> 15[7] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 02/0 : 4[4] -> 5[5] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 01/0 : 6[6] -> 7[7] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 08/0 : 10[2] -> 11[3] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 03/0 : 4[4] -> 5[5] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 09/0 : 14[6] -> 15[7] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 02/0 : 6[6] -> 7[7] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 09/0 : 10[2] -> 11[3] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 04/0 : 4[4] -> 5[5] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 10/0 : 14[6] -> 15[7] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 03/0 : 6[6] -> 7[7] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 06/0 : 4[4] -> 5[5] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 10/0 : 10[2] -> 11[3] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 11/0 : 14[6] -> 15[7] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 04/0 : 6[6] -> 7[7] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 07/0 : 4[4] -> 5[5] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 12/0 : 10[2] -> 11[3] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 12/0 : 14[6] -> 15[7] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 05/0 : 6[6] -> 7[7] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 08/0 : 4[4] -> 5[5] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 13/0 : 10[2] -> 11[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 06/0 : 6[6] -> 7[7] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 13/0 : 14[6] -> 15[7] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 09/0 : 4[4] -> 5[5] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 14/0 : 10[2] -> 11[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 08/0 : 6[6] -> 7[7] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 14/0 : 14[6] -> 15[7] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 10/0 : 4[4] -> 5[5] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 15/0 : 10[2] -> 11[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 09/0 : 6[6] -> 7[7] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 11/0 : 4[4] -> 5[5] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 10/0 : 6[6] -> 7[7] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 12/0 : 4[4] -> 5[5] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 11/0 : 6[6] -> 7[7] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 14/0 : 4[4] -> 5[5] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 12/0 : 6[6] -> 7[7] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 15/0 : 4[4] -> 5[5] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 13/0 : 6[6] -> 7[7] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 14/0 : 6[6] -> 7[7] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 00/0 : 5[5] -> 6[6] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 00/0 : 3[3] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 01/0 : 5[5] -> 6[6] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 01/0 : 3[3] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 02/0 : 5[5] -> 6[6] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 02/0 : 3[3] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 03/0 : 5[5] -> 6[6] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 03/0 : 3[3] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 04/0 : 5[5] -> 6[6] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 05/0 : 3[3] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 05/0 : 5[5] -> 6[6] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 06/0 : 3[3] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 07/0 : 5[5] -> 6[6] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 07/0 : 3[3] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 08/0 : 5[5] -> 6[6] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 08/0 : 3[3] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 09/0 : 5[5] -> 6[6] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 09/0 : 3[3] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 10/0 : 5[5] -> 6[6] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 10/0 : 3[3] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 11/0 : 5[5] -> 6[6] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 11/0 : 3[3] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 12/0 : 5[5] -> 6[6] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 13/0 : 3[3] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 13/0 : 5[5] -> 6[6] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 14/0 : 3[3] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 15/0 : 5[5] -> 6[6] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 15/0 : 3[3] -> 4[4] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 00/0 : 2[2] -> 3[3] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 01/0 : 2[2] -> 3[3] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 02/0 : 2[2] -> 3[3] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 04/0 : 2[2] -> 3[3] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 05/0 : 2[2] -> 3[3] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 06/0 : 2[2] -> 3[3] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 07/0 : 2[2] -> 3[3] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 08/0 : 2[2] -> 3[3] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 09/0 : 2[2] -> 3[3] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 10/0 : 2[2] -> 3[3] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 12/0 : 2[2] -> 3[3] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 13/0 : 2[2] -> 3[3] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 14/0 : 2[2] -> 3[3] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 15/0 : 2[2] -> 3[3] via P2P/CUMEM
+node1:14796:14988 [6] NCCL INFO [Proxy Progress] Device 6 CPU core 7
+node1:14796:14980 [6] NCCL INFO Channel 06/0 : 14[6] -> 6[6] [receive] via NET/IB/2/GDRDMA
+node1:14793:14982 [5] NCCL INFO Channel 05/0 : 13[5] -> 5[5] [receive] via NET/IB/1/GDRDMA
+node1:14791:14990 [4] NCCL INFO [Proxy Progress] Device 4 CPU core 5
+node1:14796:14980 [6] NCCL INFO Channel 14/0 : 14[6] -> 6[6] [receive] via NET/IB/2/GDRDMA
+node1:14791:14987 [4] NCCL INFO Channel 04/0 : 12[4] -> 4[4] [receive] via NET/IB/0/GDRDMA
+node1:14796:14980 [6] NCCL INFO Channel 06/0 : 6[6] -> 14[6] [send] via NET/IB/2/GDRDMA
+node1:14791:14987 [4] NCCL INFO Channel 12/0 : 12[4] -> 4[4] [receive] via NET/IB/0/GDRDMA
+node1:14796:14980 [6] NCCL INFO Channel 14/0 : 6[6] -> 14[6] [send] via NET/IB/2/GDRDMA
+node1:14793:14982 [5] NCCL INFO Channel 13/0 : 13[5] -> 5[5] [receive] via NET/IB/1/GDRDMA
+node1:14793:14989 [5] NCCL INFO [Proxy Progress] Device 5 CPU core 68
+node1:14793:14982 [5] NCCL INFO Channel 05/0 : 5[5] -> 13[5] [send] via NET/IB/1/GDRDMA
+node1:14793:14982 [5] NCCL INFO Channel 13/0 : 5[5] -> 13[5] [send] via NET/IB/1/GDRDMA
+node1:14791:14987 [4] NCCL INFO Channel 04/0 : 4[4] -> 12[4] [send] via NET/IB/0/GDRDMA
+node1:14791:14987 [4] NCCL INFO Channel 12/0 : 4[4] -> 12[4] [send] via NET/IB/0/GDRDMA
+node1:14790:14984 [3] NCCL INFO Channel 03/0 : 11[3] -> 3[3] [receive] via NET/IB/7/GDRDMA
+node1:14790:14984 [3] NCCL INFO Channel 11/0 : 11[3] -> 3[3] [receive] via NET/IB/7/GDRDMA
+node1:14790:14984 [3] NCCL INFO Channel 03/0 : 3[3] -> 11[3] [send] via NET/IB/7/GDRDMA
+node1:14790:14984 [3] NCCL INFO Channel 11/0 : 3[3] -> 11[3] [send] via NET/IB/7/GDRDMA
+node1:14790:14991 [3] NCCL INFO [Proxy Progress] Device 3 CPU core 67
+node2:12768:12960 [0] NCCL INFO Channel 03/0 : 8[0] -> 9[1] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 04/0 : 8[0] -> 9[1] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 05/0 : 8[0] -> 9[1] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 06/0 : 8[0] -> 9[1] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 07/0 : 8[0] -> 9[1] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 08/0 : 8[0] -> 9[1] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 10/0 : 8[0] -> 9[1] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 11/0 : 8[0] -> 9[1] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 12/0 : 8[0] -> 9[1] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 13/0 : 8[0] -> 9[1] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 14/0 : 8[0] -> 9[1] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 15/0 : 8[0] -> 9[1] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 00/0 : 11[3] -> 12[4] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 01/0 : 11[3] -> 12[4] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 02/0 : 11[3] -> 12[4] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 03/0 : 11[3] -> 12[4] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 05/0 : 11[3] -> 12[4] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 06/0 : 11[3] -> 12[4] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 07/0 : 11[3] -> 12[4] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 08/0 : 11[3] -> 12[4] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 09/0 : 11[3] -> 12[4] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 10/0 : 11[3] -> 12[4] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 11/0 : 11[3] -> 12[4] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 00/0 : 1[1] -> 2[2] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 13/0 : 11[3] -> 12[4] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 01/0 : 1[1] -> 2[2] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 14/0 : 11[3] -> 12[4] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 03/0 : 1[1] -> 2[2] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 15/0 : 11[3] -> 12[4] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 04/0 : 1[1] -> 2[2] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 05/0 : 1[1] -> 2[2] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 06/0 : 1[1] -> 2[2] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 07/0 : 1[1] -> 2[2] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 08/0 : 1[1] -> 2[2] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 09/0 : 1[1] -> 2[2] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 11/0 : 1[1] -> 2[2] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 12/0 : 1[1] -> 2[2] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 13/0 : 1[1] -> 2[2] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 14/0 : 1[1] -> 2[2] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 15/0 : 1[1] -> 2[2] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 01/0 : 0[0] -> 7[7] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 01/0 : 9[1] -> 1[1] [receive] via NET/IB/5/GDRDMA
+node1:14788:14986 [1] NCCL INFO Channel 09/0 : 9[1] -> 1[1] [receive] via NET/IB/5/GDRDMA
+node1:14788:14986 [1] NCCL INFO Channel 01/0 : 1[1] -> 9[1] [send] via NET/IB/5/GDRDMA
+node1:14788:14986 [1] NCCL INFO Channel 09/0 : 1[1] -> 9[1] [send] via NET/IB/5/GDRDMA
+node1:14789:14993 [2] NCCL INFO [Proxy Progress] Device 2 CPU core 2
+node1:14788:14992 [1] NCCL INFO [Proxy Progress] Device 1 CPU core 64
+node2:12774:12963 [5] NCCL INFO Channel 00/0 : 13[5] -> 14[6] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 01/0 : 13[5] -> 14[6] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 02/0 : 13[5] -> 14[6] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 03/0 : 13[5] -> 14[6] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 04/0 : 13[5] -> 14[6] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 05/0 : 13[5] -> 14[6] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 07/0 : 13[5] -> 14[6] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 08/0 : 13[5] -> 14[6] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 09/0 : 13[5] -> 14[6] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 10/0 : 13[5] -> 14[6] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 11/0 : 13[5] -> 14[6] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 12/0 : 13[5] -> 14[6] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 13/0 : 13[5] -> 14[6] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 15/0 : 13[5] -> 14[6] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 02/0 : 0[0] -> 7[7] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 03/0 : 0[0] -> 7[7] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 02/0 : 10[2] -> 2[2] [receive] via NET/IB/6/GDRDMA
+node1:14789:14981 [2] NCCL INFO Channel 10/0 : 10[2] -> 2[2] [receive] via NET/IB/6/GDRDMA
+node1:14789:14981 [2] NCCL INFO Channel 02/0 : 2[2] -> 10[2] [send] via NET/IB/6/GDRDMA
+node1:14789:14981 [2] NCCL INFO Channel 10/0 : 2[2] -> 10[2] [send] via NET/IB/6/GDRDMA
+node2:12772:12959 [4] NCCL INFO Channel 00/0 : 12[4] -> 13[5] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 01/0 : 12[4] -> 13[5] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 02/0 : 12[4] -> 13[5] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 03/0 : 12[4] -> 13[5] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 04/0 : 12[4] -> 13[5] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 06/0 : 12[4] -> 13[5] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 07/0 : 12[4] -> 13[5] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 08/0 : 12[4] -> 13[5] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 09/0 : 12[4] -> 13[5] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 10/0 : 12[4] -> 13[5] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 11/0 : 12[4] -> 13[5] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 12/0 : 12[4] -> 13[5] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 14/0 : 12[4] -> 13[5] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 15/0 : 12[4] -> 13[5] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 04/0 : 4[4] -> 12[4] [receive] via NET/IB/0/GDRDMA
+node2:12771:12967 [3] NCCL INFO [Proxy Progress] Device 3 CPU core 67
+node2:12772:12959 [4] NCCL INFO Channel 12/0 : 4[4] -> 12[4] [receive] via NET/IB/0/GDRDMA
+node2:12772:12959 [4] NCCL INFO Channel 04/0 : 12[4] -> 4[4] [send] via NET/IB/0/GDRDMA
+node2:12772:12959 [4] NCCL INFO Channel 12/0 : 12[4] -> 4[4] [send] via NET/IB/0/GDRDMA
+node2:12774:12963 [5] NCCL INFO Channel 05/0 : 5[5] -> 13[5] [receive] via NET/IB/1/GDRDMA
+node2:12772:12966 [4] NCCL INFO [Proxy Progress] Device 4 CPU core 5
+node2:12774:12963 [5] NCCL INFO Channel 13/0 : 5[5] -> 13[5] [receive] via NET/IB/1/GDRDMA
+node2:12774:12963 [5] NCCL INFO Channel 05/0 : 13[5] -> 5[5] [send] via NET/IB/1/GDRDMA
+node2:12774:12963 [5] NCCL INFO Channel 13/0 : 13[5] -> 5[5] [send] via NET/IB/1/GDRDMA
+node2:12774:12968 [5] NCCL INFO [Proxy Progress] Device 5 CPU core 69
+node1:14787:14983 [0] NCCL INFO Channel 04/0 : 0[0] -> 7[7] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 05/0 : 0[0] -> 7[7] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 06/0 : 0[0] -> 7[7] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 07/0 : 0[0] -> 7[7] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 09/0 : 0[0] -> 7[7] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 10/0 : 0[0] -> 7[7] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 11/0 : 0[0] -> 7[7] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 12/0 : 0[0] -> 7[7] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 13/0 : 0[0] -> 7[7] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 03/0 : 3[3] -> 11[3] [receive] via NET/IB/7/GDRDMA
+node2:12771:12964 [3] NCCL INFO Channel 11/0 : 3[3] -> 11[3] [receive] via NET/IB/7/GDRDMA
+node1:14787:14983 [0] NCCL INFO Channel 14/0 : 0[0] -> 7[7] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 03/0 : 11[3] -> 3[3] [send] via NET/IB/7/GDRDMA
+node2:12771:12964 [3] NCCL INFO Channel 11/0 : 11[3] -> 3[3] [send] via NET/IB/7/GDRDMA
+node1:14787:14983 [0] NCCL INFO Channel 15/0 : 0[0] -> 7[7] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 00/0 : 12[4] -> 11[3] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 01/0 : 12[4] -> 11[3] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 02/0 : 12[4] -> 11[3] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 03/0 : 12[4] -> 11[3] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 05/0 : 12[4] -> 11[3] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 06/0 : 12[4] -> 11[3] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 07/0 : 12[4] -> 11[3] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 08/0 : 12[4] -> 11[3] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 09/0 : 12[4] -> 11[3] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 10/0 : 12[4] -> 11[3] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 11/0 : 12[4] -> 11[3] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 00/0 : 11[3] -> 10[2] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 01/0 : 11[3] -> 10[2] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 02/0 : 11[3] -> 10[2] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 04/0 : 11[3] -> 10[2] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 00/0 : 3[3] -> 2[2] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 01/0 : 3[3] -> 2[2] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 02/0 : 3[3] -> 2[2] via P2P/CUMEM
+node1:14787:14994 [0] NCCL INFO [Proxy Progress] Device 0 CPU core 0
+node1:14790:14984 [3] NCCL INFO Channel 04/0 : 3[3] -> 2[2] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 05/0 : 3[3] -> 2[2] via P2P/CUMEM
+node1:14800:14995 [7] NCCL INFO [Proxy Progress] Device 7 CPU core 71
+node1:14790:14984 [3] NCCL INFO Channel 06/0 : 3[3] -> 2[2] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 07/0 : 3[3] -> 2[2] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 08/0 : 3[3] -> 2[2] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 09/0 : 3[3] -> 2[2] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 10/0 : 3[3] -> 2[2] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 12/0 : 3[3] -> 2[2] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 13/0 : 3[3] -> 2[2] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 14/0 : 3[3] -> 2[2] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Channel 15/0 : 3[3] -> 2[2] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 00/0 : 13[5] -> 12[4] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 13/0 : 12[4] -> 11[3] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 14/0 : 12[4] -> 11[3] via P2P/CUMEM
+node2:12772:12959 [4] NCCL INFO Channel 15/0 : 12[4] -> 11[3] via P2P/CUMEM
+node2:12777:12969 [6] NCCL INFO [Proxy Progress] Device 6 CPU core 7
+node2:12771:12964 [3] NCCL INFO Channel 05/0 : 11[3] -> 10[2] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 06/0 : 11[3] -> 10[2] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 07/0 : 11[3] -> 10[2] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 08/0 : 11[3] -> 10[2] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 09/0 : 11[3] -> 10[2] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 10/0 : 11[3] -> 10[2] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 12/0 : 11[3] -> 10[2] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 13/0 : 11[3] -> 10[2] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 14/0 : 11[3] -> 10[2] via P2P/CUMEM
+node2:12771:12964 [3] NCCL INFO Channel 15/0 : 11[3] -> 10[2] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 01/0 : 13[5] -> 12[4] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 02/0 : 13[5] -> 12[4] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 03/0 : 13[5] -> 12[4] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 04/0 : 13[5] -> 12[4] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 06/0 : 13[5] -> 12[4] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 07/0 : 13[5] -> 12[4] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 08/0 : 13[5] -> 12[4] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 09/0 : 13[5] -> 12[4] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 10/0 : 13[5] -> 12[4] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 11/0 : 13[5] -> 12[4] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 12/0 : 13[5] -> 12[4] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 14/0 : 13[5] -> 12[4] via P2P/CUMEM
+node2:12774:12963 [5] NCCL INFO Channel 15/0 : 13[5] -> 12[4] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 06/0 : 6[6] -> 14[6] [receive] via NET/IB/2/GDRDMA
+node2:12777:12958 [6] NCCL INFO Channel 14/0 : 6[6] -> 14[6] [receive] via NET/IB/2/GDRDMA
+node2:12777:12958 [6] NCCL INFO Channel 06/0 : 14[6] -> 6[6] [send] via NET/IB/2/GDRDMA
+node2:12777:12958 [6] NCCL INFO Channel 14/0 : 14[6] -> 6[6] [send] via NET/IB/2/GDRDMA
+node1:14800:14985 [7] NCCL INFO Channel 07/0 : 15[7] -> 7[7] [receive] via NET/IB/3/GDRDMA
+node1:14787:14983 [0] NCCL INFO Channel 00/0 : 8[0] -> 0[0] [receive] via NET/IB/4/GDRDMA
+node1:14787:14983 [0] NCCL INFO Channel 08/0 : 8[0] -> 0[0] [receive] via NET/IB/4/GDRDMA
+node1:14787:14983 [0] NCCL INFO Channel 00/0 : 0[0] -> 8[0] [send] via NET/IB/4/GDRDMA
+node1:14791:14987 [4] NCCL INFO Channel 00/0 : 4[4] -> 3[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 00/0 : 6[6] -> 5[5] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 01/0 : 4[4] -> 3[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 01/0 : 6[6] -> 5[5] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 02/0 : 4[4] -> 3[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 02/0 : 6[6] -> 5[5] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 03/0 : 4[4] -> 3[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 03/0 : 6[6] -> 5[5] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 05/0 : 4[4] -> 3[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 04/0 : 6[6] -> 5[5] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 06/0 : 4[4] -> 3[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 05/0 : 6[6] -> 5[5] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 07/0 : 4[4] -> 3[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 07/0 : 6[6] -> 5[5] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 08/0 : 4[4] -> 3[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 08/0 : 6[6] -> 5[5] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 09/0 : 4[4] -> 3[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 09/0 : 6[6] -> 5[5] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 10/0 : 4[4] -> 3[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 10/0 : 6[6] -> 5[5] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 11/0 : 4[4] -> 3[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 11/0 : 6[6] -> 5[5] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 13/0 : 4[4] -> 3[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 12/0 : 6[6] -> 5[5] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 14/0 : 4[4] -> 3[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 13/0 : 6[6] -> 5[5] via P2P/CUMEM
+node1:14791:14987 [4] NCCL INFO Channel 15/0 : 4[4] -> 3[3] via P2P/CUMEM
+node1:14796:14980 [6] NCCL INFO Channel 15/0 : 6[6] -> 5[5] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 00/0 : 14[6] -> 13[5] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 01/0 : 14[6] -> 13[5] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 02/0 : 14[6] -> 13[5] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 03/0 : 14[6] -> 13[5] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 04/0 : 14[6] -> 13[5] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 05/0 : 14[6] -> 13[5] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 07/0 : 14[6] -> 13[5] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 08/0 : 14[6] -> 13[5] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 00/0 : 5[5] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 01/0 : 5[5] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 02/0 : 5[5] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 03/0 : 5[5] -> 4[4] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 09/0 : 14[6] -> 13[5] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 04/0 : 5[5] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 06/0 : 5[5] -> 4[4] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 10/0 : 14[6] -> 13[5] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 07/0 : 5[5] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 08/0 : 5[5] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 09/0 : 5[5] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 10/0 : 5[5] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 11/0 : 5[5] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 12/0 : 5[5] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 14/0 : 5[5] -> 4[4] via P2P/CUMEM
+node1:14793:14982 [5] NCCL INFO Channel 15/0 : 5[5] -> 4[4] via P2P/CUMEM
+node1:14787:14983 [0] NCCL INFO Channel 08/0 : 0[0] -> 8[0] [send] via NET/IB/4/GDRDMA
+node2:12777:12958 [6] NCCL INFO Channel 11/0 : 14[6] -> 13[5] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 12/0 : 14[6] -> 13[5] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 13/0 : 14[6] -> 13[5] via P2P/CUMEM
+node2:12777:12958 [6] NCCL INFO Channel 15/0 : 14[6] -> 13[5] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 00/0 : 9[1] -> 10[2] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 01/0 : 9[1] -> 10[2] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 03/0 : 9[1] -> 10[2] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 04/0 : 9[1] -> 10[2] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 15/0 : 15[7] -> 7[7] [receive] via NET/IB/3/GDRDMA
+node1:14800:14985 [7] NCCL INFO Channel 07/0 : 7[7] -> 15[7] [send] via NET/IB/3/GDRDMA
+node1:14800:14985 [7] NCCL INFO Channel 15/0 : 7[7] -> 15[7] [send] via NET/IB/3/GDRDMA
+node2:12769:12962 [1] NCCL INFO Channel 05/0 : 9[1] -> 10[2] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 06/0 : 9[1] -> 10[2] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 07/0 : 9[1] -> 10[2] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 08/0 : 9[1] -> 10[2] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 09/0 : 9[1] -> 10[2] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 11/0 : 9[1] -> 10[2] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 12/0 : 9[1] -> 10[2] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 13/0 : 9[1] -> 10[2] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 14/0 : 9[1] -> 10[2] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 15/0 : 9[1] -> 10[2] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 01/0 : 8[0] -> 15[7] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 02/0 : 8[0] -> 15[7] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 03/0 : 8[0] -> 15[7] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 04/0 : 8[0] -> 15[7] via P2P/CUMEM
+node2:12770:12970 [2] NCCL INFO [Proxy Progress] Device 2 CPU core 3
+node2:12768:12960 [0] NCCL INFO Channel 05/0 : 8[0] -> 15[7] via P2P/CUMEM
+node2:12769:12971 [1] NCCL INFO [Proxy Progress] Device 1 CPU core 64
+node2:12769:12962 [1] NCCL INFO Channel 01/0 : 1[1] -> 9[1] [receive] via NET/IB/5/GDRDMA
+node2:12769:12962 [1] NCCL INFO Channel 09/0 : 1[1] -> 9[1] [receive] via NET/IB/5/GDRDMA
+node2:12769:12962 [1] NCCL INFO Channel 01/0 : 9[1] -> 1[1] [send] via NET/IB/5/GDRDMA
+node2:12769:12962 [1] NCCL INFO Channel 09/0 : 9[1] -> 1[1] [send] via NET/IB/5/GDRDMA
+node2:12770:12961 [2] NCCL INFO Channel 02/0 : 2[2] -> 10[2] [receive] via NET/IB/6/GDRDMA
+node2:12770:12961 [2] NCCL INFO Channel 10/0 : 2[2] -> 10[2] [receive] via NET/IB/6/GDRDMA
+node2:12770:12961 [2] NCCL INFO Channel 02/0 : 10[2] -> 2[2] [send] via NET/IB/6/GDRDMA
+node2:12770:12961 [2] NCCL INFO Channel 10/0 : 10[2] -> 2[2] [send] via NET/IB/6/GDRDMA
+node2:12768:12960 [0] NCCL INFO Channel 06/0 : 8[0] -> 15[7] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 00/0 : 2[2] -> 1[1] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 00/0 : 9[1] -> 8[0] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 01/0 : 2[2] -> 1[1] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 02/0 : 9[1] -> 8[0] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 03/0 : 2[2] -> 1[1] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 07/0 : 8[0] -> 15[7] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 09/0 : 8[0] -> 15[7] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 04/0 : 2[2] -> 1[1] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 10/0 : 8[0] -> 15[7] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 05/0 : 2[2] -> 1[1] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 06/0 : 2[2] -> 1[1] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 03/0 : 9[1] -> 8[0] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 11/0 : 8[0] -> 15[7] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 04/0 : 9[1] -> 8[0] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 12/0 : 8[0] -> 15[7] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 07/0 : 2[2] -> 1[1] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 08/0 : 2[2] -> 1[1] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 05/0 : 9[1] -> 8[0] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 13/0 : 8[0] -> 15[7] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 14/0 : 8[0] -> 15[7] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 06/0 : 9[1] -> 8[0] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 07/0 : 9[1] -> 8[0] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 15/0 : 8[0] -> 15[7] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 08/0 : 9[1] -> 8[0] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 00/0 : 10[2] -> 9[1] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 10/0 : 9[1] -> 8[0] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 09/0 : 2[2] -> 1[1] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 01/0 : 10[2] -> 9[1] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 11/0 : 9[1] -> 8[0] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 11/0 : 2[2] -> 1[1] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 12/0 : 2[2] -> 1[1] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 03/0 : 10[2] -> 9[1] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 12/0 : 9[1] -> 8[0] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 04/0 : 10[2] -> 9[1] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 13/0 : 9[1] -> 8[0] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 13/0 : 2[2] -> 1[1] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 05/0 : 10[2] -> 9[1] via P2P/CUMEM
+node2:12768:12972 [0] NCCL INFO [Proxy Progress] Device 0 CPU core 0
+node2:12780:12973 [7] NCCL INFO [Proxy Progress] Device 7 CPU core 71
+node2:12769:12962 [1] NCCL INFO Channel 14/0 : 9[1] -> 8[0] via P2P/CUMEM
+node2:12768:12960 [0] NCCL INFO Channel 00/0 : 0[0] -> 8[0] [receive] via NET/IB/4/GDRDMA
+node2:12768:12960 [0] NCCL INFO Channel 08/0 : 0[0] -> 8[0] [receive] via NET/IB/4/GDRDMA
+node2:12768:12960 [0] NCCL INFO Channel 00/0 : 8[0] -> 0[0] [send] via NET/IB/4/GDRDMA
+node2:12768:12960 [0] NCCL INFO Channel 08/0 : 8[0] -> 0[0] [send] via NET/IB/4/GDRDMA
+node1:14789:14981 [2] NCCL INFO Channel 14/0 : 2[2] -> 1[1] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 06/0 : 10[2] -> 9[1] via P2P/CUMEM
+node1:14789:14981 [2] NCCL INFO Channel 15/0 : 2[2] -> 1[1] via P2P/CUMEM
+node2:12769:12962 [1] NCCL INFO Channel 15/0 : 9[1] -> 8[0] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 07/0 : 10[2] -> 9[1] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 08/0 : 10[2] -> 9[1] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 09/0 : 10[2] -> 9[1] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 11/0 : 10[2] -> 9[1] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 12/0 : 10[2] -> 9[1] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 13/0 : 10[2] -> 9[1] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 14/0 : 10[2] -> 9[1] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 00/0 : 1[1] -> 0[0] via P2P/CUMEM
+node2:12770:12961 [2] NCCL INFO Channel 15/0 : 10[2] -> 9[1] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 02/0 : 1[1] -> 0[0] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 03/0 : 1[1] -> 0[0] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 04/0 : 1[1] -> 0[0] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 05/0 : 1[1] -> 0[0] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 06/0 : 1[1] -> 0[0] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 07/0 : 1[1] -> 0[0] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 08/0 : 1[1] -> 0[0] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 07/0 : 7[7] -> 15[7] [receive] via NET/IB/3/GDRDMA
+node2:12780:12965 [7] NCCL INFO Channel 15/0 : 7[7] -> 15[7] [receive] via NET/IB/3/GDRDMA
+node2:12780:12965 [7] NCCL INFO Channel 07/0 : 15[7] -> 7[7] [send] via NET/IB/3/GDRDMA
+node1:14788:14986 [1] NCCL INFO Channel 10/0 : 1[1] -> 0[0] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 11/0 : 1[1] -> 0[0] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 12/0 : 1[1] -> 0[0] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 15/0 : 15[7] -> 7[7] [send] via NET/IB/3/GDRDMA
+node2:12780:12965 [7] NCCL INFO Channel 01/0 : 15[7] -> 8[0] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 01/0 : 7[7] -> 0[0] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 02/0 : 15[7] -> 8[0] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 03/0 : 15[7] -> 8[0] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 04/0 : 15[7] -> 8[0] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 02/0 : 7[7] -> 0[0] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 13/0 : 1[1] -> 0[0] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 03/0 : 7[7] -> 0[0] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 14/0 : 1[1] -> 0[0] via P2P/CUMEM
+node1:14788:14986 [1] NCCL INFO Channel 15/0 : 1[1] -> 0[0] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 05/0 : 15[7] -> 8[0] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 06/0 : 15[7] -> 8[0] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 04/0 : 7[7] -> 0[0] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 05/0 : 7[7] -> 0[0] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 07/0 : 15[7] -> 8[0] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 09/0 : 15[7] -> 8[0] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 06/0 : 7[7] -> 0[0] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 10/0 : 15[7] -> 8[0] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 07/0 : 7[7] -> 0[0] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 09/0 : 7[7] -> 0[0] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 10/0 : 7[7] -> 0[0] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 11/0 : 7[7] -> 0[0] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 11/0 : 15[7] -> 8[0] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 12/0 : 15[7] -> 8[0] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 13/0 : 15[7] -> 8[0] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 12/0 : 7[7] -> 0[0] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 14/0 : 15[7] -> 8[0] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 13/0 : 7[7] -> 0[0] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 15/0 : 15[7] -> 8[0] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 00/0 : 15[7] -> 14[6] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 14/0 : 7[7] -> 0[0] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 15/0 : 7[7] -> 0[0] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 00/0 : 7[7] -> 6[6] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 01/0 : 15[7] -> 14[6] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 02/0 : 15[7] -> 14[6] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 01/0 : 7[7] -> 6[6] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 02/0 : 7[7] -> 6[6] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 03/0 : 15[7] -> 14[6] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 04/0 : 15[7] -> 14[6] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 03/0 : 7[7] -> 6[6] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 05/0 : 15[7] -> 14[6] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 06/0 : 15[7] -> 14[6] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 08/0 : 15[7] -> 14[6] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 09/0 : 15[7] -> 14[6] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 10/0 : 15[7] -> 14[6] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 04/0 : 7[7] -> 6[6] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 05/0 : 7[7] -> 6[6] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 06/0 : 7[7] -> 6[6] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 08/0 : 7[7] -> 6[6] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 11/0 : 15[7] -> 14[6] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 09/0 : 7[7] -> 6[6] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 10/0 : 7[7] -> 6[6] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 12/0 : 15[7] -> 14[6] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 13/0 : 15[7] -> 14[6] via P2P/CUMEM
+node2:12780:12965 [7] NCCL INFO Channel 14/0 : 15[7] -> 14[6] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 11/0 : 7[7] -> 6[6] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 12/0 : 7[7] -> 6[6] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 13/0 : 7[7] -> 6[6] via P2P/CUMEM
+node1:14800:14985 [7] NCCL INFO Channel 14/0 : 7[7] -> 6[6] via P2P/CUMEM
+node1:14790:14984 [3] NCCL INFO Connected all trees
+node2:12771:12964 [3] NCCL INFO Connected all trees
+node1:14789:14981 [2] NCCL INFO Connected all trees
+node2:12770:12961 [2] NCCL INFO Connected all trees
+node1:14791:14987 [4] NCCL INFO Connected all trees
+node1:14793:14982 [5] NCCL INFO Connected all trees
+node2:12772:12959 [4] NCCL INFO Connected all trees
+node1:14800:14985 [7] NCCL INFO Connected all trees
+node2:12774:12963 [5] NCCL INFO Connected all trees
+node1:14787:14983 [0] NCCL INFO Connected all trees
+node1:14796:14980 [6] NCCL INFO Connected all trees
+node1:14788:14986 [1] NCCL INFO Connected all trees
+node2:12780:12965 [7] NCCL INFO Connected all trees
+node2:12777:12958 [6] NCCL INFO Connected all trees
+node2:12768:12960 [0] NCCL INFO Connected all trees
+node2:12769:12962 [1] NCCL INFO Connected all trees
+node1:14791:14998 [4] NCCL INFO NVLS comm 0x5562b61a20a0 headRank 4 nHeads 8 buffSize 1048576 nvlsPerRankSize 33554432 nvlsTotalSize 268435456
+node1:14793:14997 [5] NCCL INFO NVLS comm 0x556cfc92bf80 headRank 5 nHeads 8 buffSize 1048576 nvlsPerRankSize 33554432 nvlsTotalSize 268435456
+node1:14787:15000 [0] NCCL INFO NVLS comm 0x55858412f8f0 headRank 0 nHeads 8 buffSize 1048576 nvlsPerRankSize 33554432 nvlsTotalSize 268435456
+node1:14788:14999 [1] NCCL INFO NVLS comm 0x557c35fd2520 headRank 1 nHeads 8 buffSize 1048576 nvlsPerRankSize 33554432 nvlsTotalSize 268435456
+node1:14796:15003 [6] NCCL INFO NVLS comm 0x55af05ffe720 headRank 6 nHeads 8 buffSize 1048576 nvlsPerRankSize 33554432 nvlsTotalSize 268435456
+node1:14790:15001 [3] NCCL INFO NVLS comm 0x55cf2859fbc0 headRank 3 nHeads 8 buffSize 1048576 nvlsPerRankSize 33554432 nvlsTotalSize 268435456
+node1:14800:15004 [7] NCCL INFO NVLS comm 0x55cd9b20d120 headRank 7 nHeads 8 buffSize 1048576 nvlsPerRankSize 33554432 nvlsTotalSize 268435456
+node1:14789:15002 [2] NCCL INFO NVLS comm 0x5650387204c0 headRank 2 nHeads 8 buffSize 1048576 nvlsPerRankSize 33554432 nvlsTotalSize 268435456
+node2:12771:12975 [3] NCCL INFO NVLS comm 0x5561c0ca5a40 headRank 3 nHeads 8 buffSize 1048576 nvlsPerRankSize 33554432 nvlsTotalSize 268435456
+node2:12769:12978 [1] NCCL INFO NVLS comm 0x5593f27a4df0 headRank 1 nHeads 8 buffSize 1048576 nvlsPerRankSize 33554432 nvlsTotalSize 268435456
+node2:12780:12980 [7] NCCL INFO NVLS comm 0x55c814d5a980 headRank 7 nHeads 8 buffSize 1048576 nvlsPerRankSize 33554432 nvlsTotalSize 268435456
+node2:12774:12982 [5] NCCL INFO NVLS comm 0x55e721711260 headRank 5 nHeads 8 buffSize 1048576 nvlsPerRankSize 33554432 nvlsTotalSize 268435456
+node2:12777:12977 [6] NCCL INFO NVLS comm 0x55fc79ed17a0 headRank 6 nHeads 8 buffSize 1048576 nvlsPerRankSize 33554432 nvlsTotalSize 268435456
+node2:12770:12976 [2] NCCL INFO NVLS comm 0x557b93358f00 headRank 2 nHeads 8 buffSize 1048576 nvlsPerRankSize 33554432 nvlsTotalSize 268435456
+node2:12768:12979 [0] NCCL INFO NVLS comm 0x560aeda9b790 headRank 0 nHeads 8 buffSize 1048576 nvlsPerRankSize 33554432 nvlsTotalSize 268435456
+node2:12772:12981 [4] NCCL INFO NVLS comm 0x5641f544d920 headRank 4 nHeads 8 buffSize 1048576 nvlsPerRankSize 33554432 nvlsTotalSize 268435456
+node1:14788:14999 [1] NCCL INFO Channel 00/0 : 9[1] -> 1[1] [receive] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 02/0 : 9[1] -> 1[1] [receive] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 03/0 : 9[1] -> 1[1] [receive] via NET/IB/5/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 01/0 : 8[0] -> 0[0] [receive] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 02/0 : 8[0] -> 0[0] [receive] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 03/0 : 8[0] -> 0[0] [receive] via NET/IB/4/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 00/0 : 14[6] -> 6[6] [receive] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 01/0 : 14[6] -> 6[6] [receive] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 02/0 : 14[6] -> 6[6] [receive] via NET/IB/2/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 04/0 : 8[0] -> 0[0] [receive] via NET/IB/4/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 03/0 : 14[6] -> 6[6] [receive] via NET/IB/2/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 05/0 : 8[0] -> 0[0] [receive] via NET/IB/4/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 04/0 : 14[6] -> 6[6] [receive] via NET/IB/2/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 06/0 : 8[0] -> 0[0] [receive] via NET/IB/4/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 05/0 : 14[6] -> 6[6] [receive] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 07/0 : 14[6] -> 6[6] [receive] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 08/0 : 14[6] -> 6[6] [receive] via NET/IB/2/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 00/0 : 10[2] -> 2[2] [receive] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 00/0 : 12[4] -> 4[4] [receive] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 01/0 : 10[2] -> 2[2] [receive] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 01/0 : 12[4] -> 4[4] [receive] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 03/0 : 10[2] -> 2[2] [receive] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 02/0 : 12[4] -> 4[4] [receive] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 04/0 : 10[2] -> 2[2] [receive] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 03/0 : 12[4] -> 4[4] [receive] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 05/0 : 10[2] -> 2[2] [receive] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 05/0 : 12[4] -> 4[4] [receive] via NET/IB/0/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 06/0 : 12[4] -> 4[4] [receive] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 06/0 : 10[2] -> 2[2] [receive] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 07/0 : 12[4] -> 4[4] [receive] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 07/0 : 10[2] -> 2[2] [receive] via NET/IB/6/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 08/0 : 10[2] -> 2[2] [receive] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 08/0 : 12[4] -> 4[4] [receive] via NET/IB/0/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 09/0 : 12[4] -> 4[4] [receive] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 09/0 : 10[2] -> 2[2] [receive] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 10/0 : 12[4] -> 4[4] [receive] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 11/0 : 10[2] -> 2[2] [receive] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 11/0 : 12[4] -> 4[4] [receive] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 12/0 : 10[2] -> 2[2] [receive] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 13/0 : 12[4] -> 4[4] [receive] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 13/0 : 10[2] -> 2[2] [receive] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 14/0 : 12[4] -> 4[4] [receive] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 14/0 : 10[2] -> 2[2] [receive] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 15/0 : 12[4] -> 4[4] [receive] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 15/0 : 10[2] -> 2[2] [receive] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 00/0 : 4[4] -> 12[4] [send] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 00/0 : 2[2] -> 10[2] [send] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 01/0 : 4[4] -> 12[4] [send] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 01/0 : 2[2] -> 10[2] [send] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 02/0 : 4[4] -> 12[4] [send] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 03/0 : 2[2] -> 10[2] [send] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 03/0 : 4[4] -> 12[4] [send] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 04/0 : 2[2] -> 10[2] [send] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 05/0 : 4[4] -> 12[4] [send] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 05/0 : 2[2] -> 10[2] [send] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 06/0 : 4[4] -> 12[4] [send] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 06/0 : 2[2] -> 10[2] [send] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 07/0 : 4[4] -> 12[4] [send] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 07/0 : 2[2] -> 10[2] [send] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 08/0 : 4[4] -> 12[4] [send] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 08/0 : 2[2] -> 10[2] [send] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 09/0 : 4[4] -> 12[4] [send] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 09/0 : 2[2] -> 10[2] [send] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 10/0 : 4[4] -> 12[4] [send] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 11/0 : 2[2] -> 10[2] [send] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 11/0 : 4[4] -> 12[4] [send] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 12/0 : 2[2] -> 10[2] [send] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 13/0 : 4[4] -> 12[4] [send] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 13/0 : 2[2] -> 10[2] [send] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 14/0 : 4[4] -> 12[4] [send] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 14/0 : 2[2] -> 10[2] [send] via NET/IB/6/GDRDMA
+node1:14791:14998 [4] NCCL INFO Channel 15/0 : 4[4] -> 12[4] [send] via NET/IB/0/GDRDMA
+node1:14789:15002 [2] NCCL INFO Channel 15/0 : 2[2] -> 10[2] [send] via NET/IB/6/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 00/0 : 6[6] -> 14[6] [receive] via NET/IB/2/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 01/0 : 6[6] -> 14[6] [receive] via NET/IB/2/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 02/0 : 6[6] -> 14[6] [receive] via NET/IB/2/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 03/0 : 6[6] -> 14[6] [receive] via NET/IB/2/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 04/0 : 6[6] -> 14[6] [receive] via NET/IB/2/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 05/0 : 6[6] -> 14[6] [receive] via NET/IB/2/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 07/0 : 6[6] -> 14[6] [receive] via NET/IB/2/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 08/0 : 6[6] -> 14[6] [receive] via NET/IB/2/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 09/0 : 6[6] -> 14[6] [receive] via NET/IB/2/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 00/0 : 11[3] -> 3[3] [receive] via NET/IB/7/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 00/0 : 15[7] -> 7[7] [receive] via NET/IB/3/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 00/0 : 13[5] -> 5[5] [receive] via NET/IB/1/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 01/0 : 11[3] -> 3[3] [receive] via NET/IB/7/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 01/0 : 15[7] -> 7[7] [receive] via NET/IB/3/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 02/0 : 11[3] -> 3[3] [receive] via NET/IB/7/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 01/0 : 13[5] -> 5[5] [receive] via NET/IB/1/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 02/0 : 15[7] -> 7[7] [receive] via NET/IB/3/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 04/0 : 11[3] -> 3[3] [receive] via NET/IB/7/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 02/0 : 13[5] -> 5[5] [receive] via NET/IB/1/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 03/0 : 15[7] -> 7[7] [receive] via NET/IB/3/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 05/0 : 11[3] -> 3[3] [receive] via NET/IB/7/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 03/0 : 13[5] -> 5[5] [receive] via NET/IB/1/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 04/0 : 15[7] -> 7[7] [receive] via NET/IB/3/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 10/0 : 6[6] -> 14[6] [receive] via NET/IB/2/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 06/0 : 11[3] -> 3[3] [receive] via NET/IB/7/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 04/0 : 13[5] -> 5[5] [receive] via NET/IB/1/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 05/0 : 15[7] -> 7[7] [receive] via NET/IB/3/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 07/0 : 11[3] -> 3[3] [receive] via NET/IB/7/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 06/0 : 13[5] -> 5[5] [receive] via NET/IB/1/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 06/0 : 15[7] -> 7[7] [receive] via NET/IB/3/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 07/0 : 13[5] -> 5[5] [receive] via NET/IB/1/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 08/0 : 11[3] -> 3[3] [receive] via NET/IB/7/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 00/0 : 2[2] -> 10[2] [receive] via NET/IB/6/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 11/0 : 6[6] -> 14[6] [receive] via NET/IB/2/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 08/0 : 15[7] -> 7[7] [receive] via NET/IB/3/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 01/0 : 2[2] -> 10[2] [receive] via NET/IB/6/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 09/0 : 11[3] -> 3[3] [receive] via NET/IB/7/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 08/0 : 13[5] -> 5[5] [receive] via NET/IB/1/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 09/0 : 15[7] -> 7[7] [receive] via NET/IB/3/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 09/0 : 13[5] -> 5[5] [receive] via NET/IB/1/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 10/0 : 11[3] -> 3[3] [receive] via NET/IB/7/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 10/0 : 15[7] -> 7[7] [receive] via NET/IB/3/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 10/0 : 13[5] -> 5[5] [receive] via NET/IB/1/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 12/0 : 11[3] -> 3[3] [receive] via NET/IB/7/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 11/0 : 15[7] -> 7[7] [receive] via NET/IB/3/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 11/0 : 13[5] -> 5[5] [receive] via NET/IB/1/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 13/0 : 11[3] -> 3[3] [receive] via NET/IB/7/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 12/0 : 15[7] -> 7[7] [receive] via NET/IB/3/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 12/0 : 6[6] -> 14[6] [receive] via NET/IB/2/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 03/0 : 2[2] -> 10[2] [receive] via NET/IB/6/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 12/0 : 13[5] -> 5[5] [receive] via NET/IB/1/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 14/0 : 11[3] -> 3[3] [receive] via NET/IB/7/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 13/0 : 6[6] -> 14[6] [receive] via NET/IB/2/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 04/0 : 2[2] -> 10[2] [receive] via NET/IB/6/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 15/0 : 6[6] -> 14[6] [receive] via NET/IB/2/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 13/0 : 15[7] -> 7[7] [receive] via NET/IB/3/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 05/0 : 2[2] -> 10[2] [receive] via NET/IB/6/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 00/0 : 14[6] -> 6[6] [send] via NET/IB/2/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 06/0 : 2[2] -> 10[2] [receive] via NET/IB/6/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 14/0 : 13[5] -> 5[5] [receive] via NET/IB/1/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 15/0 : 11[3] -> 3[3] [receive] via NET/IB/7/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 14/0 : 15[7] -> 7[7] [receive] via NET/IB/3/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 00/0 : 3[3] -> 11[3] [send] via NET/IB/7/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 15/0 : 13[5] -> 5[5] [receive] via NET/IB/1/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 00/0 : 7[7] -> 15[7] [send] via NET/IB/3/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 01/0 : 14[6] -> 6[6] [send] via NET/IB/2/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 01/0 : 3[3] -> 11[3] [send] via NET/IB/7/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 00/0 : 5[5] -> 13[5] [send] via NET/IB/1/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 07/0 : 2[2] -> 10[2] [receive] via NET/IB/6/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 02/0 : 14[6] -> 6[6] [send] via NET/IB/2/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 01/0 : 7[7] -> 15[7] [send] via NET/IB/3/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 08/0 : 2[2] -> 10[2] [receive] via NET/IB/6/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 03/0 : 14[6] -> 6[6] [send] via NET/IB/2/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 09/0 : 2[2] -> 10[2] [receive] via NET/IB/6/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 04/0 : 14[6] -> 6[6] [send] via NET/IB/2/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 02/0 : 3[3] -> 11[3] [send] via NET/IB/7/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 01/0 : 5[5] -> 13[5] [send] via NET/IB/1/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 00/0 : 5[5] -> 13[5] [receive] via NET/IB/1/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 00/0 : 3[3] -> 11[3] [receive] via NET/IB/7/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 05/0 : 14[6] -> 6[6] [send] via NET/IB/2/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 02/0 : 7[7] -> 15[7] [send] via NET/IB/3/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 11/0 : 2[2] -> 10[2] [receive] via NET/IB/6/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 00/0 : 1[1] -> 9[1] [receive] via NET/IB/5/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 07/0 : 14[6] -> 6[6] [send] via NET/IB/2/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 04/0 : 3[3] -> 11[3] [send] via NET/IB/7/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 01/0 : 5[5] -> 13[5] [receive] via NET/IB/1/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 02/0 : 5[5] -> 13[5] [send] via NET/IB/1/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 01/0 : 3[3] -> 11[3] [receive] via NET/IB/7/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 12/0 : 2[2] -> 10[2] [receive] via NET/IB/6/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 03/0 : 7[7] -> 15[7] [send] via NET/IB/3/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 02/0 : 1[1] -> 9[1] [receive] via NET/IB/5/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 08/0 : 14[6] -> 6[6] [send] via NET/IB/2/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 05/0 : 3[3] -> 11[3] [send] via NET/IB/7/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 02/0 : 5[5] -> 13[5] [receive] via NET/IB/1/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 13/0 : 2[2] -> 10[2] [receive] via NET/IB/6/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 03/0 : 5[5] -> 13[5] [send] via NET/IB/1/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 02/0 : 3[3] -> 11[3] [receive] via NET/IB/7/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 09/0 : 14[6] -> 6[6] [send] via NET/IB/2/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 04/0 : 7[7] -> 15[7] [send] via NET/IB/3/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 03/0 : 1[1] -> 9[1] [receive] via NET/IB/5/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 14/0 : 2[2] -> 10[2] [receive] via NET/IB/6/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 03/0 : 5[5] -> 13[5] [receive] via NET/IB/1/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 04/0 : 3[3] -> 11[3] [receive] via NET/IB/7/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 06/0 : 3[3] -> 11[3] [send] via NET/IB/7/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 10/0 : 14[6] -> 6[6] [send] via NET/IB/2/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 04/0 : 5[5] -> 13[5] [send] via NET/IB/1/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 04/0 : 1[1] -> 9[1] [receive] via NET/IB/5/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 15/0 : 2[2] -> 10[2] [receive] via NET/IB/6/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 05/0 : 7[7] -> 15[7] [send] via NET/IB/3/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 04/0 : 5[5] -> 13[5] [receive] via NET/IB/1/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 07/0 : 3[3] -> 11[3] [send] via NET/IB/7/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 06/0 : 5[5] -> 13[5] [send] via NET/IB/1/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 05/0 : 3[3] -> 11[3] [receive] via NET/IB/7/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 11/0 : 14[6] -> 6[6] [send] via NET/IB/2/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 06/0 : 7[7] -> 15[7] [send] via NET/IB/3/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 00/0 : 10[2] -> 2[2] [send] via NET/IB/6/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 05/0 : 1[1] -> 9[1] [receive] via NET/IB/5/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 08/0 : 3[3] -> 11[3] [send] via NET/IB/7/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 07/0 : 5[5] -> 13[5] [send] via NET/IB/1/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 12/0 : 14[6] -> 6[6] [send] via NET/IB/2/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 08/0 : 7[7] -> 15[7] [send] via NET/IB/3/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 06/0 : 5[5] -> 13[5] [receive] via NET/IB/1/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 09/0 : 3[3] -> 11[3] [send] via NET/IB/7/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 08/0 : 5[5] -> 13[5] [send] via NET/IB/1/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 06/0 : 3[3] -> 11[3] [receive] via NET/IB/7/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 09/0 : 7[7] -> 15[7] [send] via NET/IB/3/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 01/0 : 10[2] -> 2[2] [send] via NET/IB/6/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 10/0 : 3[3] -> 11[3] [send] via NET/IB/7/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 06/0 : 1[1] -> 9[1] [receive] via NET/IB/5/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 09/0 : 5[5] -> 13[5] [send] via NET/IB/1/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 13/0 : 14[6] -> 6[6] [send] via NET/IB/2/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 10/0 : 7[7] -> 15[7] [send] via NET/IB/3/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 03/0 : 10[2] -> 2[2] [send] via NET/IB/6/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 07/0 : 5[5] -> 13[5] [receive] via NET/IB/1/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 07/0 : 3[3] -> 11[3] [receive] via NET/IB/7/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 12/0 : 3[3] -> 11[3] [send] via NET/IB/7/GDRDMA
+node2:12777:12977 [6] NCCL INFO Channel 15/0 : 14[6] -> 6[6] [send] via NET/IB/2/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 10/0 : 5[5] -> 13[5] [send] via NET/IB/1/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 07/0 : 1[1] -> 9[1] [receive] via NET/IB/5/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 11/0 : 7[7] -> 15[7] [send] via NET/IB/3/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 04/0 : 10[2] -> 2[2] [send] via NET/IB/6/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 13/0 : 3[3] -> 11[3] [send] via NET/IB/7/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 11/0 : 5[5] -> 13[5] [send] via NET/IB/1/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 08/0 : 5[5] -> 13[5] [receive] via NET/IB/1/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 12/0 : 7[7] -> 15[7] [send] via NET/IB/3/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 08/0 : 3[3] -> 11[3] [receive] via NET/IB/7/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 05/0 : 10[2] -> 2[2] [send] via NET/IB/6/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 08/0 : 1[1] -> 9[1] [receive] via NET/IB/5/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 14/0 : 3[3] -> 11[3] [send] via NET/IB/7/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 12/0 : 5[5] -> 13[5] [send] via NET/IB/1/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 09/0 : 3[3] -> 11[3] [receive] via NET/IB/7/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 13/0 : 7[7] -> 15[7] [send] via NET/IB/3/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 09/0 : 5[5] -> 13[5] [receive] via NET/IB/1/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 06/0 : 10[2] -> 2[2] [send] via NET/IB/6/GDRDMA
+node1:14790:15001 [3] NCCL INFO Channel 15/0 : 3[3] -> 11[3] [send] via NET/IB/7/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 14/0 : 5[5] -> 13[5] [send] via NET/IB/1/GDRDMA
+node1:14800:15004 [7] NCCL INFO Channel 14/0 : 7[7] -> 15[7] [send] via NET/IB/3/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 10/0 : 1[1] -> 9[1] [receive] via NET/IB/5/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 07/0 : 10[2] -> 2[2] [send] via NET/IB/6/GDRDMA
+node1:14793:14997 [5] NCCL INFO Channel 15/0 : 5[5] -> 13[5] [send] via NET/IB/1/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 10/0 : 5[5] -> 13[5] [receive] via NET/IB/1/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 10/0 : 3[3] -> 11[3] [receive] via NET/IB/7/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 11/0 : 1[1] -> 9[1] [receive] via NET/IB/5/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 08/0 : 10[2] -> 2[2] [send] via NET/IB/6/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 11/0 : 5[5] -> 13[5] [receive] via NET/IB/1/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 12/0 : 3[3] -> 11[3] [receive] via NET/IB/7/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 12/0 : 1[1] -> 9[1] [receive] via NET/IB/5/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 09/0 : 10[2] -> 2[2] [send] via NET/IB/6/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 12/0 : 5[5] -> 13[5] [receive] via NET/IB/1/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 13/0 : 3[3] -> 11[3] [receive] via NET/IB/7/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 11/0 : 10[2] -> 2[2] [send] via NET/IB/6/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 13/0 : 1[1] -> 9[1] [receive] via NET/IB/5/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 14/0 : 5[5] -> 13[5] [receive] via NET/IB/1/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 12/0 : 10[2] -> 2[2] [send] via NET/IB/6/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 14/0 : 3[3] -> 11[3] [receive] via NET/IB/7/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 14/0 : 1[1] -> 9[1] [receive] via NET/IB/5/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 13/0 : 10[2] -> 2[2] [send] via NET/IB/6/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 15/0 : 5[5] -> 13[5] [receive] via NET/IB/1/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 15/0 : 3[3] -> 11[3] [receive] via NET/IB/7/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 15/0 : 1[1] -> 9[1] [receive] via NET/IB/5/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 14/0 : 10[2] -> 2[2] [send] via NET/IB/6/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 00/0 : 13[5] -> 5[5] [send] via NET/IB/1/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 00/0 : 11[3] -> 3[3] [send] via NET/IB/7/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 00/0 : 9[1] -> 1[1] [send] via NET/IB/5/GDRDMA
+node2:12770:12976 [2] NCCL INFO Channel 15/0 : 10[2] -> 2[2] [send] via NET/IB/6/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 00/0 : 4[4] -> 12[4] [receive] via NET/IB/0/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 01/0 : 0[0] -> 8[0] [receive] via NET/IB/4/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 01/0 : 4[4] -> 12[4] [receive] via NET/IB/0/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 02/0 : 0[0] -> 8[0] [receive] via NET/IB/4/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 02/0 : 4[4] -> 12[4] [receive] via NET/IB/0/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 03/0 : 4[4] -> 12[4] [receive] via NET/IB/0/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 03/0 : 0[0] -> 8[0] [receive] via NET/IB/4/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 05/0 : 4[4] -> 12[4] [receive] via NET/IB/0/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 04/0 : 0[0] -> 8[0] [receive] via NET/IB/4/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 06/0 : 4[4] -> 12[4] [receive] via NET/IB/0/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 05/0 : 0[0] -> 8[0] [receive] via NET/IB/4/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 07/0 : 4[4] -> 12[4] [receive] via NET/IB/0/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 06/0 : 0[0] -> 8[0] [receive] via NET/IB/4/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 08/0 : 4[4] -> 12[4] [receive] via NET/IB/0/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 07/0 : 0[0] -> 8[0] [receive] via NET/IB/4/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 09/0 : 4[4] -> 12[4] [receive] via NET/IB/0/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 10/0 : 4[4] -> 12[4] [receive] via NET/IB/0/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 09/0 : 0[0] -> 8[0] [receive] via NET/IB/4/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 11/0 : 4[4] -> 12[4] [receive] via NET/IB/0/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 10/0 : 0[0] -> 8[0] [receive] via NET/IB/4/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 13/0 : 4[4] -> 12[4] [receive] via NET/IB/0/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 11/0 : 0[0] -> 8[0] [receive] via NET/IB/4/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 14/0 : 4[4] -> 12[4] [receive] via NET/IB/0/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 12/0 : 0[0] -> 8[0] [receive] via NET/IB/4/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 15/0 : 4[4] -> 12[4] [receive] via NET/IB/0/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 13/0 : 0[0] -> 8[0] [receive] via NET/IB/4/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 00/0 : 12[4] -> 4[4] [send] via NET/IB/0/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 14/0 : 0[0] -> 8[0] [receive] via NET/IB/4/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 15/0 : 0[0] -> 8[0] [receive] via NET/IB/4/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 01/0 : 8[0] -> 0[0] [send] via NET/IB/4/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 02/0 : 8[0] -> 0[0] [send] via NET/IB/4/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 03/0 : 8[0] -> 0[0] [send] via NET/IB/4/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 04/0 : 8[0] -> 0[0] [send] via NET/IB/4/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 05/0 : 8[0] -> 0[0] [send] via NET/IB/4/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 06/0 : 8[0] -> 0[0] [send] via NET/IB/4/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 07/0 : 8[0] -> 0[0] [send] via NET/IB/4/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 01/0 : 12[4] -> 4[4] [send] via NET/IB/0/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 02/0 : 12[4] -> 4[4] [send] via NET/IB/0/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 03/0 : 12[4] -> 4[4] [send] via NET/IB/0/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 05/0 : 12[4] -> 4[4] [send] via NET/IB/0/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 06/0 : 12[4] -> 4[4] [send] via NET/IB/0/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 07/0 : 12[4] -> 4[4] [send] via NET/IB/0/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 08/0 : 12[4] -> 4[4] [send] via NET/IB/0/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 09/0 : 12[4] -> 4[4] [send] via NET/IB/0/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 10/0 : 12[4] -> 4[4] [send] via NET/IB/0/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 11/0 : 12[4] -> 4[4] [send] via NET/IB/0/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 13/0 : 12[4] -> 4[4] [send] via NET/IB/0/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 14/0 : 12[4] -> 4[4] [send] via NET/IB/0/GDRDMA
+node2:12772:12981 [4] NCCL INFO Channel 15/0 : 12[4] -> 4[4] [send] via NET/IB/0/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 09/0 : 14[6] -> 6[6] [receive] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 10/0 : 14[6] -> 6[6] [receive] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 11/0 : 14[6] -> 6[6] [receive] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 12/0 : 14[6] -> 6[6] [receive] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 13/0 : 14[6] -> 6[6] [receive] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 15/0 : 14[6] -> 6[6] [receive] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 00/0 : 6[6] -> 14[6] [send] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 01/0 : 6[6] -> 14[6] [send] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 02/0 : 6[6] -> 14[6] [send] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 03/0 : 6[6] -> 14[6] [send] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 04/0 : 6[6] -> 14[6] [send] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 05/0 : 6[6] -> 14[6] [send] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 07/0 : 6[6] -> 14[6] [send] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 08/0 : 6[6] -> 14[6] [send] via NET/IB/2/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 04/0 : 9[1] -> 1[1] [receive] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 05/0 : 9[1] -> 1[1] [receive] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 06/0 : 9[1] -> 1[1] [receive] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 07/0 : 9[1] -> 1[1] [receive] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 08/0 : 9[1] -> 1[1] [receive] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 10/0 : 9[1] -> 1[1] [receive] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 11/0 : 9[1] -> 1[1] [receive] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 12/0 : 9[1] -> 1[1] [receive] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 13/0 : 9[1] -> 1[1] [receive] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 14/0 : 9[1] -> 1[1] [receive] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 15/0 : 9[1] -> 1[1] [receive] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 00/0 : 1[1] -> 9[1] [send] via NET/IB/5/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 02/0 : 9[1] -> 1[1] [send] via NET/IB/5/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 09/0 : 6[6] -> 14[6] [send] via NET/IB/2/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 01/0 : 11[3] -> 3[3] [send] via NET/IB/7/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 01/0 : 13[5] -> 5[5] [send] via NET/IB/1/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 07/0 : 8[0] -> 0[0] [receive] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 09/0 : 8[0] -> 0[0] [receive] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 10/0 : 8[0] -> 0[0] [receive] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 11/0 : 8[0] -> 0[0] [receive] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 12/0 : 8[0] -> 0[0] [receive] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 13/0 : 8[0] -> 0[0] [receive] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 14/0 : 8[0] -> 0[0] [receive] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 15/0 : 8[0] -> 0[0] [receive] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 01/0 : 0[0] -> 8[0] [send] via NET/IB/4/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 02/0 : 1[1] -> 9[1] [send] via NET/IB/5/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 00/0 : 7[7] -> 15[7] [receive] via NET/IB/3/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 03/0 : 1[1] -> 9[1] [send] via NET/IB/5/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 02/0 : 0[0] -> 8[0] [send] via NET/IB/4/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 01/0 : 7[7] -> 15[7] [receive] via NET/IB/3/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 04/0 : 1[1] -> 9[1] [send] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 05/0 : 1[1] -> 9[1] [send] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 06/0 : 1[1] -> 9[1] [send] via NET/IB/5/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 03/0 : 9[1] -> 1[1] [send] via NET/IB/5/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 04/0 : 9[1] -> 1[1] [send] via NET/IB/5/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 10/0 : 6[6] -> 14[6] [send] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 11/0 : 6[6] -> 14[6] [send] via NET/IB/2/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 02/0 : 13[5] -> 5[5] [send] via NET/IB/1/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 03/0 : 13[5] -> 5[5] [send] via NET/IB/1/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 04/0 : 13[5] -> 5[5] [send] via NET/IB/1/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 12/0 : 6[6] -> 14[6] [send] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 13/0 : 6[6] -> 14[6] [send] via NET/IB/2/GDRDMA
+node1:14796:15003 [6] NCCL INFO Channel 15/0 : 6[6] -> 14[6] [send] via NET/IB/2/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 09/0 : 8[0] -> 0[0] [send] via NET/IB/4/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 10/0 : 8[0] -> 0[0] [send] via NET/IB/4/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 02/0 : 11[3] -> 3[3] [send] via NET/IB/7/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 04/0 : 11[3] -> 3[3] [send] via NET/IB/7/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 02/0 : 7[7] -> 15[7] [receive] via NET/IB/3/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 05/0 : 9[1] -> 1[1] [send] via NET/IB/5/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 06/0 : 13[5] -> 5[5] [send] via NET/IB/1/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 06/0 : 9[1] -> 1[1] [send] via NET/IB/5/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 07/0 : 13[5] -> 5[5] [send] via NET/IB/1/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 08/0 : 13[5] -> 5[5] [send] via NET/IB/1/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 07/0 : 1[1] -> 9[1] [send] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 08/0 : 1[1] -> 9[1] [send] via NET/IB/5/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 03/0 : 0[0] -> 8[0] [send] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 04/0 : 0[0] -> 8[0] [send] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 05/0 : 0[0] -> 8[0] [send] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 06/0 : 0[0] -> 8[0] [send] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 07/0 : 0[0] -> 8[0] [send] via NET/IB/4/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 09/0 : 13[5] -> 5[5] [send] via NET/IB/1/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 07/0 : 9[1] -> 1[1] [send] via NET/IB/5/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 03/0 : 7[7] -> 15[7] [receive] via NET/IB/3/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 10/0 : 1[1] -> 9[1] [send] via NET/IB/5/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 09/0 : 0[0] -> 8[0] [send] via NET/IB/4/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 11/0 : 8[0] -> 0[0] [send] via NET/IB/4/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 05/0 : 11[3] -> 3[3] [send] via NET/IB/7/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 11/0 : 1[1] -> 9[1] [send] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 12/0 : 1[1] -> 9[1] [send] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 13/0 : 1[1] -> 9[1] [send] via NET/IB/5/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 10/0 : 13[5] -> 5[5] [send] via NET/IB/1/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 06/0 : 11[3] -> 3[3] [send] via NET/IB/7/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 04/0 : 7[7] -> 15[7] [receive] via NET/IB/3/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 07/0 : 11[3] -> 3[3] [send] via NET/IB/7/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 11/0 : 13[5] -> 5[5] [send] via NET/IB/1/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 08/0 : 11[3] -> 3[3] [send] via NET/IB/7/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 12/0 : 13[5] -> 5[5] [send] via NET/IB/1/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 09/0 : 11[3] -> 3[3] [send] via NET/IB/7/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 10/0 : 11[3] -> 3[3] [send] via NET/IB/7/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 12/0 : 11[3] -> 3[3] [send] via NET/IB/7/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 13/0 : 11[3] -> 3[3] [send] via NET/IB/7/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 14/0 : 11[3] -> 3[3] [send] via NET/IB/7/GDRDMA
+node2:12771:12975 [3] NCCL INFO Channel 15/0 : 11[3] -> 3[3] [send] via NET/IB/7/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 05/0 : 7[7] -> 15[7] [receive] via NET/IB/3/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 14/0 : 13[5] -> 5[5] [send] via NET/IB/1/GDRDMA
+node2:12774:12982 [5] NCCL INFO Channel 15/0 : 13[5] -> 5[5] [send] via NET/IB/1/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 08/0 : 9[1] -> 1[1] [send] via NET/IB/5/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 10/0 : 9[1] -> 1[1] [send] via NET/IB/5/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 11/0 : 9[1] -> 1[1] [send] via NET/IB/5/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 12/0 : 9[1] -> 1[1] [send] via NET/IB/5/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 13/0 : 9[1] -> 1[1] [send] via NET/IB/5/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 12/0 : 8[0] -> 0[0] [send] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 10/0 : 0[0] -> 8[0] [send] via NET/IB/4/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 13/0 : 8[0] -> 0[0] [send] via NET/IB/4/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 14/0 : 8[0] -> 0[0] [send] via NET/IB/4/GDRDMA
+node2:12768:12979 [0] NCCL INFO Channel 15/0 : 8[0] -> 0[0] [send] via NET/IB/4/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 14/0 : 1[1] -> 9[1] [send] via NET/IB/5/GDRDMA
+node1:14788:14999 [1] NCCL INFO Channel 15/0 : 1[1] -> 9[1] [send] via NET/IB/5/GDRDMA
+node1:14789:15002 [2] NCCL INFO Connected NVLS tree
+node2:12770:12976 [2] NCCL INFO Connected NVLS tree
+node1:14791:14998 [4] NCCL INFO Connected NVLS tree
+node2:12772:12981 [4] NCCL INFO Connected NVLS tree
+node2:12769:12978 [1] NCCL INFO Channel 14/0 : 9[1] -> 1[1] [send] via NET/IB/5/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 06/0 : 7[7] -> 15[7] [receive] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 08/0 : 7[7] -> 15[7] [receive] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 09/0 : 7[7] -> 15[7] [receive] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 10/0 : 7[7] -> 15[7] [receive] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 11/0 : 7[7] -> 15[7] [receive] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 12/0 : 7[7] -> 15[7] [receive] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 13/0 : 7[7] -> 15[7] [receive] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 14/0 : 7[7] -> 15[7] [receive] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 00/0 : 15[7] -> 7[7] [send] via NET/IB/3/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 11/0 : 0[0] -> 8[0] [send] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 12/0 : 0[0] -> 8[0] [send] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 13/0 : 0[0] -> 8[0] [send] via NET/IB/4/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 01/0 : 15[7] -> 7[7] [send] via NET/IB/3/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 14/0 : 0[0] -> 8[0] [send] via NET/IB/4/GDRDMA
+node1:14787:15000 [0] NCCL INFO Channel 15/0 : 0[0] -> 8[0] [send] via NET/IB/4/GDRDMA
+node2:12769:12978 [1] NCCL INFO Channel 15/0 : 9[1] -> 1[1] [send] via NET/IB/5/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 02/0 : 15[7] -> 7[7] [send] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 03/0 : 15[7] -> 7[7] [send] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 04/0 : 15[7] -> 7[7] [send] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 05/0 : 15[7] -> 7[7] [send] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 06/0 : 15[7] -> 7[7] [send] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 08/0 : 15[7] -> 7[7] [send] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 09/0 : 15[7] -> 7[7] [send] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 10/0 : 15[7] -> 7[7] [send] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 11/0 : 15[7] -> 7[7] [send] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 12/0 : 15[7] -> 7[7] [send] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 13/0 : 15[7] -> 7[7] [send] via NET/IB/3/GDRDMA
+node2:12780:12980 [7] NCCL INFO Channel 14/0 : 15[7] -> 7[7] [send] via NET/IB/3/GDRDMA
+node1:14796:15003 [6] NCCL INFO Connected NVLS tree
+node2:12777:12977 [6] NCCL INFO Connected NVLS tree
+node1:14790:15001 [3] NCCL INFO Connected NVLS tree
+node2:12771:12975 [3] NCCL INFO Connected NVLS tree
+node1:14793:14997 [5] NCCL INFO Connected NVLS tree
+node2:12774:12982 [5] NCCL INFO Connected NVLS tree
+node1:14787:15000 [0] NCCL INFO Connected NVLS tree
+node2:12768:12979 [0] NCCL INFO Connected NVLS tree
+node2:12769:12978 [1] NCCL INFO Connected NVLS tree
+node1:14788:14999 [1] NCCL INFO Connected NVLS tree
+node1:14800:15004 [7] NCCL INFO Connected NVLS tree
+node2:12780:12980 [7] NCCL INFO Connected NVLS tree
+           8             2     float     sum      -1    25.84    0.00    0.00       0    24.44    0.00    0.00       0
+          16             4     float     sum      -1    24.46    0.00    0.00       0    24.70    0.00    0.00       0
+          32             8     float     sum      -1    24.62    0.00    0.00       0    24.71    0.00    0.00       0
+          64            16     float     sum      -1    25.16    0.00    0.00       0    24.74    0.00    0.00       0
+         128            32     float     sum      -1    25.01    0.01    0.01       0    25.97    0.00    0.01       0
+         256            64     float     sum      -1    25.59    0.01    0.02       0    25.53    0.01    0.02       0
+         512           128     float     sum      -1    26.03    0.02    0.04       0    25.75    0.02    0.04       0
+        1024           256     float     sum      -1    26.10    0.04    0.07       0    26.60    0.04    0.07       0
+        2048           512     float     sum      -1    27.70    0.07    0.14       0    27.55    0.07    0.14       0
+        4096          1024     float     sum      -1    29.77    0.14    0.26       0    28.59    0.14    0.27       0
+        8192          2048     float     sum      -1    34.56    0.24    0.44       0    33.33    0.25    0.46       0
+       16384          4096     float     sum      -1    37.54    0.44    0.82       0    35.97    0.46    0.85       0
+       32768          8192     float     sum      -1    38.44    0.85    1.60       0    36.26    0.90    1.69       0
+       65536         16384     float     sum      -1    38.92    1.68    3.16       0    37.38    1.75    3.29       0
+      131072         32768     float     sum      -1    39.99    3.28    6.14       0    37.90    3.46    6.48       0
+      262144         65536     float     sum      -1    47.53    5.51   10.34       0    46.25    5.67   10.63       0
+      524288        131072     float     sum      -1    81.74    6.41   12.03       0    74.42    7.04   13.21       0
+     1048576        262144     float     sum      -1    78.60   13.34   25.01       0    76.93   13.63   25.56       0
+     2097152        524288     float     sum      -1    86.42   24.27   45.50       0    85.73   24.46   45.87       0
+     4194304       1048576     float     sum      -1   105.59   39.72   74.48       0   104.44   40.16   75.30       0
+     8388608       2097152     float     sum      -1   172.77   48.55   91.04       0   146.53   57.25  107.34       0
+    16777216       4194304     float     sum      -1   196.04   85.58  160.47       0   193.24   86.82  162.79       0
+    33554432       8388608     float     sum      -1   270.73  123.94  232.39       0   273.55  122.66  229.99       0
+    67108864      16777216     float     sum      -1   501.13  133.91  251.09       0   480.74  139.59  261.74       0
+   134217728      33554432     float     sum      -1   752.64  178.33  334.37       0   757.15  177.27  332.38       0
+   268435456      67108864     float     sum      -1  1295.17  207.26  388.61       0  1319.33  203.46  381.49       0
+node2:12771:12771 [3] NCCL INFO comm 0x5561c0ca5a40 rank 11 nranks 16 cudaDev 3 busId 99000 - Destroy COMPLETE
+node2:12772:12772 [4] NCCL INFO comm 0x5641f544d920 rank 12 nranks 16 cudaDev 4 busId ab000 - Destroy COMPLETE
+node1:14790:14790 [3] NCCL INFO comm 0x55cf2859fbc0 rank 3 nranks 16 cudaDev 3 busId 99000 - Destroy COMPLETE
+node1:14791:14791 [4] NCCL INFO comm 0x5562b61a20a0 rank 4 nranks 16 cudaDev 4 busId ab000 - Destroy COMPLETE
+node2:12770:12770 [2] NCCL INFO comm 0x557b93358f00 rank 10 nranks 16 cudaDev 2 busId 95000 - Destroy COMPLETE
+node1:14789:14789 [2] NCCL INFO comm 0x5650387204c0 rank 2 nranks 16 cudaDev 2 busId 95000 - Destroy COMPLETE
+node2:12777:12777 [6] NCCL INFO comm 0x55fc79ed17a0 rank 14 nranks 16 cudaDev 6 busId b3000 - Destroy COMPLETE
+node2:12780:12780 [7] NCCL INFO comm 0x55c814d5a980 rank 15 nranks 16 cudaDev 7 busId b7000 - Destroy COMPLETE
+node1:14796:14796 [6] NCCL INFO comm 0x55af05ffe720 rank 6 nranks 16 cudaDev 6 busId b3000 - Destroy COMPLETE
+node2:12769:12769 [1] NCCL INFO comm 0x5593f27a4df0 rank 9 nranks 16 cudaDev 1 busId 91000 - Destroy COMPLETE
+node2:12774:12774 [5] NCCL INFO comm 0x55e721711260 rank 13 nranks 16 cudaDev 5 busId af000 - Destroy COMPLETE
+node1:14788:14788 [1] NCCL INFO comm 0x557c35fd2520 rank 1 nranks 16 cudaDev 1 busId 91000 - Destroy COMPLETE
+node1:14800:14800 [7] NCCL INFO comm 0x55cd9b20d120 rank 7 nranks 16 cudaDev 7 busId b7000 - Destroy COMPLETE
+node1:14793:14793 [5] NCCL INFO comm 0x556cfc92bf80 rank 5 nranks 16 cudaDev 5 busId af000 - Destroy COMPLETE
+node2:12768:12768 [0] NCCL INFO comm 0x560aeda9b790 rank 8 nranks 16 cudaDev 0 busId 8d000 - Destroy COMPLETE
+node1:14787:14787 [0] NCCL INFO comm 0x55858412f8f0 rank 0 nranks 16 cudaDev 0 busId 8d000 - Destroy COMPLETE
+# Out of bounds values : 0 OK
+# Avg bus bandwidth    : 63.4164 
+#
+# Collective test concluded: all_reduce_perf
+#
+
+cd ~/ai-infra-demo && git add benchmarks/ jobs/nccl_1_single_gpu.sh jobs/nccl_2_nvlink.sh jobs/nccl_3_mpi_tcp.sh jobs/nccl_4_ib.sh && git commit -m "Add NCCL benchmark results and fix LD_LIBRARY_PATH and -g flag in job scripts"

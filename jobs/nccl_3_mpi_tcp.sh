@@ -14,4 +14,4 @@ export NCCL_DEBUG=INFO  # INFO required to confirm Transport: TCP in logs
 
 /usr/mpi/gcc/openmpi-4.1.7a1/bin/mpirun --np 16 \
   --host node1:8,node2:8 \
-  /home/user/nccl-tests/build/all_reduce_perf -b 8 -e 128M -f 2 -g 8
+  /home/user/nccl-tests/build/all_reduce_perf -b 8 -e 128M -f 2 -g 1

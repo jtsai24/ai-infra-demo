@@ -1,0 +1,37 @@
+# nccl-tests version 2.18.4 nccl-headers=22304 nccl-library=22304
+# Collective test starting: all_reduce_perf
+# nThread 1 nGpus 8 minBytes 8 maxBytes 134217728 step: 2(factor) warmup iters: 1 iters: 20 agg iters: 1 validation: 1 graph: 0 unalign: 0
+#
+# Using devices
+Invalid number of GPUs: 48 requested but only 8 were found.
+Please check the number of processes and GPUs per process.
+ .. node2 pid 11460: Test failure common.cu:1216
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+Invalid number of GPUs: 24 requested but only 8 were found.
+Please check the number of processes and GPUs per process.
+ .. node2 pid 11457: Test failure common.cu:1216
+Invalid number of GPUs: 16 requested but only 8 were found.
+Please check the number of processes and GPUs per process.
+ .. node2 pid 11456: Test failure common.cu:1216
+Invalid number of GPUs: 32 requested but only 8 were found.
+Please check the number of processes and GPUs per process.
+ .. node2 pid 11458: Test failure common.cu:1216
+Invalid number of GPUs: 64 requested but only 8 were found.
+Please check the number of processes and GPUs per process.
+ .. node2 pid 11462: Test failure common.cu:1216
+Invalid number of GPUs: 40 requested but only 8 were found.
+Please check the number of processes and GPUs per process.
+ .. node2 pid 11459: Test failure common.cu:1216
+Invalid number of GPUs: 56 requested but only 8 were found.
+Please check the number of processes and GPUs per process.
+ .. node2 pid 11461: Test failure common.cu:1216
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[31415,1],13]
+  Exit code:    5
+--------------------------------------------------------------------------
