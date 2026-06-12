@@ -1,0 +1,38 @@
+# vllm-metal 0.3.0, model: mlx-community/Qwen2.5-0.5B-Instruct-4bit
+# Server: vllm serve mlx-community/Qwen2.5-0.5B-Instruct-4bit --port 8000
+
+# Run 1 — cold start
+jimmy@Mac kv-inference % python3 scripts/measure_inference_vllm.py
+Model: mlx-community/Qwen2.5-0.5B-Instruct-4bit
+Prompt: Explain what a KV cache is in a large language model inferen...
+Running inference...
+
+TTFT:       6996.6 ms
+TPOT:       9.7 ms/token
+Throughput: 20.1 tokens/sec
+Tokens:     174
+
+Response preview:
+ The KCache file of one or more text vectors is a type of data structure (or the object upon which operations on the dat...
+
+# Run 2 — warming up
+jimmy@Mac kv-inference % python3 scripts/measure_inference_vllm.py
+Model: mlx-community/Qwen2.5-0.5B-Instruct-4bit
+Prompt: Explain what a KV cache is in a large language model inferen...
+Running inference...
+
+TTFT:       2071.2 ms
+TPOT:       9.0 ms/token
+Throughput: 51.7 tokens/sec
+Tokens:     200
+
+# Run 3 — warm baseline
+jimmy@Mac kv-inference % python3 scripts/measure_inference_vllm.py
+Model: mlx-community/Qwen2.5-0.5B-Instruct-4bit
+Prompt: Explain what a KV cache is in a large language model inferen...
+Running inference...
+
+TTFT:       1979.5 ms
+TPOT:       9.1 ms/token
+Throughput: 52.8 tokens/sec
+Tokens:     200
