@@ -1,11 +1,11 @@
 # CLAUDE.md
-Last updated: June 4, 2026
+Last updated: June 12, 2026
 
 ## Who I am
 
 Jimmy — backend software engineer, 10+ years at Amazon building distributed microservices. Strong in Linux, Java/Python, AWS, distributed systems fundamentals. Actively transitioning into AI infrastructure engineering.
 
-New to: Slurm, RDMA/InfiniBand, NCCL, Go operators, vLLM, ArgoCD, GPU-specific tooling, Terraform (CDK background).
+New to: Slurm, RDMA/InfiniBand, Ollama, vLLM, NCCL, Go operators, ArgoCD, GPU-specific tooling, Terraform (CDK background).
 
 ## How to work with me
 
@@ -17,6 +17,7 @@ Pair program with me — do not do the work for me.
 - Call out footguns before they happen (leaked resources, wrong env vars, munge key permissions)
 - Don't over-explain basic software engineering — I know distributed systems. Do explain GPU/RDMA/Slurm concepts clearly
 - Ask me what I think before giving the answer on new concepts
+- After writing to Notion, always give me a link to the page — I will always want to review it
 
 ## Project goal
 
@@ -51,14 +52,28 @@ Build a portfolio demo for AI infra roles (CoreWeave, Anthropic, Nvidia L1-L3):
 
 ## Current phase
 
-Phase 1, Week 1 — Foundation
+Phase 4 — Local k3s Observability + Nebius Inference Stack
 
-- [x] Nebius account created
-- [x] Project ID and Subnet ID found
-- [x] Claude Code installed and authenticated on Pro
-- [ ] Terraform installed
-- [ ] Nebius CLI installed and authenticated
-- [ ] CPU VM validation loop (provision → SSH → destroy)
-- [ ] GPU cluster provisioned (main Phase 1 goal)
-- [ ] Ansible playbook runs clean
-- [ ] ib_write_bw succeeds across both nodes
+### Completed
+- [x] Ollama local benchmarks
+- [x] vLLM-metal installed and running locally (M4, MLX backend)
+- [x] vLLM benchmark scripts (`measure_inference_vllm.py`, `load_test_vllm.py`)
+- [x] Confirmed all three Go operator metrics present in vLLM `/metrics`
+- [x] Decided vLLM over Ollama for inference stack (Prometheus metrics required by operator)
+
+### In progress
+- [ ] k3s up locally
+- [ ] Prometheus + Grafana + Loki + Promtail running as pods, scraping vLLM-metal on host
+- [ ] Load test Job wired into k3s, metrics visible in Grafana during run
+
+### Up next
+- [ ] Nebius Session 1 — single H100, vLLM pod, full observability, KV cache pressure data
+- [ ] Local operator dev (after Nebius Session 1 data)
+- [ ] Nebius Session 2 — Go operator demo + Loom recording
+
+## Local k3s architecture decisions
+
+- **Deployments**: Prometheus, Grafana, Loki, Promtail
+- **Jobs**: single-request and load test scripts (run to completion)
+- **Host (outside k3s)**: vLLM-metal at `host.docker.internal:8000` — cannot be containerized on Apple Silicon
+- **No host-process observability**: purpose of local step is to de-risk Nebius; pods give near copy-paste manifests to Nebius
