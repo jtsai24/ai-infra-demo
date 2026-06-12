@@ -1,0 +1,17 @@
+# Server: OLLAMA_FLASH_ATTENTION="1" OLLAMA_KV_CACHE_TYPE="q8_0" OLLAMA_NUM_PARALLEL=8 ollama serve
+
+jimmy@Mac kv-inference % python3 scripts/load_test.py
+Load test against qwen2.5:0.5b
+==================================================
+
+Concurrency: 1
+  TTFT  — p50: 942ms  p95: 942ms  max: 942ms
+  Throughput — avg 56.3 tok/s per request, wall time 8.4s
+
+Concurrency: 2
+  TTFT  — p50: 190ms  p95: 190ms  max: 190ms
+  Throughput — avg 107.0 tok/s per request, wall time 3.6s
+
+Concurrency: 4
+  TTFT  — p50: 216ms  p95: 217ms  max: 217ms
+  Throughput — avg 65.1 tok/s per request, wall time 6.9s

@@ -1,0 +1,13 @@
+jimmy@Mac kv-inference % python3 scripts/measure_inference.py
+Model: qwen2.5:0.5b
+Prompt: Explain what a KV cache is in a large language model inferen...
+Running inference...
+
+TTFT:       127.8 ms
+TPOT:       13.6 ms/token
+Throughput: 69.3 tokens/sec
+Tokens:     134
+
+Response preview:
+A KVA (key-value) store or cache is an application feature of a large language model inference
+system, enabling models t...

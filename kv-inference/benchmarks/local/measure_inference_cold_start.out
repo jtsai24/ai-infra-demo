@@ -1,0 +1,9 @@
+jimmy@Mac kv-inference % python3 scripts/measure_inference.py
+Model: qwen2.5:0.5b
+Prompt: Explain what a KV cache is in a large language model inferen...
+Running inference...
+
+TTFT:       964.5 ms
+TPOT:       13.1 ms/token
+Throughput: 55.1 tokens/sec
+Tokens:     188
