@@ -1,9 +1,10 @@
 # KV-Aware Inference Platform
 
-Local inference benchmarks on MacBook Air M4 via Ollama, establishing baselines before moving to vLLM on Nebius in Phase 4.
+Local inference benchmarks on MacBook Air M4, establishing baselines before moving to vLLM on Nebius in Phase 4. Two inference backends tested locally: Ollama (Metal GPU) and vLLM-metal.
 
 ## Setup
 
+### Ollama
 - **Model:** `qwen2.5:0.5b` (397MB, 4-bit quantized)
 - **Hardware:** MacBook Air M4, 17.8GB unified memory, Metal GPU backend
 - **Ollama:** 0.30.7
@@ -14,23 +15,43 @@ OLLAMA_FLASH_ATTENTION="1" OLLAMA_KV_CACHE_TYPE="q8_0" OLLAMA_NUM_PARALLEL=4 oll
 ollama pull qwen2.5:0.5b
 ```
 
+### vLLM-metal
+- **Model:** `mlx-community/Qwen2.5-0.5B-Instruct-4bit`
+- **vLLM-metal:** 0.3.0, Metal GPU backend via MLX
+- **Install:** `curl -fsSL https://raw.githubusercontent.com/vllm-project/vllm-metal/main/install.sh | bash`
+
+```bash
+source ~/.venv-vllm-metal/bin/activate
+vllm serve mlx-community/Qwen2.5-0.5B-Instruct-4bit --port 8000
+```
+
 ## Scripts
 
+### Ollama
 | Script | Purpose |
 |--------|---------|
-| `scripts/measure_inference.py` | Single-request TTFT, TPOT, throughput via streaming API |
-| `scripts/load_test.py` | Concurrent load test sweeping concurrency 1/2/4, reports TTFT p50/p95 |
+| `scripts/measure_inference_ollama.py` | Single-request TTFT, TPOT, throughput via streaming API |
+| `scripts/load_test_ollama.py` | Concurrent load test sweeping concurrency 1/2/4, reports TTFT p50/p95 |
+
+### vLLM
+| Script | Purpose |
+|--------|---------|
+| `scripts/measure_inference_vllm.py` | Single-request TTFT, TPOT, throughput via streaming API |
+| `scripts/load_test_vllm.py` | Concurrent load test sweeping concurrency 1/2/4, reports TTFT p50/p95 |
 
 ## Benchmark Results
 
-Raw output files in `benchmarks/local/`:
-- [`benchmarks/local/measure_inference_cold_start.out`](benchmarks/local/measure_inference_cold_start.out) — first invocation, Metal cold start
-- [`benchmarks/local/measure_inference_warm.out`](benchmarks/local/measure_inference_warm.out) — second invocation, fully warm
-- [`benchmarks/local/load_test_num_parallel_1.out`](benchmarks/local/load_test_num_parallel_1.out) — load test, sequential queuing
-- [`benchmarks/local/load_test_num_parallel_4.out`](benchmarks/local/load_test_num_parallel_4.out) — load test, 4 concurrent slots
-- [`benchmarks/local/load_test_num_parallel_8.out`](benchmarks/local/load_test_num_parallel_8.out) — load test, 8 concurrent slots
+### Ollama raw output (`benchmarks/local/ollama/`)
+- [`benchmarks/local/ollama/measure_inference_cold_start.out`](benchmarks/local/ollama/measure_inference_cold_start.out) — first invocation, Metal cold start
+- [`benchmarks/local/ollama/measure_inference_warm.out`](benchmarks/local/ollama/measure_inference_warm.out) — second invocation, fully warm
+- [`benchmarks/local/ollama/load_test_num_parallel_1.out`](benchmarks/local/ollama/load_test_num_parallel_1.out) — load test, sequential queuing
+- [`benchmarks/local/ollama/load_test_num_parallel_4.out`](benchmarks/local/ollama/load_test_num_parallel_4.out) — load test, 4 concurrent slots
+- [`benchmarks/local/ollama/load_test_num_parallel_8.out`](benchmarks/local/ollama/load_test_num_parallel_8.out) — load test, 8 concurrent slots
 
-### Single request (`measure_inference.py`, `NUM_PARALLEL=1`)
+### vLLM raw output (`benchmarks/local/vllm/`)
+_To be added._
+
+### Single request (`measure_inference_ollama.py`, `NUM_PARALLEL=1`)
 
 | Run | TTFT | TPOT | Throughput | Tokens |
 |-----|------|------|------------|--------|
@@ -39,7 +60,7 @@ Raw output files in `benchmarks/local/`:
 
 The `ollama run warmup` loads weights but Metal buffer allocation happens on first HTTP API call — always discard the first script run.
 
-### Load test (`load_test.py`)
+### Load test (`load_test_ollama.py`)
 
 **`NUM_PARALLEL=1` — sequential queuing:**
 
