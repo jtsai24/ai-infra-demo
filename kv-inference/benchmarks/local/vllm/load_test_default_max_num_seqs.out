@@ -1,0 +1,19 @@
+# vllm-metal 0.3.0, model: mlx-community/Qwen2.5-0.5B-Instruct-4bit
+# Server: vllm serve mlx-community/Qwen2.5-0.5B-Instruct-4bit --port 8000
+# --max-num-seqs default (256)
+
+jimmy@Mac kv-inference % python3 scripts/load_test_vllm.py
+Load test against mlx-community/Qwen2.5-0.5B-Instruct-4bit
+==================================================
+
+Concurrency: 1
+  TTFT  — p50: 1968ms  p95: 1968ms  max: 1968ms
+  Throughput — avg 53.9 tok/s per request, wall time 3.7s
+
+Concurrency: 2
+  TTFT  — p50: 211ms  p95: 336ms  max: 336ms
+  Throughput — avg 73.6 tok/s per request, wall time 2.7s
+
+Concurrency: 4
+  TTFT  — p50: 106ms  p95: 106ms  max: 106ms
+  Throughput — avg 74.2 tok/s per request, wall time 2.7s
