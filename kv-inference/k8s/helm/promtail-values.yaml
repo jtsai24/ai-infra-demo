@@ -1,0 +1,22 @@
+config:
+  clients:
+    - url: http://loki-gateway.default.svc.cluster.local/loki/api/v1/push
+  snippets:
+    extraScrapeConfigs: |
+      - job_name: vllm
+        static_configs:
+          - targets:
+              - localhost
+            labels:
+              job: vllm
+              __path__: /var/log/vllm.log
+
+extraVolumes:
+  - name: vllm-logs
+    hostPath:
+      path: /Users/jimmy/vllm.log
+      type: File
+
+extraVolumeMounts:
+  - name: vllm-logs
+    mountPath: /var/log/vllm.log
