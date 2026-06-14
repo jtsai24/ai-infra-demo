@@ -4,6 +4,7 @@ Concurrent load generator for vLLM.
 Shows how TTFT and throughput change as concurrency increases.
 """
 
+import argparse
 import json
 import time
 import urllib.request
@@ -86,7 +87,18 @@ def run_load_test(concurrency: int):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--continuous", action="store_true")
+    args = parser.parse_args()
+
     print(f"Load test against {MODEL}")
     print("=" * 50)
-    for c in [1, 2, 4]:
-        run_load_test(c)
+
+    if args.continuous:
+        while True:
+            for c in [1, 2, 4]:
+                run_load_test(c)
+            time.sleep(5)
+    else:
+        for c in [1, 2, 4]:
+            run_load_test(c)
