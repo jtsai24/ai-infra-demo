@@ -16,6 +16,27 @@ A portfolio project demonstrating AI infrastructure engineering skills targeting
 ### [kv-inference/](kv-inference/) — KV-Aware Inference Platform 🚧
 vLLM inference gateway with a custom Go Kubernetes operator. In progress.
 
+**Local observability stack validated (k3s + OrbStack on Apple Silicon):**
+- Prometheus scraping vLLM metrics — `vllm:kv_cache_usage_perc`, `vllm:num_requests_running`, `vllm:num_requests_waiting`
+- Loki + Promtail collecting vLLM logs
+- Grafana dashboard with KV cache, request pipeline, latency, and log panels
+- Load test script with one-shot and continuous modes
+
+**To run locally (Apple Silicon, vLLM-metal):**
+```bash
+# Start vLLM
+source ~/.venv-vllm-metal/bin/activate && vllm serve mlx-community/Qwen2.5-0.5B-Instruct-4bit 2>&1 | tee ~/vllm.log
+
+# Deploy observability stack
+helm install prometheus prometheus-community/prometheus -f kv-inference/k8s/helm/prometheus-values.yaml
+helm install loki grafana/loki -f kv-inference/k8s/helm/loki-values.yaml
+helm install promtail grafana/promtail -f kv-inference/k8s/helm/promtail-values.yaml
+helm install grafana grafana/grafana -f kv-inference/k8s/helm/grafana-values.yaml
+
+# Access Grafana
+kubectl port-forward svc/grafana 3000:80
+```
+
 ## Stack
 
-Terraform · Ansible · Slurm · NCCL · InfiniBand · RDMA · Nebius · H100 SXM · HPC-X MPI
+Terraform · Ansible · Slurm · NCCL · InfiniBand · RDMA · Nebius · H100 SXM · HPC-X MPI · vLLM · Prometheus · Grafana · Loki · Helm · k3s
