@@ -1,3 +1,8 @@
+output "ssh_cmd" {
+  description = "SSH into the H100 worker node"
+  value       = "ssh user@<worker-node-public-ip> — get IP from: nebius compute v1 instance list --parent-id ${var.project_id} -o json | jq -r '.items[0].status.network_interfaces[0].public_ip_address.address'"
+}
+
 output "cluster_id" {
   description = "Nebius MK8s cluster ID — use this for get-credentials"
   value       = nebius_mk8s_v1_cluster.kv_inference.id

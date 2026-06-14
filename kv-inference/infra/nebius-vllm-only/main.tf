@@ -62,6 +62,16 @@ resource "nebius_mk8s_v1_node_group" "h100" {
         public_ip_address = {}
       }
     ]
+
+    cloud_init_user_data = <<-EOT
+      #cloud-config
+      users:
+        - name: user
+          sudo: ALL=(ALL) NOPASSWD:ALL
+          shell: /bin/bash
+          ssh_authorized_keys:
+            - ${file("../../credentials/public_openssh.pub")}
+    EOT
   }
 }
 

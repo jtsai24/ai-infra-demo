@@ -52,7 +52,6 @@ resource "kubernetes_deployment" "vllm" {
             "--host", "0.0.0.0",
             "--port", "8000",
             "--gpu-memory-utilization", "0.90",
-            "--disable-prefix-caching",
           ]
 
           port {
