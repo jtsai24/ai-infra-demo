@@ -124,14 +124,20 @@ Open `http://<node-ip>:30300`, log in as `admin`. Import dashboard from:
 
 ---
 
-## Step 7 — Run load test
+## Step 7 — Run measurement and load test
+
+**Single-request measurement** (TTFT, TPOT, throughput baseline):
 
 ```bash
 cd /Users/jimmy/ai-infra-demo
-python kv-inference/scripts/nebius-2-vllm-w-observ/load_test_vllm.py --url http://<node-ip>:30800 --model Qwen/Qwen2.5-0.5B-Instruct --continuous
+python kv-inference/scripts/nebius-2-vllm-w-observ/measure_inference_vllm.py --url http://<node-ip>:30800 --model Qwen/Qwen2.5-0.5B-Instruct
 ```
 
-Watch KV cache pressure and request pipeline metrics build up in Grafana.
+**Continuous load test** (watch KV cache pressure build up in Grafana):
+
+```bash
+python kv-inference/scripts/nebius-2-vllm-w-observ/load_test_vllm.py --url http://<node-ip>:30800 --model Qwen/Qwen2.5-0.5B-Instruct --continuous
+```
 
 ---
 
