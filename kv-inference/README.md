@@ -2,9 +2,13 @@
 
 Local inference benchmarks on MacBook Air M4, establishing baselines before moving to vLLM on Nebius in Phase 4. Two inference backends tested locally: Ollama (Metal GPU) and vLLM-metal.
 
-## Setup
+---
 
-### Ollama
+## Local — MacBook Air M4
+
+### Setup
+
+#### Ollama
 - **Model:** `qwen2.5:0.5b` (397MB, 4-bit quantized)
 - **Hardware:** MacBook Air M4, 17.8GB unified memory, Metal GPU backend
 - **Ollama:** 0.30.7
@@ -15,7 +19,7 @@ OLLAMA_FLASH_ATTENTION="1" OLLAMA_KV_CACHE_TYPE="q8_0" OLLAMA_NUM_PARALLEL=4 oll
 ollama pull qwen2.5:0.5b
 ```
 
-### vLLM-metal
+#### vLLM-metal
 - **Model:** `mlx-community/Qwen2.5-0.5B-Instruct-4bit`
 - **vLLM-metal:** 0.3.0, Metal GPU backend via MLX
 - **Install:** `curl -fsSL https://raw.githubusercontent.com/vllm-project/vllm-metal/main/install.sh | bash`
@@ -25,25 +29,23 @@ source ~/.venv-vllm-metal/bin/activate
 vllm serve mlx-community/Qwen2.5-0.5B-Instruct-4bit --port 8000
 ```
 
-## Scripts
+### Scripts
 
-### Ollama
+#### Ollama
 | Script | Purpose |
 |--------|---------|
 | `scripts/measure_inference_ollama.py` | Single-request TTFT, TPOT, throughput via streaming API |
 | `scripts/load_test_ollama.py` | Concurrent load test sweeping concurrency 1/2/4, reports TTFT p50/p95 |
 
-### vLLM
+#### vLLM
 | Script | Purpose |
 |--------|---------|
 | `scripts/measure_inference_vllm.py` | Single-request TTFT, TPOT, throughput via streaming API |
 | `scripts/load_test_vllm.py` | Concurrent load test sweeping concurrency 1/2/4, reports TTFT p50/p95 |
 
----
+### Results
 
-## Local — MacBook Air M4
-
-### Ollama
+#### Ollama
 
 Raw output: [`benchmarks/local/ollama/`](benchmarks/local/ollama/)
 - [`measure_inference_cold_start.out`](benchmarks/local/ollama/measure_inference_cold_start.out) — first invocation, Metal cold start
@@ -52,7 +54,7 @@ Raw output: [`benchmarks/local/ollama/`](benchmarks/local/ollama/)
 - [`load_test_num_parallel_4.out`](benchmarks/local/ollama/load_test_num_parallel_4.out) — load test, 4 concurrent slots
 - [`load_test_num_parallel_8.out`](benchmarks/local/ollama/load_test_num_parallel_8.out) — load test, 8 concurrent slots
 
-#### Single request (`measure_inference_ollama.py`, `NUM_PARALLEL=1`)
+##### Single request (`measure_inference_ollama.py`, `NUM_PARALLEL=1`)
 
 | Run | TTFT | TPOT | Throughput | Tokens |
 |-----|------|------|------------|--------|
@@ -61,7 +63,7 @@ Raw output: [`benchmarks/local/ollama/`](benchmarks/local/ollama/)
 
 The `ollama run warmup` loads weights but Metal buffer allocation happens on first HTTP API call — always discard the first script run.
 
-#### Load test (`load_test_ollama.py`)
+##### Load test (`load_test_ollama.py`)
 
 **`NUM_PARALLEL=1` — sequential queuing:**
 
@@ -85,7 +87,7 @@ Sweet spot at concurrency 2. At concurrency 4, GPU compute is saturated.
 
 **`NUM_PARALLEL=8`:** Essentially identical to `NUM_PARALLEL=4` — load test only reaches concurrency 4 so extra slots go unused.
 
-#### Ollama analysis
+##### Ollama analysis
 
 - Model weights + 4 KV cache slots ≈ ~700MB of 17.8GB — memory is not the constraint
 - M4 GPU matrix multiply throughput is the ceiling
@@ -94,7 +96,7 @@ Sweet spot at concurrency 2. At concurrency 4, GPU compute is saturated.
 
 ---
 
-### vLLM-metal
+#### vLLM-metal
 
 Raw output: [`benchmarks/local/vllm/`](benchmarks/local/vllm/)
 - [`measure_inference_cold_to_warm.out`](benchmarks/local/vllm/measure_inference_cold_to_warm.out) — 3 runs showing warmup progression
@@ -103,7 +105,7 @@ Raw output: [`benchmarks/local/vllm/`](benchmarks/local/vllm/)
 
 See [`benchmarks/local/vllm/DISCUSSION.md`](benchmarks/local/vllm/DISCUSSION.md) for full analysis.
 
-#### Single request (`measure_inference_vllm.py`, default `--max-num-seqs=256`)
+##### Single request (`measure_inference_vllm.py`, default `--max-num-seqs=256`)
 
 | Run | TTFT | TPOT | Throughput | Tokens |
 |-----|------|------|------------|--------|
@@ -113,7 +115,7 @@ See [`benchmarks/local/vllm/DISCUSSION.md`](benchmarks/local/vllm/DISCUSSION.md)
 
 vLLM has more warmup overhead than Ollama — stabilizes at ~2 seconds TTFT vs Ollama's ~128ms. Higher baseline TTFT is due to vLLM's scheduler overhead.
 
-#### Load test (`load_test_vllm.py`)
+##### Load test (`load_test_vllm.py`)
 
 **Default `--max-num-seqs=256` — continuous batching:**
 
@@ -135,7 +137,7 @@ TTFT improves as concurrency increases — opposite of Ollama. Continuous batchi
 
 TTFT degrades with concurrency, mirroring Ollama `NUM_PARALLEL=1`. Concurrency 2 still better than concurrency 1 due to vLLM's internal scheduler behavior.
 
-#### vLLM analysis
+##### vLLM analysis
 
 - `--max-num-seqs` is vLLM's equivalent of Ollama's `OLLAMA_NUM_PARALLEL`
 - vLLM's continuous batching actively improves TTFT under load by batching requests into a single GPU forward pass
