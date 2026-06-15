@@ -82,14 +82,6 @@ provider "kubernetes" {
     nebius_mk8s_v1_cluster.kv_inference.status.control_plane.auth.cluster_ca_certificate
   )
 
-  exec {
-    api_version = "client.authentication.k8s.io/v1beta1"
-    command     = "nebius"
-    args = [
-      "mk8s", "v1", "cluster", "get-credentials",
-      "--id", nebius_mk8s_v1_cluster.kv_inference.id,
-      "--external",
-      "--format", "json"
-    ]
-  }
+  config_path    = "~/.kube/config"
+  config_context = "nebius-kv-inference"
 }
