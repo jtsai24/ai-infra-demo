@@ -37,14 +37,24 @@ output "vllm_test_inference_cmd" {
   EOT
 }
 
-output "vllm_port_forward_cmd" {
-  description = "Forward vLLM to localhost:8000 — run scripts against it as if local"
-  value       = "kubectl port-forward -n default svc/vllm 8000:8000"
+output "node_ip_cmd" {
+  description = "Get the worker node public IP"
+  value       = "nebius compute v1 instance list --parent-id ${var.project_id} --format json | jq -r '.items[0].status.network_interfaces[0].public_ip_address.address' | cut -d/ -f1"
 }
 
-output "grafana_port_forward_cmd" {
-  description = "Forward Grafana to localhost:3000"
-  value       = "kubectl port-forward -n default svc/grafana 3000:80"
+output "vllm_url" {
+  description = "vLLM endpoint via NodePort — use this for load test scripts"
+  value       = "http://<node-ip>:30800"
+}
+
+output "prometheus_url" {
+  description = "Prometheus UI via NodePort"
+  value       = "http://<node-ip>:30090"
+}
+
+output "grafana_url" {
+  description = "Grafana UI via NodePort"
+  value       = "http://<node-ip>:30300"
 }
 
 output "grafana_password_cmd" {

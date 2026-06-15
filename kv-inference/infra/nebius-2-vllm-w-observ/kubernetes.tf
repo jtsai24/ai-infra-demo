@@ -155,10 +155,11 @@ resource "kubernetes_service" "vllm" {
       name        = "http"
       port        = 8000
       target_port = 8000
+      node_port   = 30800
       protocol    = "TCP"
     }
 
-    type = "ClusterIP"
+    type = "NodePort"
   }
 
   depends_on = [kubernetes_deployment.vllm]

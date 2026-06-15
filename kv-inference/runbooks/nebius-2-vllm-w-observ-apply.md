@@ -91,44 +91,44 @@ kubectl get pods -n default -w
 
 ---
 
-## Step 5 — Validate observability stack
+## Step 5 — Get node IP
+
+All services are exposed via NodePort on the worker node's public IP:
+
+```bash
+nebius compute v1 instance list --parent-id <project_id> --format json | jq -r '.items[0].status.network_interfaces[0].public_ip_address.address' | cut -d/ -f1
+```
+
+| Service | NodePort | URL |
+|---------|----------|-----|
+| vLLM | 30800 | `http://<node-ip>:30800` |
+| Prometheus | 30090 | `http://<node-ip>:30090` |
+| Grafana | 30300 | `http://<node-ip>:30300` |
+
+---
+
+## Step 6 — Validate observability stack
 
 **Prometheus scraping vLLM:**
 
-```bash
-kubectl port-forward svc/prometheus-server 9090:80
-```
-
-Open `http://localhost:9090/targets` — vLLM job should show `UP`.
+Open `http://<node-ip>:30090/targets` — vLLM job should show `UP`.
 
 **Grafana:**
 
 ```bash
-# Get admin password
 kubectl get secret -n default grafana -o jsonpath='{.data.admin-password}' | base64 --decode
-
-# Forward to localhost
-kubectl port-forward svc/grafana 3000:80
 ```
 
-Open `http://localhost:3000`, log in as `admin`. Import dashboard from:
+Open `http://<node-ip>:30300`, log in as `admin`. Import dashboard from:
 `kv-inference/observability/grafana/dashboards/vllm-dashboard.json`
 
 ---
 
-## Step 6 — Run load test
-
-Port-forward vLLM so local scripts can reach it:
-
-```bash
-kubectl port-forward -n default svc/vllm 8000:8000
-```
-
-In a separate terminal, run the load test:
+## Step 7 — Run load test
 
 ```bash
 cd /Users/jimmy/ai-infra-demo
-python kv-inference/scripts/load_test_vllm.py --continuous
+python kv-inference/scripts/load_test_vllm.py --url http://<node-ip>:30800 --continuous
 ```
 
 Watch KV cache pressure and request pipeline metrics build up in Grafana.

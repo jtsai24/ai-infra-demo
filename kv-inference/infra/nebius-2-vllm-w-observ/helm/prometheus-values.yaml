@@ -1,3 +1,8 @@
+server:
+  service:
+    type: NodePort
+    nodePort: 30090
+
 serverFiles:
   prometheus.yml:
     scrape_configs:
