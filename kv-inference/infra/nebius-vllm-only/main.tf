@@ -1,3 +1,20 @@
+# Two-step apply required — kubernetes provider cannot auth until the cluster
+# exists and ~/.kube/config is populated. Apply in this order:
+#
+#   Step 1: provision cluster + node group only
+#     terraform apply -target=nebius_mk8s_v1_cluster.kv_inference \
+#                     -target=nebius_mk8s_v1_node_group.h100
+#
+#   Step 2: populate kubeconfig (nebius CLI writes to ~/.kube/config,
+#           it does NOT emit ExecCredential JSON to stdout)
+#     nebius mk8s v1 cluster get-credentials \
+#       --id <cluster_id> --external
+#     # Verify context name: kubectl config get-contexts
+#     # config_context in this file must match — default is "nebius-kv-inference"
+#
+#   Step 3: apply the rest (k8s Secret + Deployment + Service)
+#     terraform apply
+
 terraform {
   required_providers {
     nebius = {
