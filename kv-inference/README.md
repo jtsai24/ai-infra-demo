@@ -146,7 +146,17 @@ TTFT degrades with concurrency, mirroring Ollama `NUM_PARALLEL=1`. Concurrency 2
 
 ## Nebius H100 Results
 
-_To be added in Phase 4._
+**Session 1 — Single H100 SXM, `Qwen/Qwen2.5-0.5B-Instruct`**
+
+- Provisioned via Terraform: Nebius managed k8s cluster, 1× H100 SXM node (`1gpu-16vcpu-200gb`)
+- vLLM `0.23.0` deployed as a Kubernetes pod, serving the OpenAI-compatible API on port 8000
+- Inference validated end-to-end via `kubectl exec`
+- All three operator target metrics confirmed live on `/metrics`:
+  - `vllm:kv_cache_usage_perc`
+  - `vllm:num_requests_running`
+  - `vllm:num_requests_waiting`
+
+Full observability stack and load test results to be added in Session 2.
 
 ---
 
