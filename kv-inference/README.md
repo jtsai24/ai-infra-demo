@@ -41,7 +41,7 @@ vllm serve mlx-community/Qwen2.5-0.5B-Instruct-4bit --port 8000
 
 ---
 
-## Local Results — MacBook Air M4
+## Local — MacBook Air M4
 
 ### Ollama
 
@@ -144,19 +144,28 @@ TTFT degrades with concurrency, mirroring Ollama `NUM_PARALLEL=1`. Concurrency 2
 
 ---
 
-## Nebius H100 Results
+## Nebius — H100
 
-**Session 1 — Single H100 SXM, `Qwen/Qwen2.5-0.5B-Instruct`**
+### Stage 1: nebius-vllm-only
 
-- Provisioned via Terraform: Nebius managed k8s cluster, 1× H100 SXM node (`1gpu-16vcpu-200gb`)
-- vLLM `0.23.0` deployed as a Kubernetes pod, serving the OpenAI-compatible API on port 8000
-- Inference validated end-to-end via `kubectl exec`
-- All three operator target metrics confirmed live on `/metrics`:
-  - `vllm:kv_cache_usage_perc`
-  - `vllm:num_requests_running`
-  - `vllm:num_requests_waiting`
+Runbook: [`runbooks/nebius-vllm-only-apply.md`](runbooks/nebius-vllm-only-apply.md)
+Infra: [`infra/nebius-vllm-only/`](infra/nebius-vllm-only/)
 
-Full observability stack and load test results to be added in Session 2.
+**What this stage de-risks:**
+- Nebius managed k8s cluster provisioning via Terraform two-step apply
+- vLLM pod deployment on a real H100 SXM node
+- OpenAI-compatible API reachable via `kubectl exec`
+- All three operator target metrics confirmed live on `/metrics` before building the operator
+
+**Hardware:** 1× H100 SXM (`1gpu-16vcpu-200gb`), vLLM `0.23.0`, `Qwen/Qwen2.5-0.5B-Instruct`
+
+**Status:** Infrastructure and inference validated. Observability stack and load test results to be added in Stage 2.
+
+---
+
+### Stage 2: nebius-vllm-observability
+
+_Upcoming — Prometheus + Grafana deployed into the cluster, load test under real H100 GPU pressure, KV cache utilization data._
 
 ---
 
