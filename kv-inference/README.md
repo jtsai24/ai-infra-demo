@@ -1,6 +1,6 @@
 # KV-Aware Inference Platform
 
-Local inference benchmarks on MacBook Air M4, establishing baselines before moving to vLLM on Nebius in Phase 4. Two inference backends tested locally: Ollama (Metal GPU) and vLLM-metal.
+vLLM inference platform with full observability. Local validation on MacBook Air M4 (Ollama and vLLM-metal), then deployed on Nebius H100 in staged sessions.
 
 ---
 
