@@ -37,6 +37,11 @@ output "vllm_test_inference_cmd" {
   EOT
 }
 
+output "vllm_port_forward_cmd" {
+  description = "Forward vLLM to localhost:8000 — run scripts against it as if local"
+  value       = "kubectl port-forward -n default svc/vllm 8000:8000"
+}
+
 output "grafana_port_forward_cmd" {
   description = "Forward Grafana to localhost:3000"
   value       = "kubectl port-forward -n default svc/grafana 3000:80"
