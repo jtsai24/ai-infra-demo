@@ -1,6 +1,6 @@
 output "ssh_cmd" {
   description = "SSH into the H100 worker node"
-  value       = "ssh user@<worker-node-public-ip> — get IP from: nebius compute v1 instance list --parent-id ${var.project_id} -o json | jq -r '.items[0].status.network_interfaces[0].public_ip_address.address'"
+  value       = "ssh -i ~/ai-infra-demo/credentials/private.pem user@$(nebius compute v1 instance list --parent-id ${var.project_id} --format json | jq -r '.items[0].status.network_interfaces[0].public_ip_address.address' | cut -d/ -f1)"
 }
 
 output "cluster_id" {
@@ -16,6 +16,11 @@ output "cluster_public_endpoint" {
 output "get_credentials_cmd" {
   description = "Run this after terraform apply to configure kubectl"
   value       = "nebius mk8s v1 cluster get-credentials --id ${nebius_mk8s_v1_cluster.kv_inference.id} --external"
+}
+
+output "delete_context_cmd" {
+  description = "Remove the kubeconfig context after teardown"
+  value       = "kubectl config delete-context nebius-mk8s-${nebius_mk8s_v1_cluster.kv_inference.name}-${replace(nebius_mk8s_v1_cluster.kv_inference.id, "mk8scluster-", "")}"
 }
 
 output "vllm_health_check_cmd" {
