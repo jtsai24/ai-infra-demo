@@ -128,7 +128,6 @@ In a separate terminal, run the load test:
 
 ```bash
 cd /Users/jimmy/ai-infra-demo
-source ~/.venv-vllm-metal/bin/activate
 python kv-inference/scripts/load_test_vllm.py --continuous
 ```
 
