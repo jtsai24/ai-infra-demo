@@ -16,6 +16,13 @@ A portfolio project demonstrating AI infrastructure engineering skills targeting
 ### [kv-inference/](kv-inference/) — KV-Aware Inference Platform 🚧
 vLLM inference gateway with a custom Go Kubernetes operator. In progress.
 
+**Nebius Session 1 — vLLM on H100 (single node):**
+- Provisioned Nebius managed k8s cluster with 1× H100 SXM node via Terraform
+- Deployed vLLM serving `Qwen/Qwen2.5-0.5B-Instruct` as a Kubernetes pod
+- Validated OpenAI-compatible inference API end-to-end via `kubectl exec`
+- Confirmed all three operator metrics live on `/metrics`: `vllm:kv_cache_usage_perc`, `vllm:num_requests_running`, `vllm:num_requests_waiting`
+- Cluster torn down cleanly with `terraform destroy`
+
 **Local observability stack validated (k3s + OrbStack on Apple Silicon):**
 - Prometheus scraping vLLM metrics — `vllm:kv_cache_usage_perc`, `vllm:num_requests_running`, `vllm:num_requests_waiting`
 - Loki + Promtail collecting vLLM logs
