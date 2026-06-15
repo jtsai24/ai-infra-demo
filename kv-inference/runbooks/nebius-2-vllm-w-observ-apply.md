@@ -128,7 +128,7 @@ Open `http://<node-ip>:30300`, log in as `admin`. Import dashboard from:
 
 ```bash
 cd /Users/jimmy/ai-infra-demo
-python kv-inference/scripts/load_test_vllm.py --url http://<node-ip>:30800 --continuous
+python kv-inference/scripts/nebius-2-vllm-w-observ/load_test_vllm.py --url http://<node-ip>:30800 --model Qwen/Qwen2.5-0.5B-Instruct --continuous
 ```
 
 Watch KV cache pressure and request pipeline metrics build up in Grafana.
