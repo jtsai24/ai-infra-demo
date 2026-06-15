@@ -161,13 +161,34 @@ Infra: [`infra/nebius-vllm-only/`](infra/nebius-vllm-only/)
 
 **Hardware:** 1× H100 SXM (`1gpu-16vcpu-200gb`), vLLM `0.23.0`, `Qwen/Qwen2.5-0.5B-Instruct`
 
-**Status:** Infrastructure and inference validated. Observability stack and load test results to be added in Stage 2.
+**Status:** Complete. Observability stack deployed and validated in Stage 2.
 
 ---
 
-### Stage 2: nebius-vllm-observability
+### Stage 2: nebius-2-vllm-w-observ
 
-_Upcoming — Prometheus + Grafana deployed into the cluster, load test under real H100 GPU pressure, KV cache utilization data._
+Runbook: [`runbooks/nebius-2-vllm-w-observ-apply.md`](runbooks/nebius-2-vllm-w-observ-apply.md)
+Infra: [`infra/nebius-2-vllm-w-observ/`](infra/nebius-2-vllm-w-observ/)
+
+**What this stage adds:**
+- Prometheus, Loki, Promtail, Grafana deployed via Helm into the same cluster as vLLM
+- Prometheus scraping vLLM `/metrics` endpoint confirmed live
+- Loki log pipeline confirmed: Promtail collecting pod logs → Loki ingesting → Grafana queryable
+- Grafana dashboard with vLLM metrics and log panels (`nebius-vllm-dashboard.json`)
+
+**Hardware:** 1× H100 SXM (`1gpu-16vcpu-200gb`), vLLM `0.23.0`, `Qwen/Qwen2.5-0.5B-Instruct`
+
+**Nebius H100 single-request results (`measure_inference_vllm.py`):**
+
+| Run | TTFT | TPOT | Throughput | Tokens |
+|-----|------|------|------------|--------|
+| Warm | 366ms | 1.8 ms/token | 278 tok/s | 200 |
+
+H100 TPOT (1.8ms) is 5× faster than M4 (9.1ms). TTFT (366ms warm) is higher than M4 (1,980ms) — H100 runs the full-precision model vs M4's 4-bit quantized MLX build; prefill is proportionally more expensive.
+
+**KV cache pressure:** Not observed at concurrency 1–4 with Qwen2.5-0.5B. The model's KV cache footprint (~200MB) is negligible against the H100's 80GB HBM. A larger model (Llama 3 8B or 70B) at high concurrency with long context would be required to generate measurable cache pressure.
+
+**Status:** Complete. Observability pipeline validated end-to-end.
 
 ---
 
