@@ -120,7 +120,7 @@ kubectl get secret -n default grafana -o jsonpath='{.data.admin-password}' | bas
 ```
 
 Open `http://<node-ip>:30300`, log in as `admin`. Import dashboard from:
-`kv-inference/observability/grafana/dashboards/vllm-dashboard.json`
+`kv-inference/observability/grafana/dashboards/nebius-vllm-dashboard.json`
 
 ---
 

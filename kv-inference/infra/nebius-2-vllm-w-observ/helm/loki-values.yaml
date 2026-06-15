@@ -6,6 +6,12 @@ loki:
   auth_enabled: false
   useTestSchema: true
 
+# Nebius names the DNS service "coredns" not "kube-dns".
+# The Loki gateway nginx config hardcodes kube-dns as the resolver — override it.
+gateway:
+  nginxConfig:
+    resolver: coredns.kube-system.svc.cluster.local
+
 deploymentMode: SingleBinary
 
 singleBinary:
