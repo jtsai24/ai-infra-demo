@@ -93,12 +93,12 @@ resource "nebius_mk8s_v1_node_group" "h100" {
 }
 
 provider "kubernetes" {
-  host = "https://${nebius_mk8s_v1_cluster.kv_inference.status.control_plane.endpoints.public_endpoint}"
+  host = nebius_mk8s_v1_cluster.kv_inference.status.control_plane.endpoints.public_endpoint
 
-  cluster_ca_certificate = base64decode(
-    nebius_mk8s_v1_cluster.kv_inference.status.control_plane.auth.cluster_ca_certificate
-  )
+  cluster_ca_certificate = nebius_mk8s_v1_cluster.kv_inference.status.control_plane.auth.cluster_ca_certificate
 
   config_path    = "~/.kube/config"
-  config_context = "nebius-kv-inference"
+  # Context name written by: nebius mk8s v1 cluster get-credentials --external
+  # Pattern observed: nebius-mk8s-<cluster-name>-<cluster-id>
+  config_context = "nebius-mk8s-${nebius_mk8s_v1_cluster.kv_inference.name}-${replace(nebius_mk8s_v1_cluster.kv_inference.id, "mk8scluster-", "")}"
 }
