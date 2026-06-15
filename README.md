@@ -23,26 +23,19 @@ vLLM inference gateway with a custom Go Kubernetes operator. In progress.
 - Confirmed all three operator metrics live on `/metrics`: `vllm:kv_cache_usage_perc`, `vllm:num_requests_running`, `vllm:num_requests_waiting`
 - Cluster torn down cleanly with `terraform destroy`
 
+**Nebius Session 2 — vLLM + Observability Stack on H100:**
+- Deployed Prometheus, Loki, Promtail, Grafana via Helm into the same cluster as vLLM
+- Prometheus confirmed scraping vLLM `/metrics` (Targets page showed UP)
+- Loki log pipeline confirmed end-to-end: Promtail → Loki → 720 lines ingested → Grafana queryable
+- Grafana dashboard showing both metrics and log panels live
+- H100 single-request: TTFT **366ms** warm, TPOT **1.8ms/token**, **278 tok/s** (full-precision vs M4's 4-bit)
+- All services on NodePort — no port-forwarding needed during the session
+
 **Local observability stack validated (k3s + OrbStack on Apple Silicon):**
 - Prometheus scraping vLLM metrics — `vllm:kv_cache_usage_perc`, `vllm:num_requests_running`, `vllm:num_requests_waiting`
 - Loki + Promtail collecting vLLM logs
 - Grafana dashboard with KV cache, request pipeline, latency, and log panels
 - Load test script with one-shot and continuous modes
-
-**To run locally (Apple Silicon, vLLM-metal):**
-```bash
-# Start vLLM
-source ~/.venv-vllm-metal/bin/activate && vllm serve mlx-community/Qwen2.5-0.5B-Instruct-4bit 2>&1 | tee ~/vllm.log
-
-# Deploy observability stack
-helm install prometheus prometheus-community/prometheus -f kv-inference/k8s/helm/prometheus-values.yaml
-helm install loki grafana/loki -f kv-inference/k8s/helm/loki-values.yaml
-helm install promtail grafana/promtail -f kv-inference/k8s/helm/promtail-values.yaml
-helm install grafana grafana/grafana -f kv-inference/k8s/helm/grafana-values.yaml
-
-# Access Grafana
-kubectl port-forward svc/grafana 3000:80
-```
 
 ## Stack
 
