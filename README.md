@@ -47,3 +47,7 @@ kubectl port-forward svc/grafana 3000:80
 ## Stack
 
 Terraform · Ansible · Slurm · NCCL · InfiniBand · RDMA · Nebius · H100 SXM · HPC-X MPI · vLLM · Prometheus · Grafana · Loki · Helm · k3s
+
+## Tradeoffs & Known Limitations
+
+**Why Terraform over Pulumi:** Terraform's declarative model does not natively support imperative ordering of side effects. The Nebius managed Kubernetes provider writes cluster credentials to `~/.kube/config` via a CLI command (`nebius mk8s v1 cluster get-credentials`) rather than emitting ExecCredential JSON to stdout, which means the kubeconfig population cannot be expressed as a Terraform resource. This forces a manual step between Stage 1 (cluster + node group) and Stage 2 (Kubernetes + Helm resources), breaking the single-apply declarative model. Nebius provides an official Pulumi provider that would solve this cleanly — since Pulumi uses real Go/Python code, the credential fetch can be expressed as a regular function call with explicit ordering, enabling a single `pulumi up` with no manual intervention. Terraform was chosen here for portfolio visibility given its dominance in AI infra shops, but this is the concrete cost of that choice.
