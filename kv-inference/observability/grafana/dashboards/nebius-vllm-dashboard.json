@@ -447,8 +447,8 @@
     "list": []
   },
   "time": {
-    "from": "2026-06-13T22:59:56.191Z",
-    "to": "2026-06-13T23:22:25.464Z"
+    "from": "now-1h",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",

@@ -1,0 +1,16 @@
+service:
+  type: NodePort
+  nodePort: 30300
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-server.default.svc.cluster.local
+        isDefault: true
+
+      - name: Loki
+        type: loki
+        url: http://loki-gateway.default.svc.cluster.local

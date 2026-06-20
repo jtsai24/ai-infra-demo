@@ -1,0 +1,6 @@
+# On Nebius, vLLM runs as a pod — Promtail's default k8s log collection
+# handles it automatically. No hostPath volume mount needed (unlike local
+# setup where vLLM runs on the host outside k8s).
+config:
+  clients:
+    - url: http://loki-gateway.default.svc.cluster.local/loki/api/v1/push

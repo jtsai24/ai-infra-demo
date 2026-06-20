@@ -1,0 +1,10 @@
+# Copy to terraform.tfvars and fill in your values.
+# terraform.tfvars is gitignored — never commit real values.
+
+project_id  = "your-nebius-project-id"
+subnet_id   = "your-nebius-subnet-id"
+hf_token    = "hf_..."
+
+# vllm_model             = "Qwen/Qwen2.5-7B-Instruct"
+# k8s_version            = "1.31"
+# gpu_memory_utilization = "0.20"  # Run A; use 0.40 for Run B
