@@ -12,6 +12,7 @@ import argparse
 import concurrent.futures
 import json
 import statistics
+import threading
 import time
 import urllib.request
 
@@ -81,7 +82,7 @@ def run_inference(messages: list, url: str, model: str) -> dict:
     }
 
 
-def run_chat_session(session_id: int, url: str, model: str, max_turns: int, think_time: float) -> list:
+def run_chat_session(session_id: int, url: str, model: str, max_turns: int, think_time: float, stop_event: threading.Event) -> list:
     messages = [{"role": "system", "content": "You are a helpful assistant."}]
     results = []
 
@@ -97,8 +98,10 @@ def run_chat_session(session_id: int, url: str, model: str, max_turns: int, thin
 
         print(f"[S{session_id} T{i + 1}] TTFT: {result['ttft_ms']} ms  |  TPOT: {result['tpot_ms']} ms/token  |  Tokens: {result['total_tokens']}")
 
+        if stop_event.is_set():
+            break
         if think_time > 0 and i < max_turns - 1:
-            time.sleep(think_time)
+            stop_event.wait(think_time)  # wakes early if stop_event is set
 
     return results
 
@@ -110,6 +113,7 @@ if __name__ == "__main__":
     parser.add_argument("--turns", type=int, default=5, help="Number of turns per session")
     parser.add_argument("--concurrency", type=int, default=2, help="Number of parallel sessions")
     parser.add_argument("--think-time", type=float, default=0.0, help="Seconds to pause between turns")
+    parser.add_argument("--continuous", action="store_true", help="Keep running until ctrl-C, replacing completed sessions")
     args = parser.parse_args()
 
     url = f"{args.url.rstrip('/')}/v1/chat/completions"
@@ -120,23 +124,42 @@ if __name__ == "__main__":
     print(f"Turns:       {args.turns}")
     print(f"Think time:  {args.think_time}s\n")
 
+    all_results = []
+    session_counter = 0
+    stop_event = threading.Event()
+
+    def new_session(pool):
+        global session_counter
+        session_counter += 1
+        return pool.submit(run_chat_session, session_counter, url, args.model, args.turns, args.think_time, stop_event)
+
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.concurrency) as pool:
-        futures = [
-            pool.submit(run_chat_session, sid, url, args.model, args.turns, args.think_time)
-            for sid in range(1, args.concurrency + 1)
-        ]
-        all_results = []
-        for f in concurrent.futures.as_completed(futures):
-            all_results.extend(f.result())
+        active = {new_session(pool) for _ in range(args.concurrency)}
+        try:
+            if args.continuous:
+                while True:
+                    done, active = concurrent.futures.wait(active, return_when=concurrent.futures.FIRST_COMPLETED)
+                    for f in done:
+                        all_results.extend(f.result())
+                        active.add(new_session(pool))
+            else:
+                for f in concurrent.futures.as_completed(active):
+                    all_results.extend(f.result())
+        except KeyboardInterrupt:
+            print("\nStopping — waiting for in-flight requests to finish...")
+            stop_event.set()
 
-    ttfts = [r["ttft_ms"] for r in all_results]
-    tpots = [r["tpot_ms"] for r in all_results]
+    if not all_results:
+        print("No results collected.")
+    else:
+        ttfts = [r["ttft_ms"] for r in all_results]
+        tpots = [r["tpot_ms"] for r in all_results]
 
-    print(f"\n{'Session':<10} {'Turn':<6} {'TTFT (ms)':<12} {'TPOT (ms)':<12} {'Tokens':<8} {'Msg count'}")
-    print("-" * 60)
-    for r in sorted(all_results, key=lambda x: (x["session"], x["turn"])):
-        print(f"{r['session']:<10} {r['turn']:<6} {r['ttft_ms']:<12} {r['tpot_ms']:<12} {r['total_tokens']:<8} {r['prompt_messages']}")
+        print(f"\n{'Session':<10} {'Turn':<6} {'TTFT (ms)':<12} {'TPOT (ms)':<12} {'Tokens':<8} {'Msg count'}")
+        print("-" * 60)
+        for r in sorted(all_results, key=lambda x: (x["session"], x["turn"])):
+            print(f"{r['session']:<10} {r['turn']:<6} {r['ttft_ms']:<12} {r['tpot_ms']:<12} {r['total_tokens']:<8} {r['prompt_messages']}")
 
-    print(f"\n--- Summary across {len(all_results)} requests ---")
-    print(f"TTFT  p50: {statistics.median(ttfts):.0f} ms  p95: {sorted(ttfts)[int(len(ttfts) * 0.95)]:.0f} ms  max: {max(ttfts):.0f} ms")
-    print(f"TPOT  p50: {statistics.median(tpots):.1f} ms/token")
+        print(f"\n--- Summary across {len(all_results)} requests ---")
+        print(f"TTFT  p50: {statistics.median(ttfts):.0f} ms  p95: {sorted(ttfts)[int(len(ttfts) * 0.95)]:.0f} ms  max: {max(ttfts):.0f} ms")
+        print(f"TPOT  p50: {statistics.median(tpots):.1f} ms/token")
