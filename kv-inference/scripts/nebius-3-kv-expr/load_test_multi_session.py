@@ -22,6 +22,16 @@ TURNS = [
     "What is prefix caching and how does it help with multi-turn conversations?",
     "What happens when the KV cache is full?",
     "How would you monitor KV cache utilization in production?",
+    "What is the difference between TTFT and TPOT, and why does each matter for user experience?",
+    "How does tensor parallelism affect KV cache size across multiple GPUs?",
+    "What tradeoffs exist between batch size and KV cache memory usage?",
+    "How does chunked prefill help with long-context requests?",
+    "What is preemption in vLLM and when does it occur?",
+    "How would you design a KV cache eviction policy for a production system?",
+    "What is the relationship between model precision and KV cache memory footprint?",
+    "How does continuous batching differ from static batching in terms of memory usage?",
+    "What metrics would you alert on to detect KV cache pressure before it impacts users?",
+    "How would paged attention help with memory fragmentation in a KV cache?",
 ]
 
 
@@ -30,7 +40,7 @@ def run_inference(messages: list, url: str, model: str) -> dict:
         "model": model,
         "messages": messages,
         "stream": True,
-        "max_tokens": 200,
+        "max_tokens": 600,
     }).encode()
 
     req = urllib.request.Request(

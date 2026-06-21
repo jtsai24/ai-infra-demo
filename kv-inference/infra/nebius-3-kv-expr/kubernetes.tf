@@ -23,6 +23,14 @@ resource "kubernetes_deployment" "vllm" {
   spec {
     replicas = 1
 
+    strategy {
+      type = "RollingUpdate"
+      rolling_update {
+        max_unavailable = 1
+        max_surge       = 0
+      }
+    }
+
     selector {
       match_labels = {
         app = "vllm"
@@ -59,6 +67,11 @@ resource "kubernetes_deployment" "vllm" {
             name           = "http"
             container_port = 8000
             protocol       = "TCP"
+          }
+
+          env {
+            name  = "VLLM_PORT"
+            value = "8000"
           }
 
           env {
