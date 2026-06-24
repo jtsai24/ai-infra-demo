@@ -31,6 +31,17 @@ vLLM inference gateway with a custom Go Kubernetes operator. In progress.
 - H100 single-request: TTFT **366ms** warm, TPOT **1.8ms/token**, **278 tok/s** (full-precision vs M4's 4-bit)
 - All services on NodePort — no port-forwarding needed during the session
 
+**Nebius Session 3 — KV Cache Experiments (H100, Qwen2.5-7B-Instruct):**
+
+Four controlled experiments measuring how vLLM configuration levers affect KV cache, latency, and throughput under concurrent multi-turn load. All runs on a single Nebius H100 80GB SXM with full Prometheus/Grafana observability.
+
+| Experiment | Variable | Key Finding | Issue |
+|---|---|---|---|
+| [Exp 1 — KV Cache Size vs Throughput](https://github.com/jtsai24/ai-infra-demo/issues/5) | `gpu_memory_utilization` 0.30 vs 0.70 | At 0.30, KV cache hit 100% and requests queued (TTFT p95 ~6s); at 0.70, queue stayed at 0 and TTFT p95 ~3.5s | #5 |
+| [Exp 2 — Prefix Caching](https://github.com/jtsai24/ai-infra-demo/issues/7) | Prefix cache OFF vs ON | Enabling prefix cache cut TTFT p95 **10×** (4–5s → 0.4–0.5s) and halved KV cache consumption — zero-cost optimization | #7 |
+| [Exp 3 — Weight Quantization](https://github.com/jtsai24/ai-infra-demo/issues/8) | bf16 vs INT4 GPTQ | INT4 weights 2.6× smaller (14GB → 5.3GB), TPOT improved 27%, 38% more requests completed; quality degradation negligible | #8 |
+| [Exp 4 — Chunked Prefill](https://github.com/jtsai24/ai-infra-demo/issues/9) | Chunked prefill OFF vs ON | Without chunking, a 2000-token inject caused 10–15× TPOT spikes (6ms → 50–93ms) in concurrent sessions; chunking eliminated all spikes | #9 |
+
 **Local observability stack validated (k3s + OrbStack on Apple Silicon):**
 - Prometheus scraping vLLM metrics — `vllm:kv_cache_usage_perc`, `vllm:num_requests_running`, `vllm:num_requests_waiting`
 - Loki + Promtail collecting vLLM logs
