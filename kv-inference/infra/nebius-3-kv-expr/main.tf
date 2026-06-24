@@ -97,6 +97,9 @@ resource "nebius_mk8s_v1_node_group" "h100" {
           shell: /bin/bash
           ssh_authorized_keys:
             - ${file("../../credentials/public_openssh.pub")}
+      runcmd:
+        - mkdir -p /home/user/.cache/huggingface
+        - chown -R user:user /home/user/.cache/huggingface
     EOT
   }
 }

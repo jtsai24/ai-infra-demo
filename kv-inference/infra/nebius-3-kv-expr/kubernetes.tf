@@ -130,6 +130,11 @@ resource "kubernetes_deployment" "vllm" {
             name       = "shm"
             mount_path = "/dev/shm"
           }
+
+          volume_mount {
+            name       = "hf-cache"
+            mount_path = "/root/.cache/huggingface"
+          }
         }
 
         volume {
@@ -137,6 +142,14 @@ resource "kubernetes_deployment" "vllm" {
           empty_dir {
             medium     = "Memory"
             size_limit = "16Gi"
+          }
+        }
+
+        volume {
+          name = "hf-cache"
+          host_path {
+            path = "/home/user/.cache/huggingface"
+            type = "DirectoryOrCreate"
           }
         }
       }
