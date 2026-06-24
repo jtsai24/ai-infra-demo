@@ -1,0 +1,64 @@
+=== What is attention in a transformer model? ===
+In the context of a Transformer model, "attention" refers to a mechanism that allows the model to weigh the importance of different parts of the input when generating an output. This is particularly useful for handling sequential data and capturing dependencies between elements in the sequence.
+
+### How Attention Works in Transformers
+
+1. **Query (Q), Key (K), Value (V) Vectors**:
+   - The input to the attention mechanism is typically split into three vectors: Query (Q), Key (K), and Value (V). These vectors are derived from the input sequence using linear transformations.
+   
+2. **Scoring Mechanism**:
+   - The Query vector is compared with the Key vector using a dot product or another scoring function. This results in a score that indicates how much each Key is relevant to the corresponding Query.
+   - Mathematically, the score \( S \) can be represented as:
+     \[
+     S = Q \cdot K^T
+     \]
+   -
+
+=== Explain CUDA cores vs tensor cores. ===
+CUDA cores and Tensor Cores are both types of compute units found in NVIDIA GPUs, but they serve different purposes and are optimized for different types of computations.
+
+### CUDA Cores
+
+CUDA cores (also known as Streaming Multiprocessors or SMs) are the primary computing units in NVIDIA GPUs that support the CUDA parallel computing platform. They are designed to handle general-purpose computations and are optimized for a wide range of applications, including scientific simulations, machine learning tasks, and graphics rendering. Each CUDA core can execute multiple threads concurrently, and the number of CUDA cores can vary significantly across different GPU models. For example, a high-end consumer-grade GPU might have several thousand CUDA cores, while a lower-end one might have hundreds.
+
+CUDA cores execute instructions in a single-precision floating-point format, which is suitable for many types of scientific and engineering calculations. They can also support double-precision floating-point operations, although with reduced performance compared to single-precision operations.
+
+### Tensor Cores
+
+Tensor Cores,
+
+=== What does a GPU memory controller do? ===
+A GPU (Graphics Processing Unit) memory controller is a component within the GPU that manages the communication between the GPU and its memory (typically GDDR or HBM memory). Its primary responsibilities include:
+
+1. **Data Transfer Management**: The memory controller oversees the transfer of data between the GPU and the memory. This includes reading data from memory to be processed by the GPU and writing results back to memory.
+
+2. **Memory Access Coordination**: It coordinates with the GPU cores to ensure that data is accessed efficiently and correctly. This can involve managing memory coherency and ensuring that all parts of the GPU have access to the most up-to-date data.
+
+3. **Bandwidth Management**: The memory controller helps manage the bandwidth between the GPU and memory. It ensures that the data transfer rates are optimized for the specific workload being performed by the GPU.
+
+4. **Error Correction**: In some cases, the memory controller may also include error correction mechanisms to detect and correct errors in the memory data, enhancing the
+
+=== Describe the role of the KV cache in inference. ===
+In the context of inference within machine learning models, particularly those using transformers like those found in large language models (LLMs), the Key-Value (KV) cache plays a crucial role in enhancing efficiency and speed without compromising accuracy.
+
+### What is KV Cache?
+
+The KV cache is a technique used to store intermediate results during the inference process. Specifically, it stores the key and value portions of the attention mechanism's output from previous steps of the model's computation. This allows the model to quickly retrieve these values when needed for subsequent computations, thus reducing redundant calculations and speeding up the inference process.
+
+### Role in Inference
+
+1. **Efficiency and Speed**:
+   - **Reducing Computation**: By storing the key and value pairs from previous steps, the model doesn't need to recompute them. This significantly reduces the computational load and speeds up the inference process.
+   - **Batch Processing**: The KV cache enables efficient batch processing, where multiple inputs can be handled more quickly since shared computations
+
+=== What is speculative decoding? ===
+Speculative decoding is a technique used in modern computer processors to improve performance by predicting future instructions that the processor might need and decoding them before they are actually needed. This can help to reduce the latency of instruction fetching and execution, as the processor can start working on predicted instructions even before they have been explicitly requested.
+
+Here's how it works:
+
+1. **Prediction**: The processor makes an educated guess about the next instructions that will be needed based on patterns in the program flow or previous execution history.
+2. **Decoding**: The processor decodes these predicted instructions into micro-operations (micro-ops) that can be executed by the hardware.
+3. **Execution**: The decoded instructions are then executed if the prediction turns out to be correct.
+
+If the prediction is incorrect, the speculative execution is rolled back, and the processor continues with the correct sequence of instructions. This process can significantly reduce the time spent waiting for instructions to be fetched from memory and can help hide the latency of fetching and executing instructions
+

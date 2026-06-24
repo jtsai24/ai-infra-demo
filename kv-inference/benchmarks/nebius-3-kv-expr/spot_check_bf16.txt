@@ -1,0 +1,64 @@
+=== What is attention in a transformer model? ===
+In the context of a transformer model, "attention" refers to a mechanism that allows the model to weigh the importance of different parts of the input when generating each element of the output. This mechanism is crucial for the transformer's ability to capture and process long-range dependencies within sequences of data.
+
+### Key Components of Attention Mechanism in Transformers
+
+1. **Query (Q), Key (K), and Value (V) Vectors**:
+   - For each position in the input sequence, the transformer computes three vectors: Query, Key, and Value.
+   - These vectors are derived from the input embeddings through linear transformations.
+
+2. **Attention Score Calculation**:
+   - The attention score between two positions is calculated as the dot product of the Query vector of one position with the Key vector of another position.
+   - Mathematically, for a given position \(i\) and another position \(j\), the attention score \(A_{ij}\) is computed as:
+     \[
+     A
+
+=== Explain CUDA cores vs tensor cores. ===
+CUDA cores and Tensor Cores are both types of specialized hardware designed to accelerate certain types of computations, but they serve different purposes and are optimized for different workloads.
+
+### CUDA Cores
+
+CUDA cores are the fundamental processing units in NVIDIA's GPUs that support the CUDA parallel computing architecture. They are designed for general-purpose GPU computing (GPGPU) and can perform a wide range of tasks, including:
+
+- **General-purpose computations**: These cores can execute any type of instruction, making them highly versatile.
+- **Floating-point operations**: They are capable of handling single-precision (FP32), double-precision (FP64), and mixed-precision floating-point arithmetic.
+- **Integer operations**: They can handle integer arithmetic as well.
+- **Memory access and data transfer**: They are responsible for accessing and transferring data between global memory and other memory spaces.
+
+CUDA cores are part of the SM (Streaming Multiprocessor) architecture in modern NVIDIA GPUs. Each SM contains multiple CUDA cores, and
+
+=== What does a GPU memory controller do? ===
+A GPU (Graphics Processing Unit) memory controller is a critical component that manages the flow of data between the GPU and its associated memory, typically referred to as GPU memory or VRAM (Video Random Access Memory). Here’s what it does:
+
+1. **Data Transfer Management**: The memory controller is responsible for managing the transfer of data between the GPU and the VRAM. This includes reading data from the VRAM to be processed by the GPU and writing processed data back to the VRAM.
+
+2. **Bandwidth Control**: It controls the bandwidth between the GPU and the VRAM, ensuring that data can be transferred at optimal speeds. This is crucial for maintaining high performance in graphics rendering and other computational tasks.
+
+3. **Memory Access Scheduling**: The memory controller schedules accesses to the VRAM to optimize performance and reduce latency. It may use techniques like prefetching to anticipate future memory requests and prepare data in advance.
+
+4. **Error Correction**: Many GPUs include error correction capabilities in their memory controllers
+
+=== Describe the role of the KV cache in inference. ===
+In the context of machine learning and natural language processing, particularly when using models like transformers for tasks such as text generation or translation, the KV (Key-Value) cache plays a crucial role in optimizing the inference process. Here's how it works:
+
+### What is KV Cache?
+
+KV cache stands for Key-Value cache. In the context of transformer models, the keys and values refer to parts of the model's hidden states that are used during the self-attention mechanism. The self-attention mechanism allows the model to weigh the importance of different words in a sentence when generating the next word.
+
+### Role in Inference
+
+1. **Efficiency in Self-Attention:**
+   - During the inference phase, the model needs to compute attention scores between the current token and all previous tokens in the sequence. This involves calculating the dot product of query vectors with key vectors for each pair of tokens.
+   - The KV cache stores these key and value pairs from the previous steps of the sequence, which
+
+=== What is speculative decoding? ===
+Speculative decoding is a technique used in modern computer processors to improve performance by predicting the future state of the program's execution and decoding instructions that may be needed in the near future before they are actually required. This approach can help reduce the latency associated with fetching and decoding instructions, which can be a significant bottleneck in processor performance.
+
+Here’s how it works:
+
+1. **Prediction**: The processor makes educated guesses about what instructions will be needed next based on the current instruction stream and patterns observed in the program's behavior.
+
+2. **Decoding Ahead of Time**: Once the processor predicts which instructions might be needed, it starts decoding those instructions before they are explicitly requested by the program. This means that when the actual instruction pointer reaches the predicted location, the decoded instructions are already available.
+
+3. **Branch Prediction**: A key aspect of speculative decoding involves branch prediction, where the processor tries to guess whether a conditional branch (e.g., an "if" statement) will be taken or not. If the
+
