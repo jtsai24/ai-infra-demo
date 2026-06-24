@@ -11,6 +11,7 @@ Nebius: python load_test_chunked_prefill.py --url http://<node-ip>:30800 --model
 import argparse
 import concurrent.futures
 import json
+import random
 import statistics
 import threading
 import time
@@ -40,69 +41,31 @@ TURNS = [
 ]
 
 
-COLD_PROMPT = """
-You are an AI infrastructure engineer preparing a detailed technical design document.
+COLD_PROMPT_PREAMBLE = "You are an AI infrastructure engineer preparing a detailed technical design document.\n\nPlease write a comprehensive explanation covering ALL of the following topics in depth:"
 
-Please write a comprehensive explanation covering ALL of the following topics in depth:
+COLD_PROMPT_TOPICS = [
+    "How transformer attention works mechanically — query, key, value projections, scaled dot-product attention, multi-head attention, and why the complexity is O(n^2) in sequence length.",
+    "What the KV cache is, why it exists, how keys and values are stored across decode steps, and what happens to memory as sequence length grows.",
+    "How PagedAttention works — the block table abstraction, how vLLM maps logical blocks to physical blocks, and how this enables copy-on-write for beam search.",
+    "What chunked prefill is, why long prompts cause head-of-line blocking in a naive prefill implementation, and how interleaving prefill chunks with decode steps fixes P95 TTFT without hurting throughput.",
+    "How prefix caching works at the block level — which blocks are eligible for reuse, how the hash key is computed, and what workloads benefit most.",
+    "The tradeoff between block size and memory fragmentation — why small blocks reduce waste at sequence boundaries but increase block table overhead.",
+    "How you would design a production Grafana dashboard to monitor all of the above — which vLLM Prometheus metrics you would track, what alert thresholds make sense, and what a KV cache saturation event looks like in the charts.",
+    "How continuous batching works in vLLM — how requests are admitted mid-batch, why it improves GPU utilization over static batching, and what the scheduling policy looks like.",
+    "What tensor parallelism is, how it splits attention heads and weight matrices across multiple GPUs, and what the communication overhead looks like at inference time.",
+    "How speculative decoding works in LLM inference — the draft model, verification step, acceptance rate, and when it helps vs hurts throughput.",
+    "What CUDA graphs are, why vLLM uses them to reduce kernel launch overhead, and what the tradeoff is between graph capture time and per-request latency.",
+    "How weight quantization affects inference — the difference between PTQ and QAT, how GPTQ calibrates per-layer scale factors, and what quality degradation to expect at INT4 vs FP8.",
+    "How KV cache quantization differs from weight quantization — why INT8 KV cache is safe for most workloads, and how it interacts with PagedAttention block management.",
+    "How you would capacity plan an inference cluster — given a target QPS, SLA on TTFT and TPOT, model size, and GPU type, walk through the calculation to determine node count and KV cache budget.",
+]
 
-1. How transformer attention works mechanically — query, key, value projections,
-   scaled dot-product attention, multi-head attention, and why the complexity is
-   O(n^2) in sequence length.
 
-2. What the KV cache is, why it exists, how keys and values are stored across
-   decode steps, and what happens to memory as sequence length grows.
-
-3. How PagedAttention works — the block table abstraction, how vLLM maps logical
-   blocks to physical blocks, and how this enables copy-on-write for beam search.
-
-4. What chunked prefill is, why long prompts cause head-of-line blocking in
-   a naive prefill implementation, and how interleaving prefill chunks with
-   decode steps fixes P95 TTFT without hurting throughput.
-
-5. How prefix caching works at the block level — which blocks are eligible for
-   reuse, how the hash key is computed, and what workloads benefit most.
-
-6. The tradeoff between block size and memory fragmentation — why small blocks
-   reduce waste at sequence boundaries but increase block table overhead.
-
-7. How you would design a production Grafana dashboard to monitor all of the
-   above — which vLLM Prometheus metrics you would track, what alert thresholds
-   make sense, and what a KV cache saturation event looks like in the charts.
-
-Be thorough. Each section should be at least three paragraphs.
-
----
-
-You are an AI infrastructure engineer preparing a detailed technical design document.
-
-Please write a comprehensive explanation covering ALL of the following topics in depth:
-
-1. How transformer attention works mechanically — query, key, value projections,
-   scaled dot-product attention, multi-head attention, and why the complexity is
-   O(n^2) in sequence length.
-
-2. What the KV cache is, why it exists, how keys and values are stored across
-   decode steps, and what happens to memory as sequence length grows.
-
-3. How PagedAttention works — the block table abstraction, how vLLM maps logical
-   blocks to physical blocks, and how this enables copy-on-write for beam search.
-
-4. What chunked prefill is, why long prompts cause head-of-line blocking in
-   a naive prefill implementation, and how interleaving prefill chunks with
-   decode steps fixes P95 TTFT without hurting throughput.
-
-5. How prefix caching works at the block level — which blocks are eligible for
-   reuse, how the hash key is computed, and what workloads benefit most.
-
-6. The tradeoff between block size and memory fragmentation — why small blocks
-   reduce waste at sequence boundaries but increase block table overhead.
-
-7. How you would design a production Grafana dashboard to monitor all of the
-   above — which vLLM Prometheus metrics you would track, what alert thresholds
-   make sense, and what a KV cache saturation event looks like in the charts.
-
-Be thorough. Each section should be at least three paragraphs.
-""".strip()
+def build_cold_prompt() -> str:
+    """Shuffle topics so every inject has a unique token sequence — defeats prefix cache."""
+    shuffled = random.sample(COLD_PROMPT_TOPICS, len(COLD_PROMPT_TOPICS))
+    numbered = "\n\n".join(f"{i+1}. {t}" for i, t in enumerate(shuffled))
+    return f"{COLD_PROMPT_PREAMBLE}\n\n{numbered}\n\nBe thorough. Each section should be at least three paragraphs."
 
 
 # ##############################
@@ -117,7 +80,7 @@ def run_inference(messages: list, url: str, model: str) -> dict:
         "model": model,
         "messages": messages,
         "stream": True,
-        "max_tokens": 200,
+        "max_tokens": 600,
     }).encode()
 
     req = urllib.request.Request(
@@ -214,10 +177,10 @@ def run_injector(url: str, model: str, interval_s: float, all_results: list, res
         inject_id += 1
         print(f"\n[INJECT {inject_id}] Firing cold ~2000-token prompt...")
 
-        # Prepend unique ID to break prefix cache — shared suffix would still hit
-        # if we appended instead, since vLLM caches at the block level from the start.
-        unique_prompt = f"[Request ID: {inject_id}]\n\n{COLD_PROMPT}"
-        messages = [{"role": "user", "content": unique_prompt}]
+        # Shuffle topics on every inject to guarantee full cache miss each time.
+        # A fixed prompt would be cached after the first hit; shuffled order
+        # produces a unique token sequence so all blocks miss the prefix cache.
+        messages = [{"role": "user", "content": build_cold_prompt()}]
         try:
             result = run_inference(messages, url, model)
             result.pop("response_full", None)
