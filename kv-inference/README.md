@@ -192,6 +192,43 @@ H100 TPOT (1.8ms) is 5× faster than M4 (9.1ms). TTFT (366ms warm) is higher tha
 
 ---
 
+### Stage 3: nebius-3-kv-expr
+
+Infra: [`infra/nebius-3-kv-expr/`](infra/nebius-3-kv-expr/)
+
+**What this stage adds:**
+- Upgraded model to `Qwen/Qwen2.5-7B-Instruct` (bf16) — large enough for KV cache pressure to be the binding constraint
+- Four controlled experiments varying one vLLM config lever at a time, each with a kubectl patch script
+- Load generators: `ramp_load_test.py` (concurrency ramp 8→16→24) and `load_test_chunked_prefill.py` (multi-turn + injector thread)
+- HuggingFace model cache persisted across pod restarts via hostPath volume — eliminates re-download between experiment runs
+
+**Hardware:** 1× H100 SXM (`1gpu-16vcpu-200gb`), vLLM V1, `Qwen/Qwen2.5-7B-Instruct`
+
+**Experiments:**
+
+| Experiment | Variable | Key Finding | Issue |
+|---|---|---|---|
+| [Exp 1 — KV Cache Size vs Throughput](https://github.com/jtsai24/ai-infra-demo/issues/5) | `gpu_memory_utilization` 0.30 vs 0.70 | At 0.30, KV cache hit 100% and TTFT p95 climbed to ~6s with ~8 requests queued; at 0.70, queue stayed at 0 and TTFT p95 ~3.5s | #5 |
+| [Exp 2 — Prefix Caching](https://github.com/jtsai24/ai-infra-demo/issues/7) | Prefix cache OFF vs ON | Enabling prefix cache cut TTFT p95 **10×** (4–5s → 0.4–0.5s) and halved KV cache consumption under multi-turn load | #7 |
+| [Exp 3 — Weight Quantization](https://github.com/jtsai24/ai-infra-demo/issues/8) | bf16 vs INT4 GPTQ | INT4 weights 2.6× smaller (14GB → 5.3GB), freed 50% more KV cache headroom, TPOT improved 27%, 38% more requests completed in same window | #8 |
+| [Exp 4 — Chunked Prefill](https://github.com/jtsai24/ai-infra-demo/issues/9) | Chunked prefill OFF vs ON | Without chunking, a 2000-token inject caused 10–15× TPOT spikes (6ms → 50–93ms) in concurrent decode sessions; chunking eliminated all spikes | #9 |
+
+**Scripts:**
+
+| Script | Purpose |
+|---|---|
+| `scripts/nebius-3-kv-expr/ramp_load_test.py` | Concurrency ramp 8→16→24, configurable stage duration |
+| `scripts/nebius-3-kv-expr/load_test_chunked_prefill.py` | 4 multi-turn sessions + injector thread firing ~2000-token cold prompts every 15s |
+| `scripts/nebius-3-kv-expr/patch_exp2a.sh` / `patch_exp2b.sh` | kubectl patches for Exp 2 (prefix caching OFF vs ON) |
+| `scripts/nebius-3-kv-expr/patch_exp3a.sh` / `patch_exp3b.sh` | kubectl patches for Exp 3 (bf16 vs INT4 GPTQ) |
+| `scripts/nebius-3-kv-expr/patch_exp4a.sh` / `patch_exp4b.sh` | kubectl patches for Exp 4 (chunked prefill OFF vs ON) |
+
+**Raw benchmark outputs:** [`benchmarks/nebius-3-kv-expr/`](benchmarks/nebius-3-kv-expr/)
+
+**Status:** Complete.
+
+---
+
 ## Tradeoffs & Known Limitations
 
 **Why Terraform over Pulumi:** Terraform's declarative model does not natively support imperative ordering of side effects. The Nebius managed Kubernetes provider writes cluster credentials to `~/.kube/config` via a CLI command (`nebius mk8s v1 cluster get-credentials`) rather than emitting ExecCredential JSON to stdout, which means the kubeconfig population cannot be expressed as a Terraform resource. This forces a manual step between Stage 1 (cluster + node group) and Stage 2 (Kubernetes + Helm resources), breaking the single-apply declarative model. Nebius provides an official Pulumi provider that would solve this cleanly — since Pulumi uses real Go/Python code, the credential fetch can be expressed as a regular function call with explicit ordering, enabling a single `pulumi up` with no manual intervention. Terraform was chosen here for portfolio visibility given its dominance in AI infra shops, but this is the concrete cost of that choice.
