@@ -1,0 +1,293 @@
+jimmy@Mac ai-infra-demo % python3 kv-inference/scripts/nebius-3-kv-expr/load_test_chunked_prefill.py \
+--url http://195.242.29.28:30800 --model qwen-7b \
+--mode mixed --concurrency 4 --continuous --inject-interval 15
+Model:       qwen-7b
+URL:         http://195.242.29.28:30800/v1/chat/completions
+Concurrency: 4
+Turns:       5
+Think time:  0.0s
+
+[S4 T1] TTFT: 388.8 ms  |  TPOT: 6.2 ms/token  |  Tokens: 580
+[S3 T1] TTFT: 375.8 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S1 T1] TTFT: 400.8 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S4 T2] TTFT: 389.2 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S3 T2] TTFT: 378.1 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S1 T2] TTFT: 393.0 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S3 T3] TTFT: 363.2 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S1 T3] TTFT: 364.9 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+
+[INJECT 1] Firing cold ~2000-token prompt...
+[S3 T4] TTFT: 360.4 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S1 T4] TTFT: 366.9 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[INJECT 1] TTFT: 382.6 ms
+[S3 T5] TTFT: 398.3 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S1 T5] TTFT: 520.2 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S6 T1] TTFT: 588.9 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S6 T2] TTFT: 353.5 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S6 T3] TTFT: 394.8 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+
+[INJECT 2] Firing cold ~2000-token prompt...
+[INJECT 2] TTFT: 367.0 ms
+[S2 T1] TTFT: 393.9 ms  |  TPOT: 84.2 ms/token  |  Tokens: 500
+[S2 T2] TTFT: 359.3 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S2 T3] TTFT: 375.8 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S4 T3] TTFT: 393.2 ms  |  TPOT: 73.4 ms/token  |  Tokens: 600
+
+[INJECT 3] Firing cold ~2000-token prompt...
+[INJECT 3] TTFT: 378.9 ms
+[S4 T4] TTFT: 535.5 ms  |  TPOT: 8.2 ms/token  |  Tokens: 600
+[S4 T5] TTFT: 397.1 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S5 T1] TTFT: 409.6 ms  |  TPOT: 73.3 ms/token  |  Tokens: 569
+[S7 T1] TTFT: 355.6 ms  |  TPOT: 6.1 ms/token  |  Tokens: 517
+[S5 T2] TTFT: 359.4 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S7 T2] TTFT: 389.4 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S5 T3] TTFT: 402.8 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+
+[INJECT 4] Firing cold ~2000-token prompt...
+[S7 T3] TTFT: 418.2 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S5 T4] TTFT: 381.0 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[INJECT 4] TTFT: 391.2 ms
+[S7 T4] TTFT: 363.7 ms  |  TPOT: 6.3 ms/token  |  Tokens: 600
+[S6 T4] TTFT: 414.6 ms  |  TPOT: 74.3 ms/token  |  Tokens: 600
+[S5 T5] TTFT: 396.0 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S6 T5] TTFT: 404.1 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+^C
+Stopping — waiting for in-flight requests to finish...
+[S7 T5] TTFT: 782.1 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S8 T1] TTFT: 378.7 ms  |  TPOT: 6.2 ms/token  |  Tokens: 527
+[S2 T4] TTFT: 386.9 ms  |  TPOT: 69.9 ms/token  |  Tokens: 600
+[S9 T1] TTFT: 391.9 ms  |  TPOT: 93.0 ms/token  |  Tokens: 492
+
+Session    Turn   TTFT (ms)    TPOT (ms)    Tokens   Msg count
+------------------------------------------------------------
+1          1      400.8        6.2          600      2
+1          2      393.0        6.2          600      4
+1          3      364.9        6.2          600      6
+1          4      366.9        6.2          600      8
+1          5      520.2        6.2          600      10
+3          1      375.8        6.2          600      2
+3          2      378.1        6.2          600      4
+3          3      363.2        6.2          600      6
+3          4      360.4        6.2          600      8
+3          5      398.3        6.2          600      10
+4          1      388.8        6.2          580      2
+4          2      389.2        6.2          600      4
+4          3      393.2        73.4         600      6
+4          4      535.5        8.2          600      8
+4          5      397.1        6.1          600      10
+5          1      409.6        73.3         569      2
+5          2      359.4        6.1          600      4
+5          3      402.8        6.1          600      6
+5          4      381.0        6.2          600      8
+5          5      396.0        6.2          600      10
+6          1      588.9        6.1          600      2
+6          2      353.5        6.1          600      4
+6          3      394.8        6.1          600      6
+6          4      414.6        74.3         600      8
+6          5      404.1        6.2          600      10
+INJ-1      1      382.6        6.2          600      1
+INJ-2      1      367.0        6.1          600      1
+INJ-3      1      378.9        6.2          600      1
+INJ-4      1      391.2        6.2          600      1
+
+--- Chat sessions (25 requests) ---
+TTFT  p50: 393 ms  p95: 536 ms
+
+--- Cold inject (4 requests) ---
+TTFT  p50: 381 ms  p95: 391 ms
+
+
+
+jimmy@Mac ai-infra-demo % python3 kv-inference/scripts/nebius-3-kv-expr/load_test_chunked_prefill.py \
+--url http://195.242.29.28:30800 --model qwen-7b \
+--mode mixed --concurrency 4 --continuous --inject-interval 15
+Model:       qwen-7b
+URL:         http://195.242.29.28:30800/v1/chat/completions
+Concurrency: 4
+Turns:       5
+Think time:  0.0s
+
+[S3 T1] TTFT: 407.4 ms  |  TPOT: 6.2 ms/token  |  Tokens: 473
+[S2 T1] TTFT: 401.9 ms  |  TPOT: 6.2 ms/token  |  Tokens: 496
+[S1 T1] TTFT: 371.3 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S4 T1] TTFT: 371.2 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S3 T2] TTFT: 358.0 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S2 T2] TTFT: 394.8 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S4 T2] TTFT: 393.0 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S1 T2] TTFT: 393.5 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S3 T3] TTFT: 375.2 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S2 T3] TTFT: 359.7 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S4 T3] TTFT: 363.5 ms  |  TPOT: 6.3 ms/token  |  Tokens: 600
+
+[INJECT 1] Firing cold ~2000-token prompt...
+[S3 T4] TTFT: 383.1 ms  |  TPOT: 6.3 ms/token  |  Tokens: 600
+[S2 T4] TTFT: 397.0 ms  |  TPOT: 6.3 ms/token  |  Tokens: 600
+[S4 T4] TTFT: 397.6 ms  |  TPOT: 6.3 ms/token  |  Tokens: 600
+[INJECT 1] TTFT: 379.4 ms
+[S3 T5] TTFT: 405.4 ms  |  TPOT: 6.3 ms/token  |  Tokens: 600
+[S2 T5] TTFT: 366.0 ms  |  TPOT: 6.3 ms/token  |  Tokens: 600
+[S4 T5] TTFT: 364.4 ms  |  TPOT: 6.3 ms/token  |  Tokens: 600
+[S6 T1] TTFT: 387.4 ms  |  TPOT: 6.2 ms/token  |  Tokens: 521
+[S5 T1] TTFT: 355.1 ms  |  TPOT: 6.2 ms/token  |  Tokens: 594
+[S7 T1] TTFT: 403.0 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S6 T2] TTFT: 360.1 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S5 T2] TTFT: 378.5 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S7 T2] TTFT: 424.1 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S5 T3] TTFT: 393.4 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S7 T3] TTFT: 380.2 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+
+[INJECT 2] Firing cold ~2000-token prompt...
+[S5 T4] TTFT: 386.6 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S7 T4] TTFT: 379.4 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S5 T5] TTFT: 370.0 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S7 T5] TTFT: 371.4 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S8 T1] TTFT: 368.8 ms  |  TPOT: 6.1 ms/token  |  Tokens: 557
+[S9 T1] TTFT: 381.6 ms  |  TPOT: 6.1 ms/token  |  Tokens: 559
+[S8 T2] TTFT: 382.3 ms  |  TPOT: 6.4 ms/token  |  Tokens: 600
+[S9 T2] TTFT: 360.2 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S1 T3] TTFT: 387.7 ms  |  TPOT: 71.0 ms/token  |  Tokens: 600
+[S8 T3] TTFT: 363.7 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S9 T3] TTFT: 360.1 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S1 T4] TTFT: 414.9 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S8 T4] TTFT: 417.8 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S9 T4] TTFT: 366.0 ms  |  TPOT: 6.3 ms/token  |  Tokens: 600
+[S1 T5] TTFT: 367.5 ms  |  TPOT: 6.3 ms/token  |  Tokens: 600
+[S8 T5] TTFT: 374.4 ms  |  TPOT: 6.3 ms/token  |  Tokens: 600
+[S9 T5] TTFT: 366.3 ms  |  TPOT: 6.3 ms/token  |  Tokens: 600
+[S10 T1] TTFT: 378.3 ms  |  TPOT: 6.2 ms/token  |  Tokens: 598
+[S11 T1] TTFT: 391.6 ms  |  TPOT: 6.2 ms/token  |  Tokens: 494
+[S12 T1] TTFT: 396.1 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S11 T2] TTFT: 370.5 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S12 T2] TTFT: 369.5 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S6 T3] TTFT: 386.3 ms  |  TPOT: 72.2 ms/token  |  Tokens: 600
+[S12 T3] TTFT: 384.6 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S6 T4] TTFT: 381.8 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S12 T4] TTFT: 399.7 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S6 T5] TTFT: 404.0 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[INJECT 2] TTFT: 392.5 ms
+[S12 T5] TTFT: 401.3 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S14 T1] TTFT: 359.4 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S14 T2] TTFT: 355.9 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S14 T3] TTFT: 357.6 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+
+[INJECT 3] Firing cold ~2000-token prompt...
+[S14 T4] TTFT: 422.8 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[INJECT 3] TTFT: 382.1 ms
+[S14 T5] TTFT: 403.0 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S15 T1] TTFT: 365.7 ms  |  TPOT: 6.1 ms/token  |  Tokens: 569
+[S13 T1] TTFT: 378.0 ms  |  TPOT: 50.7 ms/token  |  Tokens: 528
+[S10 T2] TTFT: 417.2 ms  |  TPOT: 71.2 ms/token  |  Tokens: 600
+[S15 T2] TTFT: 476.5 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S11 T3] TTFT: 386.7 ms  |  TPOT: 72.0 ms/token  |  Tokens: 600
+[S15 T3] TTFT: 363.9 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+
+[INJECT 4] Firing cold ~2000-token prompt...
+[S11 T4] TTFT: 395.0 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S15 T4] TTFT: 424.8 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S11 T5] TTFT: 369.4 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S15 T5] TTFT: 391.2 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S16 T1] TTFT: 353.8 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S17 T1] TTFT: 388.5 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S16 T2] TTFT: 396.1 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S17 T2] TTFT: 378.6 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S16 T3] TTFT: 385.5 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S17 T3] TTFT: 368.5 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S16 T4] TTFT: 379.4 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S17 T4] TTFT: 422.2 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S16 T5] TTFT: 367.6 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+[S17 T5] TTFT: 367.5 ms  |  TPOT: 6.2 ms/token  |  Tokens: 600
+^C
+Stopping — waiting for in-flight requests to finish...
+[S18 T1] TTFT: 378.6 ms  |  TPOT: 6.1 ms/token  |  Tokens: 600
+[S13 T2] TTFT: 385.1 ms  |  TPOT: 66.7 ms/token  |  Tokens: 600
+[S10 T3] TTFT: 384.6 ms  |  TPOT: 66.7 ms/token  |  Tokens: 600
+[INJECT 4] TTFT: 391.0 ms
+[S19 T1] TTFT: 393.8 ms  |  TPOT: 86.4 ms/token  |  Tokens: 572
+
+Session    Turn   TTFT (ms)    TPOT (ms)    Tokens   Msg count
+------------------------------------------------------------
+1          1      371.3        6.2          600      2
+1          2      393.5        6.2          600      4
+1          3      387.7        71.0         600      6
+1          4      414.9        6.2          600      8
+1          5      367.5        6.3          600      10
+11         1      391.6        6.2          494      2
+11         2      370.5        6.2          600      4
+11         3      386.7        72.0         600      6
+11         4      395.0        6.2          600      8
+11         5      369.4        6.2          600      10
+12         1      396.1        6.2          600      2
+12         2      369.5        6.1          600      4
+12         3      384.6        6.2          600      6
+12         4      399.7        6.2          600      8
+12         5      401.3        6.2          600      10
+14         1      359.4        6.1          600      2
+14         2      355.9        6.1          600      4
+14         3      357.6        6.1          600      6
+14         4      422.8        6.1          600      8
+14         5      403.0        6.1          600      10
+15         1      365.7        6.1          569      2
+15         2      476.5        6.2          600      4
+15         3      363.9        6.1          600      6
+15         4      424.8        6.2          600      8
+15         5      391.2        6.2          600      10
+16         1      353.8        6.1          600      2
+16         2      396.1        6.1          600      4
+16         3      385.5        6.1          600      6
+16         4      379.4        6.2          600      8
+16         5      367.6        6.2          600      10
+17         1      388.5        6.1          600      2
+17         2      378.6        6.1          600      4
+17         3      368.5        6.2          600      6
+17         4      422.2        6.2          600      8
+17         5      367.5        6.2          600      10
+2          1      401.9        6.2          496      2
+2          2      394.8        6.2          600      4
+2          3      359.7        6.2          600      6
+2          4      397.0        6.3          600      8
+2          5      366.0        6.3          600      10
+3          1      407.4        6.2          473      2
+3          2      358.0        6.2          600      4
+3          3      375.2        6.2          600      6
+3          4      383.1        6.3          600      8
+3          5      405.4        6.3          600      10
+4          1      371.2        6.2          600      2
+4          2      393.0        6.2          600      4
+4          3      363.5        6.3          600      6
+4          4      397.6        6.3          600      8
+4          5      364.4        6.3          600      10
+5          1      355.1        6.2          594      2
+5          2      378.5        6.2          600      4
+5          3      393.4        6.2          600      6
+5          4      386.6        6.2          600      8
+5          5      370.0        6.2          600      10
+6          1      387.4        6.2          521      2
+6          2      360.1        6.2          600      4
+6          3      386.3        72.2         600      6
+6          4      381.8        6.2          600      8
+6          5      404.0        6.2          600      10
+7          1      403.0        6.1          600      2
+7          2      424.1        6.2          600      4
+7          3      380.2        6.2          600      6
+7          4      379.4        6.2          600      8
+7          5      371.4        6.2          600      10
+8          1      368.8        6.1          557      2
+8          2      382.3        6.4          600      4
+8          3      363.7        6.2          600      6
+8          4      417.8        6.2          600      8
+8          5      374.4        6.3          600      10
+9          1      381.6        6.1          559      2
+9          2      360.2        6.1          600      4
+9          3      360.1        6.2          600      6
+9          4      366.0        6.3          600      8
+9          5      366.3        6.3          600      10
+INJ-1      1      379.4        6.3          600      1
+INJ-2      1      392.5        78.1         600      1
+INJ-3      1      382.1        6.2          600      1
+INJ-4      1      391.0        68.8         600      1
+
+--- Chat sessions (75 requests) ---
+TTFT  p50: 382 ms  p95: 423 ms
+
+--- Cold inject (4 requests) ---
+TTFT  p50: 387 ms  p95: 392 ms
