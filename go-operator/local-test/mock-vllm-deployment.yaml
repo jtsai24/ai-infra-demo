@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mock-vllm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mock-vllm
+  template:              # ← this whole block IS the pod spec
+    metadata:
+      labels:
+        app: mock-vllm
+    spec:
+      containers:
+      - name: mock-vllm
+        image: nginx:alpine
+        ports:
+        - containerPort: 80

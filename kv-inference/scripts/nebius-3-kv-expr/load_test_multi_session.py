@@ -5,7 +5,7 @@ Runs N sessions in parallel, each maintaining independent conversation history.
 Measures TTFT and TPOT per turn across all sessions.
 
 Local:  python load_test_multi_session.py
-Nebius: python load_test_multi_session.py --url http://<node-ip>:30800 --model Qwen/Qwen2.5-0.5B-Instruct
+Nebius: python3 load_test_multi_session.py --url http://<node-ip>:30800 --model Qwen/Qwen2.5-0.5B-Instruct
 """
 
 import argparse
