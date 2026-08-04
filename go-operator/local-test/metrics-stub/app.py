@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
@@ -17,6 +17,25 @@ def metrics():
         f"vllm_num_requests_waiting {state['num_requests_waiting']}\n"
     )
     return body, 200, {"Content-Type": "text/plain; version=0.0.4"}
+
+@app.route("/set", methods=["POST"])
+def set_metrics():
+    """
+    Update the fake metric values at runtime.
+
+    Accepts either a JSON body or query params, using short keys:
+      curl -X POST localhost:8080/set -H "Content-Type: application/json" \
+           -d '{"kv": 0.85, "requests": 5}'
+      curl -X POST "localhost:8080/set?kv=0.85&requests=5"
+    """
+    data = request.get_json(silent=True) or request.args
+
+    if "kv" in data:
+        state["kv_cache_usage_perc"] = float(data["kv"])
+    if "requests" in data:
+        state["num_requests_waiting"] = int(data["requests"])
+
+    return jsonify(state), 200
 
 
 if __name__ == "__main__":
