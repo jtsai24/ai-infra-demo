@@ -14,7 +14,7 @@ A portfolio project demonstrating AI infrastructure engineering skills targeting
 - Transport confirmed as `NET/IB/GDRDMA` via NCCL debug logs
 
 ### [kv-inference/](kv-inference/) — KV-Aware Inference Platform 🚧
-vLLM inference gateway with a custom Go Kubernetes operator. In progress.
+vLLM inference platform with full observability — local validation on MacBook Air M4, then staged deployment on Nebius H100.
 
 **Nebius Session 1 — vLLM on H100 (single node):**
 - Provisioned Nebius managed k8s cluster with 1× H100 SXM node via Terraform
@@ -47,6 +47,20 @@ Four controlled experiments measuring how vLLM configuration levers affect KV ca
 - Loki + Promtail collecting vLLM logs
 - Grafana dashboard with KV cache, request pipeline, latency, and log panels
 - Load test script with one-shot and continuous modes
+
+### [go-operator/](go-operator/) — Kubernetes Operator for vLLM Autoscaling 🚧
+Custom Go Kubernetes operator (kubebuilder) that watches a `WorkloadLifecycle` CRD, polls a vLLM deployment's KV cache usage, and scales replicas within configured bounds — a hysteresis band between scale-up and scale-down thresholds prevents flapping.
+
+**Built and validated locally (OrbStack Kubernetes), no GPU spend required:**
+- `mock-vllm` (nginx stand-in) + `metrics-stub` (Flask, fakes Prometheus `/metrics`) as local scaling target and controllable input signal
+- `WorkloadLifecycle` CRD + `MetricsProvider` interface, decoupling the reconciler from where metrics come from
+- Full reconcile loop: CR-driven metrics fetch → threshold comparison → real `Deployment.Spec.Replicas` patch, verified against live cluster state (`kubectl get deploy -w`) at every stage
+- Scale-up capped at `MaxReplicas`, scale-down floored at `MinReplicas`, hysteresis band holds steady in between — all three paths tested live
+- `Reconcile` refactored from a single flat function into per-concern helpers (`observeMetrics`, `observeDeployment`, `computeDesiredReplicas`, `makeAdjustmentIfNeeded`)
+
+Full build log and tracking issue: [#18](https://github.com/jtsai24/ai-infra-demo/issues/18)
+
+**Not yet started:** status writeback on the CR, Xid cordon/drain action, metric-gated rollback, deployment against a real Nebius H100 cluster with an actual vLLM instance.
 
 ## Stack
 
