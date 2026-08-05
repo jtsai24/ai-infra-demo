@@ -1,0 +1,9 @@
+apiVersion: lifecycle.ai-infra.demo/v1alpha1
+kind: WorkloadLifecycle
+metadata:
+  labels:
+    app.kubernetes.io/name: go-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: workloadlifecycle-sample
+spec:
+  # TODO(user): Add fields here
