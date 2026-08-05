@@ -1,135 +1,72 @@
-# go-operator
-// TODO(user): Add simple overview of use/purpose
+# Go Kubernetes Operator — vLLM Autoscaler
 
-## Description
-// TODO(user): An in-depth paragraph about your project and overview of use
+A custom Kubernetes operator (Go, kubebuilder) that watches a `WorkloadLifecycle` custom resource, polls a vLLM deployment's KV cache usage via a metrics endpoint, and scales the deployment's replica count within configured bounds — a hysteresis band between the scale-up and scale-down thresholds prevents flapping at the boundary.
 
-## Getting Started
+## What this demonstrates
 
-### Prerequisites
-- go version v1.24.6+
-- docker version 17.03+.
-- kubectl version v1.11.3+.
-- Access to a Kubernetes v1.11.3+ cluster.
+- Kubebuilder project scaffolding: CRD types, controller, RBAC markers, manifest generation (`make manifests`/`make generate`)
+- CRD schema design: kubebuilder validation markers, the implicit-required-field behavior of `controller-gen` (a field is required unless its json tag carries `omitempty`), and why `float64` fields are rejected in favor of `int32` percentages
+- A `MetricsProvider` interface decoupling the reconciler from where metrics come from (HTTP stub today, Prometheus later)
+- Polling-based reconciliation (`RequeueAfter`) vs. push/event-driven reconciliation, and the difference between in-cluster DNS and host-machine networking (`kubectl port-forward`)
+- A real architectural bug found and fixed: a metrics provider built once in `main.go` can't reflect per-CR configuration — fixed by reading `wl.Spec` fresh on every reconcile
+- Splitting a flat `Reconcile` function into per-concern helpers (`observeMetrics`, `observeDeployment`, `computeDesiredReplicas`, `makeAdjustmentIfNeeded`) so each sits at one abstraction level
 
-### To Deploy on the cluster
-**Build and push your image to the location specified by `IMG`:**
+## Local dev environment
 
-```sh
-make docker-build docker-push IMG=<some-registry>/go-operator:tag
+Built and validated entirely without a real vLLM instance or GPU spend:
+
+- **`mock-vllm`** — an `nginx:alpine` Deployment standing in for vLLM. The operator only ever acts on `spec.replicas`, so the actual served content is irrelevant.
+- **`metrics-stub`** — a small Flask app faking a Prometheus-style `/metrics` endpoint, with a `/set` endpoint to inject KV cache usage values at runtime and watch the operator react.
+
+Both run as pods in a local OrbStack Kubernetes cluster, giving near copy-paste manifests for a later deployment against a real Nebius cluster.
+
+## How it works
+
+```
+WorkloadLifecycle CR  →  MetricsProvider.GetMetrics()  →  compare vs. thresholds  →  patch Deployment.Spec.Replicas
+     (spec: thresholds,        (HTTP GET, parses               (hysteresis band:            (r.Update, full-object
+      target deployment,        Prometheus text format)          scale up / hold /            patch, re-polled every
+      metrics endpoint)                                          scale down)                  RequeueAfter)
 ```
 
-**NOTE:** This image ought to be published in the personal registry you specified.
-And it is required to have access to pull the image from the working environment.
-Make sure you have the proper permission to the registry if the above commands don’t work.
+Every reconcile re-fetches the CR and rebuilds a fresh `MetricsProvider` from its spec — correctly scoped per-CR (multiple `WorkloadLifecycle` objects, each targeting a different deployment, work without any shared mutable state) while still reusing a single pooled `http.Client` for connection efficiency.
 
-**Install the CRDs into the cluster:**
+## Development log
 
-```sh
-make install
+| Stage | What | Issue |
+|---|---|---|
+| 1 | `mock-vllm` Deployment manifest + validation | [#10](https://github.com/jtsai24/ai-infra-demo/issues/10) |
+| 2 | Flask metrics-stub — `/metrics` + `/set` | [#11](https://github.com/jtsai24/ai-infra-demo/issues/11) |
+| 3 | Containerize + deploy metrics-stub to Kubernetes | [#12](https://github.com/jtsai24/ai-infra-demo/issues/12) |
+| 4 | `WorkloadLifecycle` CRD types + `MetricsProvider` | [#13](https://github.com/jtsai24/ai-infra-demo/issues/13) |
+| 5 | Wire `Reconcile` to `MetricsProvider`, log observed metrics | [#14](https://github.com/jtsai24/ai-infra-demo/issues/14) |
+| 6 | Scale-up decision + Deployment patch | [#15](https://github.com/jtsai24/ai-infra-demo/issues/15) |
+| 7 | Scale-down threshold — hysteresis band | [#16](https://github.com/jtsai24/ai-infra-demo/issues/16) |
+| 8 | Refactor `Reconcile` into per-concern helpers | [#17](https://github.com/jtsai24/ai-infra-demo/issues/17) |
+
+Full tracking issue with build order and status: [#18](https://github.com/jtsai24/ai-infra-demo/issues/18)
+
+## Repo layout
+
+```
+go-operator/
+  api/v1alpha1/                 WorkloadLifecycle CRD types
+  internal/controller/          Reconcile loop, MetricsProvider
+  config/crd, config/rbac, ...  kubebuilder-generated manifests
+  local-test/                   mock-vllm manifest, metrics-stub (Flask app + Dockerfile)
 ```
 
-**Deploy the Manager to the cluster with the image specified by `IMG`:**
+## Key lessons learned
 
-```sh
-make deploy IMG=<some-registry>/go-operator:tag
-```
+- `controller-gen` rejects `float64` fields ("highly discouraged... support varies across languages") — use scaled integers instead, matching real Kubernetes API conventions (e.g. HPA's `averageUtilization`)
+- A Go struct field becomes required in the generated CRD schema by default; `omitempty` (not a `+kubebuilder:validation:Required` marker) is what makes it optional
+- `metrics-stub`'s `ClusterIP` Service is only reachable from inside the cluster — `make run` executes the operator on the host machine, not in-cluster, so it needs `kubectl port-forward` to reach it, exactly like a manual `curl` test would
+- Reconciliation is polling, not push — an external metric changing triggers nothing on its own; `RequeueAfter` is what drives repeated observation
+- A single global cache for the metrics provider would be actively wrong once more than one CR exists (each needs independently-tracked config, concurrent reconciles would race on shared state) — building a fresh provider per reconcile while sharing only the pooled `http.Client` is both simpler and correct for any number of CRs
 
-> **NOTE**: If you encounter RBAC errors, you may need to grant yourself cluster-admin
-privileges or be logged in as admin.
+## Not yet started
 
-**Create instances of your solution**
-You can apply the samples (examples) from the config/sample:
-
-```sh
-kubectl apply -k config/samples/
-```
-
->**NOTE**: Ensure that the samples has default values to test it out.
-
-### To Uninstall
-**Delete the instances (CRs) from the cluster:**
-
-```sh
-kubectl delete -k config/samples/
-```
-
-**Delete the APIs(CRDs) from the cluster:**
-
-```sh
-make uninstall
-```
-
-**UnDeploy the controller from the cluster:**
-
-```sh
-make undeploy
-```
-
-## Project Distribution
-
-Following the options to release and provide this solution to the users.
-
-### By providing a bundle with all YAML files
-
-1. Build the installer for the image built and published in the registry:
-
-```sh
-make build-installer IMG=<some-registry>/go-operator:tag
-```
-
-**NOTE:** The makefile target mentioned above generates an 'install.yaml'
-file in the dist directory. This file contains all the resources built
-with Kustomize, which are necessary to install this project without its
-dependencies.
-
-2. Using the installer
-
-Users can just run 'kubectl apply -f <URL for YAML BUNDLE>' to install
-the project, i.e.:
-
-```sh
-kubectl apply -f https://raw.githubusercontent.com/<org>/go-operator/<tag or branch>/dist/install.yaml
-```
-
-### By providing a Helm Chart
-
-1. Build the chart using the optional helm plugin
-
-```sh
-kubebuilder edit --plugins=helm/v2-alpha
-```
-
-2. See that a chart was generated under 'dist/chart', and users
-can obtain this solution from there.
-
-**NOTE:** If you change the project, you need to update the Helm Chart
-using the same command above to sync the latest changes. Furthermore,
-if you create webhooks, you need to use the above command with
-the '--force' flag and manually ensure that any custom configuration
-previously added to 'dist/chart/values.yaml' or 'dist/chart/manager/manager.yaml'
-is manually re-applied afterwards.
-
-## Contributing
-// TODO(user): Add detailed information on how you would like others to contribute to this project
-
-**NOTE:** Run `make help` for more information on all potential `make` targets
-
-More information can be found via the [Kubebuilder Documentation](https://book.kubebuilder.io/introduction.html)
-
-## License
-
-Copyright 2026.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
+- Status writeback on the CR (cross-cutting)
+- Xid cordon/drain action
+- Metric-gated rollback action
+- Deployment against a real Nebius H100 cluster with an actual vLLM instance behind the operator
