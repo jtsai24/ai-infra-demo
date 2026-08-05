@@ -21,6 +21,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -58,6 +59,30 @@ func (r *WorkloadLifecycleReconciler) Reconcile(ctx context.Context, req ctrl.Re
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
+	metrics, err := r.observeMetrics(ctx, logger, &wl)
+	if err != nil {
+		logger.Error(err, "failed to fetch metrics")
+		return ctrl.Result{RequeueAfter: 15 * time.Second}, nil
+	}
+
+	deploy, currentReplicas, err := r.observeDeployment(ctx, &wl)
+	if err != nil {
+		logger.Error(err, "unable to fetch target deployment", "deployment", wl.Spec.TargetDeployment)
+		return ctrl.Result{RequeueAfter: 15 * time.Second}, nil
+	}
+
+	desiredReplicas := computeDesiredReplicas(currentReplicas, metrics.KVCacheUsagePercent, wl.Spec)
+
+	if err := r.makeAdjustmentIfNeeded(ctx, logger, &deploy, currentReplicas, desiredReplicas, metrics.KVCacheUsagePercent, wl.Spec.KVCacheThresholdPercent); err != nil {
+		logger.Error(err, "failed to patch deployment replicas")
+		return ctrl.Result{RequeueAfter: 15 * time.Second}, err
+	}
+
+	return ctrl.Result{RequeueAfter: 15 * time.Second}, nil
+}
+
+// observeMetrics fetches current metrics from the workload's metrics endpoint.
+func (r *WorkloadLifecycleReconciler) observeMetrics(ctx context.Context, logger logr.Logger, wl *lifecyclev1alpha1.WorkloadLifecycle) (Metrics, error) {
 	provider := &HTTPMetricsProvider{
 		Endpoint: wl.Spec.MetricsEndpoint,
 		Client:   r.HTTPClient,
@@ -65,8 +90,7 @@ func (r *WorkloadLifecycleReconciler) Reconcile(ctx context.Context, req ctrl.Re
 
 	metrics, err := provider.GetMetrics(ctx)
 	if err != nil {
-		logger.Error(err, "failed to fetch metrics")
-		return ctrl.Result{RequeueAfter: 15 * time.Second}, nil
+		return Metrics{}, err
 	}
 
 	logger.Info("observed metrics",
@@ -74,14 +98,18 @@ func (r *WorkloadLifecycleReconciler) Reconcile(ctx context.Context, req ctrl.Re
 		"numRequestsWaiting", metrics.NumRequestsWaiting,
 	)
 
+	return metrics, nil
+}
+
+// observeDeployment fetches the target Deployment and its current replica count.
+func (r *WorkloadLifecycleReconciler) observeDeployment(ctx context.Context, wl *lifecyclev1alpha1.WorkloadLifecycle) (appsv1.Deployment, int32, error) {
 	var deploy appsv1.Deployment
 	deployKey := client.ObjectKey{
 		Namespace: wl.Namespace,
 		Name:      wl.Spec.TargetDeployment,
 	}
 	if err := r.Get(ctx, deployKey, &deploy); err != nil {
-		logger.Error(err, "unable to fetch target deployment", "deployment", wl.Spec.TargetDeployment)
-		return ctrl.Result{RequeueAfter: 15 * time.Second}, nil
+		return appsv1.Deployment{}, 0, err
 	}
 
 	var currentReplicas int32 = 1
@@ -89,36 +117,52 @@ func (r *WorkloadLifecycleReconciler) Reconcile(ctx context.Context, req ctrl.Re
 		currentReplicas = *deploy.Spec.Replicas
 	}
 
-	desiredReplicas := currentReplicas
-	if metrics.KVCacheUsagePercent > wl.Spec.KVCacheThresholdPercent {
-		desiredReplicas = currentReplicas + 1
-		if desiredReplicas > wl.Spec.MaxReplicas {
-			desiredReplicas = wl.Spec.MaxReplicas
-		}
-	}
+	return deploy, currentReplicas, nil
+}
 
-	if desiredReplicas != currentReplicas {
-		logger.Info("scaling decision",
-			"currentReplicas", currentReplicas,
-			"desiredReplicas", desiredReplicas,
-			"kvCacheUsagePercent", metrics.KVCacheUsagePercent,
-			"thresholdPercent", wl.Spec.KVCacheThresholdPercent,
-		)
-
-		deploy.Spec.Replicas = &desiredReplicas
-		if err := r.Update(ctx, &deploy); err != nil {
-			logger.Error(err, "failed to patch deployment replicas")
-			return ctrl.Result{RequeueAfter: 15 * time.Second}, err
-		}
-	} else {
+// makeAdjustmentIfNeeded logs the scaling decision and, if desiredReplicas
+// differs from currentReplicas, patches the Deployment to match.
+func (r *WorkloadLifecycleReconciler) makeAdjustmentIfNeeded(ctx context.Context, logger logr.Logger, deploy *appsv1.Deployment, currentReplicas, desiredReplicas, kvCacheUsagePercent, thresholdPercent int32) error {
+	if desiredReplicas == currentReplicas {
 		logger.Info("no scaling action needed",
 			"currentReplicas", currentReplicas,
-			"kvCacheUsagePercent", metrics.KVCacheUsagePercent,
-			"thresholdPercent", wl.Spec.KVCacheThresholdPercent,
+			"kvCacheUsagePercent", kvCacheUsagePercent,
+			"thresholdPercent", thresholdPercent,
 		)
+		return nil
 	}
 
-	return ctrl.Result{RequeueAfter: 15 * time.Second}, nil
+	logger.Info("scaling decision",
+		"currentReplicas", currentReplicas,
+		"desiredReplicas", desiredReplicas,
+		"kvCacheUsagePercent", kvCacheUsagePercent,
+		"thresholdPercent", thresholdPercent,
+	)
+
+	deploy.Spec.Replicas = &desiredReplicas
+	return r.Update(ctx, deploy)
+}
+
+// computeDesiredReplicas applies the hysteresis-band scaling rule: scale up
+// when KV cache pressure crosses the high threshold, scale down when it
+// drops below the low threshold, otherwise hold steady.
+func computeDesiredReplicas(currentReplicas, kvCacheUsagePercent int32, spec lifecyclev1alpha1.WorkloadLifecycleSpec) int32 {
+	switch {
+	case kvCacheUsagePercent > spec.KVCacheThresholdPercent:
+		desired := currentReplicas + 1
+		if desired > spec.MaxReplicas {
+			desired = spec.MaxReplicas
+		}
+		return desired
+	case kvCacheUsagePercent < spec.KVCacheScaleDownThresholdPercent:
+		desired := currentReplicas - 1
+		if desired < spec.MinReplicas {
+			desired = spec.MinReplicas
+		}
+		return desired
+	default:
+		return currentReplicas
+	}
 }
 
 // SetupWithManager sets up the controller with the Manager.
