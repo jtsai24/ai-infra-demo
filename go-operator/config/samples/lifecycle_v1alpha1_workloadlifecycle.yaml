@@ -9,5 +9,6 @@ spec:
   targetDeployment: mock-vllm
   metricsEndpoint: http://localhost:8080/metrics
   kvCacheThresholdPercent: 80
+  kvCacheScaleDownThresholdPercent: 25
   minReplicas: 1
   maxReplicas: 3

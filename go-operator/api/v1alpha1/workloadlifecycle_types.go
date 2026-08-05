@@ -41,6 +41,10 @@ type WorkloadLifecycleSpec struct {
 	// +kubebuilder:validation:Maximum=100
 	KVCacheThresholdPercent int32 `json:"kvCacheThresholdPercent"`
 
+	// KVCacheScaleDownThresholdPercent: scale down when usage drops below this value.
+	// Must be lower than KVCacheThresholdPercent to create a hysteresis band and avoid flapping.
+	KVCacheScaleDownThresholdPercent int32 `json:"kvCacheScaleDownThresholdPercent"`
+
 	// MinReplicas is the replica count when KV cache usage is below threshold.
 	// +kubebuilder:validation:Required
 	// +kubebuilder:validation:Minimum=1
