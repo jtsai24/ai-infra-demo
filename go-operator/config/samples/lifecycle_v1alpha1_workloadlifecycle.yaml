@@ -6,4 +6,8 @@ metadata:
     app.kubernetes.io/managed-by: kustomize
   name: workloadlifecycle-sample
 spec:
-  # TODO(user): Add fields here
+  targetDeployment: mock-vllm
+  metricsEndpoint: http://localhost:8080/metrics
+  kvCacheThresholdPercent: 80
+  minReplicas: 1
+  maxReplicas: 3

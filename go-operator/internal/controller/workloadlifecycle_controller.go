@@ -18,6 +18,8 @@ package controller
 
 import (
 	"context"
+	"net/http"
+	"time"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -30,7 +32,8 @@ import (
 // WorkloadLifecycleReconciler reconciles a WorkloadLifecycle object
 type WorkloadLifecycleReconciler struct {
 	client.Client
-	Scheme *runtime.Scheme
+	Scheme     *runtime.Scheme
+	HTTPClient *http.Client // shared once, reused by every provider instance
 }
 
 // +kubebuilder:rbac:groups=lifecycle.ai-infra.demo,resources=workloadlifecycles,verbs=get;list;watch;create;update;patch;delete
@@ -47,11 +50,30 @@ type WorkloadLifecycleReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.24.1/pkg/reconcile
 func (r *WorkloadLifecycleReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = logf.FromContext(ctx)
+	logger := logf.FromContext(ctx)
+	var wl lifecyclev1alpha1.WorkloadLifecycle
+	if err := r.Get(ctx, req.NamespacedName, &wl); err != nil {
+		logger.Error(err, "unable to fetch WorkloadLifecycle")
+		return ctrl.Result{}, client.IgnoreNotFound(err)
+	}
 
-	// TODO(user): your logic here
+	provider := &HTTPMetricsProvider{
+		Endpoint: wl.Spec.MetricsEndpoint,
+		Client:   r.HTTPClient,
+	}
 
-	return ctrl.Result{}, nil
+	metrics, err := provider.GetMetrics(ctx)
+	if err != nil {
+		logger.Error(err, "failed to fetch metrics")
+		return ctrl.Result{RequeueAfter: 15 * time.Second}, nil
+	}
+
+	logger.Info("observed metrics",
+		"kvCacheUsagePercent", metrics.KVCacheUsagePercent,
+		"numRequestsWaiting", metrics.NumRequestsWaiting,
+	)
+
+	return ctrl.Result{RequeueAfter: 15 * time.Second}, nil
 }
 
 // SetupWithManager sets up the controller with the Manager.
