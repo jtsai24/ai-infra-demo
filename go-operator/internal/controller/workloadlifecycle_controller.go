@@ -21,6 +21,7 @@ import (
 	"net/http"
 	"time"
 
+	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -72,6 +73,50 @@ func (r *WorkloadLifecycleReconciler) Reconcile(ctx context.Context, req ctrl.Re
 		"kvCacheUsagePercent", metrics.KVCacheUsagePercent,
 		"numRequestsWaiting", metrics.NumRequestsWaiting,
 	)
+
+	var deploy appsv1.Deployment
+	deployKey := client.ObjectKey{
+		Namespace: wl.Namespace,
+		Name:      wl.Spec.TargetDeployment,
+	}
+	if err := r.Get(ctx, deployKey, &deploy); err != nil {
+		logger.Error(err, "unable to fetch target deployment", "deployment", wl.Spec.TargetDeployment)
+		return ctrl.Result{RequeueAfter: 15 * time.Second}, nil
+	}
+
+	var currentReplicas int32 = 1
+	if deploy.Spec.Replicas != nil {
+		currentReplicas = *deploy.Spec.Replicas
+	}
+
+	desiredReplicas := currentReplicas
+	if metrics.KVCacheUsagePercent > wl.Spec.KVCacheThresholdPercent {
+		desiredReplicas = currentReplicas + 1
+		if desiredReplicas > wl.Spec.MaxReplicas {
+			desiredReplicas = wl.Spec.MaxReplicas
+		}
+	}
+
+	if desiredReplicas != currentReplicas {
+		logger.Info("scaling decision",
+			"currentReplicas", currentReplicas,
+			"desiredReplicas", desiredReplicas,
+			"kvCacheUsagePercent", metrics.KVCacheUsagePercent,
+			"thresholdPercent", wl.Spec.KVCacheThresholdPercent,
+		)
+
+		deploy.Spec.Replicas = &desiredReplicas
+		if err := r.Update(ctx, &deploy); err != nil {
+			logger.Error(err, "failed to patch deployment replicas")
+			return ctrl.Result{RequeueAfter: 15 * time.Second}, err
+		}
+	} else {
+		logger.Info("no scaling action needed",
+			"currentReplicas", currentReplicas,
+			"kvCacheUsagePercent", metrics.KVCacheUsagePercent,
+			"thresholdPercent", wl.Spec.KVCacheThresholdPercent,
+		)
+	}
 
 	return ctrl.Result{RequeueAfter: 15 * time.Second}, nil
 }
