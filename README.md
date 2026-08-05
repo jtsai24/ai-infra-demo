@@ -58,6 +58,12 @@ Custom Go Kubernetes operator (kubebuilder) that watches a `WorkloadLifecycle` C
 - Scale-up capped at `MaxReplicas`, scale-down floored at `MinReplicas`, hysteresis band holds steady in between — all three paths tested live
 - `Reconcile` refactored from a single flat function into per-concern helpers (`observeMetrics`, `observeDeployment`, `computeDesiredReplicas`, `makeAdjustmentIfNeeded`)
 
+**Key results** (raw test output in [#16](https://github.com/jtsai24/ai-infra-demo/issues/16)):
+- 85% KV cache usage → scale-up capped at `MaxReplicas` (1 → 2 → 3, holds)
+- 15% KV cache usage → scale-down floored at `MinReplicas` (3 → 2 → 1, holds)
+- 50% KV cache usage (inside the 25–80% hysteresis band) → holds steady, no flapping
+- All three confirmed against two independent sources: operator logs and `kubectl get deploy -w`
+
 Full build log and tracking issue: [#18](https://github.com/jtsai24/ai-infra-demo/issues/18)
 
 **Not yet started:** status writeback on the CR, Xid cordon/drain action, metric-gated rollback, deployment against a real Nebius H100 cluster with an actual vLLM instance.

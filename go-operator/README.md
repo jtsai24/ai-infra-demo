@@ -31,6 +31,25 @@ WorkloadLifecycle CR  →  MetricsProvider.GetMetrics()  →  compare vs. thresh
 
 Every reconcile re-fetches the CR and rebuilds a fresh `MetricsProvider` from its spec — correctly scoped per-CR (multiple `WorkloadLifecycle` objects, each targeting a different deployment, work without any shared mutable state) while still reusing a single pooled `http.Client` for connection efficiency.
 
+## Results
+
+Verified live against a running cluster (`mock-vllm` + `metrics-stub`, OrbStack Kubernetes), driving KV cache usage through all three control regions and confirming two independent sources agree at every step: operator logs and `kubectl get deploy -w`. Raw test output in [#16](https://github.com/jtsai24/ai-infra-demo/issues/16).
+
+| KV cache usage | Region | Action | Replicas |
+|---|---|---|---|
+| 85% | Above `KVCacheThresholdPercent` (80%) | Scale up, capped at `MaxReplicas` | 1 → 2 → 3 (holds at 3) |
+| 15% | Below `KVCacheScaleDownThresholdPercent` (25%) | Scale down, floored at `MinReplicas` | 3 → 2 → 1 (holds at 1) |
+| 50% | Inside the 25–80% hysteresis band | Hold steady, no flapping | unchanged |
+
+```
+observed metrics    kvCacheUsagePercent=85 numRequestsWaiting=5
+scaling decision     currentReplicas=1 desiredReplicas=2 ...
+scaling decision     currentReplicas=2 desiredReplicas=3 ...
+no scaling action needed   currentReplicas=3 kvCacheUsagePercent=85 ...  (capped)
+```
+
+Driven via the metrics-stub's `/set` endpoint mid-run, with no restart of `make run` between changes — confirming CR-driven fetching, connection reuse, and live metric changes all work correctly together.
+
 ## Development log
 
 | Stage | What | Issue |
