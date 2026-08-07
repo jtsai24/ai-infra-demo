@@ -77,6 +77,28 @@ type WorkloadLifecycleStatus struct {
 	// +listMapKey=type
 	// +optional
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
+
+	// ObservedKVCacheUsagePercent is the KV cache usage percentage observed
+	// on the most recent reconcile.
+	// +kubebuilder:validation:Minimum=0
+	// +kubebuilder:validation:Maximum=100
+	// +optional
+	ObservedKVCacheUsagePercent int32 `json:"observedKVCacheUsagePercent,omitempty"`
+
+	// DesiredReplicas is the replica count computed on the most recent reconcile.
+	// +kubebuilder:validation:Minimum=1
+	// +optional
+	DesiredReplicas int32 `json:"desiredReplicas,omitempty"`
+
+	// LastScaleTime is the last time the controller changed the target
+	// Deployment's replica count.
+	// +optional
+	LastScaleTime *metav1.Time `json:"lastScaleTime,omitempty"`
+
+	// LastTransitionReason describes the outcome of the most recent
+	// scaling decision, e.g. "ScaledUp", "ScaledDown", "Holding".
+	// +optional
+	LastTransitionReason string `json:"lastTransitionReason,omitempty"`
 }
 
 // +kubebuilder:object:root=true

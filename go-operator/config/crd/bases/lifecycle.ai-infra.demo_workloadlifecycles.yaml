@@ -154,6 +154,31 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              desiredReplicas:
+                description: DesiredReplicas is the replica count computed on the
+                  most recent reconcile.
+                format: int32
+                minimum: 1
+                type: integer
+              lastScaleTime:
+                description: |-
+                  LastScaleTime is the last time the controller changed the target
+                  Deployment's replica count.
+                format: date-time
+                type: string
+              lastTransitionReason:
+                description: |-
+                  LastTransitionReason describes the outcome of the most recent
+                  scaling decision, e.g. "ScaledUp", "ScaledDown", "Holding".
+                type: string
+              observedKVCacheUsagePercent:
+                description: |-
+                  ObservedKVCacheUsagePercent is the KV cache usage percentage observed
+                  on the most recent reconcile.
+                format: int32
+                maximum: 100
+                minimum: 0
+                type: integer
             type: object
         required:
         - spec
