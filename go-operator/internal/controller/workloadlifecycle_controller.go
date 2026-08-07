@@ -23,9 +23,11 @@ import (
 
 	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/client-go/tools/record"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/builder"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -35,16 +37,38 @@ import (
 	lifecyclev1alpha1 "github.com/jtsai24/ai-infra-demo/operator/api/v1alpha1"
 )
 
+// ReasonMetricsUnavailable and ReasonTargetDeploymentNotFound are both the
+// Condition/LastTransitionReason value and the Event reason for their
+// respective observe failures — kept as one constant per reason so the two
+// vocabularies can't drift apart.
+const (
+	ReasonMetricsUnavailable       = "MetricsUnavailable"
+	ReasonTargetDeploymentNotFound = "TargetDeploymentNotFound"
+	// ReasonRecovered is shared across every observation-failure recovery,
+	// per the "Option A" decision in the EventRecorder design doc — the
+	// specific prior failure goes in the Event message, not the reason.
+	ReasonRecovered = "Recovered"
+
+	ReasonScaledUp   = "ScaledUp"
+	ReasonScaledDown = "ScaledDown"
+	// ReasonScaleFailed intentionally has no error-text-level dedup like
+	// rows 3/4 do — repeated failures collapse to one Warning regardless of
+	// the specific error, since the detail belongs in the logs, not Events.
+	ReasonScaleFailed = "ScaleFailed"
+)
+
 // WorkloadLifecycleReconciler reconciles a WorkloadLifecycle object
 type WorkloadLifecycleReconciler struct {
 	client.Client
 	Scheme     *runtime.Scheme
 	HTTPClient *http.Client // shared once, reused by every provider instance
+	Recorder   record.EventRecorder
 }
 
 // +kubebuilder:rbac:groups=lifecycle.ai-infra.demo,resources=workloadlifecycles,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=lifecycle.ai-infra.demo,resources=workloadlifecycles/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=lifecycle.ai-infra.demo,resources=workloadlifecycles/finalizers,verbs=update
+// +kubebuilder:rbac:groups="",resources=events,verbs=create;patch
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -62,30 +86,43 @@ func (r *WorkloadLifecycleReconciler) Reconcile(ctx context.Context, req ctrl.Re
 		logger.Error(err, "unable to fetch WorkloadLifecycle")
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
+	priorReason := wl.Status.LastTransitionReason
 
 	metrics, err := r.observeMetrics(ctx, logger, &wl)
 	if err != nil {
 		logger.Error(err, "failed to fetch metrics")
+		if priorReason != ReasonMetricsUnavailable {
+			r.Recorder.Event(&wl, corev1.EventTypeWarning, ReasonMetricsUnavailable, err.Error())
+		}
 		r.recordStatus(ctx, logger, &wl, statusUpdate{
-			Reason:    "MetricsUnavailable",
+			Reason:    ReasonMetricsUnavailable,
 			Available: metav1.ConditionFalse,
 			Degraded:  metav1.ConditionTrue,
 			Message:   err.Error(),
 		})
 		return ctrl.Result{RequeueAfter: 15 * time.Second}, nil
 	}
+	if priorReason == ReasonMetricsUnavailable {
+		r.Recorder.Eventf(&wl, corev1.EventTypeNormal, ReasonRecovered, "recovered from %s", priorReason)
+	}
 
 	deploy, currentReplicas, err := r.observeDeployment(ctx, &wl)
 	if err != nil {
 		logger.Error(err, "unable to fetch target deployment", "deployment", wl.Spec.TargetDeployment)
+		if priorReason != ReasonTargetDeploymentNotFound {
+			r.Recorder.Event(&wl, corev1.EventTypeWarning, ReasonTargetDeploymentNotFound, err.Error())
+		}
 		r.recordStatus(ctx, logger, &wl, statusUpdate{
-			Reason:                      "TargetDeploymentNotFound",
+			Reason:                      ReasonTargetDeploymentNotFound,
 			Available:                   metav1.ConditionFalse,
 			Degraded:                    metav1.ConditionTrue,
 			Message:                     err.Error(),
 			ObservedKVCacheUsagePercent: &metrics.KVCacheUsagePercent,
 		})
 		return ctrl.Result{RequeueAfter: 15 * time.Second}, nil
+	}
+	if priorReason == ReasonTargetDeploymentNotFound {
+		r.Recorder.Eventf(&wl, corev1.EventTypeNormal, ReasonRecovered, "recovered from %s", priorReason)
 	}
 
 	desiredReplicas := computeDesiredReplicas(currentReplicas, metrics.KVCacheUsagePercent, wl.Spec)
@@ -192,6 +229,8 @@ func (r *WorkloadLifecycleReconciler) observeDeployment(ctx context.Context, wl 
 // desiredReplicas differs from currentReplicas, and records the outcome
 // (holding, scaled, or scale failed) to wl.Status.
 func (r *WorkloadLifecycleReconciler) makeAdjustmentIfNeeded(ctx context.Context, logger logr.Logger, wl *lifecyclev1alpha1.WorkloadLifecycle, deploy *appsv1.Deployment, currentReplicas, desiredReplicas, kvCacheUsagePercent, thresholdPercent int32) error {
+	priorReason := wl.Status.LastTransitionReason
+
 	if desiredReplicas == currentReplicas {
 		logger.Info("no scaling action needed",
 			"currentReplicas", currentReplicas,
@@ -215,15 +254,18 @@ func (r *WorkloadLifecycleReconciler) makeAdjustmentIfNeeded(ctx context.Context
 		"thresholdPercent", thresholdPercent,
 	)
 
-	reason := "ScaledUp"
+	reason := ReasonScaledUp
 	if desiredReplicas < currentReplicas {
-		reason = "ScaledDown"
+		reason = ReasonScaledDown
 	}
 
 	deploy.Spec.Replicas = &desiredReplicas
 	if err := r.Update(ctx, deploy); err != nil {
+		if priorReason != ReasonScaleFailed {
+			r.Recorder.Event(wl, corev1.EventTypeWarning, ReasonScaleFailed, err.Error())
+		}
 		r.recordStatus(ctx, logger, wl, statusUpdate{
-			Reason:                      "ScaleFailed",
+			Reason:                      ReasonScaleFailed,
 			Available:                   metav1.ConditionTrue,
 			Degraded:                    metav1.ConditionTrue,
 			Message:                     err.Error(),
@@ -232,6 +274,14 @@ func (r *WorkloadLifecycleReconciler) makeAdjustmentIfNeeded(ctx context.Context
 		})
 		return err
 	}
+
+	appliedThreshold := thresholdPercent
+	if reason == ReasonScaledDown {
+		appliedThreshold = wl.Spec.KVCacheScaleDownThresholdPercent
+	}
+	r.Recorder.Eventf(wl, corev1.EventTypeNormal, reason,
+		"Scaled %s from %d to %d replicas (KV cache %d%% vs threshold %d%%)",
+		wl.Spec.TargetDeployment, currentReplicas, desiredReplicas, kvCacheUsagePercent, appliedThreshold)
 
 	r.recordStatus(ctx, logger, wl, statusUpdate{
 		Reason:                      reason,

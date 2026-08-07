@@ -183,6 +183,7 @@ func main() {
 		Client:     mgr.GetClient(),
 		Scheme:     mgr.GetScheme(),
 		HTTPClient: &http.Client{},
+		Recorder:   mgr.GetEventRecorderFor("workloadlifecycle-controller"),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "Failed to create controller", "controller", "workloadlifecycle")
 		os.Exit(1)
